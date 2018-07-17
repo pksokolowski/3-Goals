@@ -163,7 +163,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
     }
 
     fun getGoals(edition:Edition) : MutableList<Goal> {
-        val cursor = sDataBase!!.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY _id ASC",  arrayOf( edition.ID.toString() ))
+        val cursor = sDataBase!!.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC",  arrayOf( edition.ID.toString() ))
 
         val goals = mutableListOf<Goal>()
 
