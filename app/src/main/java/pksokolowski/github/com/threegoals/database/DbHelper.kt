@@ -15,6 +15,17 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
         p0.execSQL("DROP TABLE IF EXISTS "+ Contract.editions.TABLE_NAME)
         onCreate(p0)
     }
+    companion object {
 
+        @Volatile private var INSTANCE: DbHelper? = null
+
+        fun getInstance(context: Context): DbHelper =
+                INSTANCE ?: synchronized(this) {
+                    INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                }
+
+        private fun buildDatabase(context: Context) = DbHelper(context)
+
+    }
 
 }
