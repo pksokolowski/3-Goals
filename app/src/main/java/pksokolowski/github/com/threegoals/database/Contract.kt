@@ -6,7 +6,7 @@ internal object Contract {
 
     internal class reports : BaseColumns {
         companion object {
-            val ID = "id"
+            val ID = "_id"
             val TABLE_NAME = "reports"
             val COLUMN_NAME_DAY_NUM = "day_num"
             val COLUMN_NAME_TIME_STAMP = "time_stamp"
@@ -18,7 +18,7 @@ internal object Contract {
 
     internal class goals : BaseColumns {
         companion object {
-            val ID = "id"
+            val ID = "_id"
             val TABLE_NAME = "goals"
             val COLUMN_NAME_NAME = "name"
             val COLUMN_NAME_INITIAL = "initial"
@@ -29,7 +29,7 @@ internal object Contract {
 
     internal class editions : BaseColumns {
         companion object {
-            val ID = "id"
+            val ID = "_id"
             val TABLE_NAME = "editions"
             val COLUMN_NAME_TITLE = "title"
             val COLUMN_NAME_GOALS_COUNT = "goals_count"
