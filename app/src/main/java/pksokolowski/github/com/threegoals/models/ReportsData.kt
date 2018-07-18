@@ -13,7 +13,7 @@ class ReportsData(context: Context, val edition: Edition) {
         val editionsReports = db.getReports(edition)
 
         // assign reports to day slots:
-        for (i in editionsReports.indices){
+        for (i in editionsReports.indices) {
             val report = editionsReports[i]
             val day_num = report.day_num
             reports[day_num] = report

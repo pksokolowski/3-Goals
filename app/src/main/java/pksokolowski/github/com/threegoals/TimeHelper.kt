@@ -6,15 +6,15 @@ import java.util.*
 class TimeHelper {
     companion object {
 
-        public val yearInMillis = 31536000000
-        public val dayInMillis = 86400000
+        public val yearInMillis = 31536000000L
+        public val dayInMillis = 86400000L
 
-        public fun getYear(timeStamp: Long) : String{
+        public fun getYear(timeStamp: Long): String {
             val formatter = SimpleDateFormat("yyyy")
             return formatter.format(Date(timeStamp))
         }
 
-        public fun getYearLast2Digits(timeStamp: Long) : String{
+        public fun getYearLast2Digits(timeStamp: Long): String {
             val formatter = SimpleDateFormat("yy")
             return formatter.format(Date(timeStamp))
         }

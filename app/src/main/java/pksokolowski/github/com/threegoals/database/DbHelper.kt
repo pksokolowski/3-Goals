@@ -8,9 +8,9 @@ import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.models.Goal
 import pksokolowski.github.com.threegoals.models.Report
 
-class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context, "dataBase.db", null, 1) {
+class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context, "dataBase.db", null, 1) {
     override fun onCreate(p0: SQLiteDatabase?) {
-        with(p0!!){
+        with(p0!!) {
             execSQL("CREATE TABLE " + Contract.reports.TABLE_NAME + " (" +
                     Contract.reports.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     Contract.reports.COLUMN_NAME_DAY_NUM + " INTEGER, " +
@@ -23,7 +23,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
             execSQL("CREATE TABLE " + Contract.goals.TABLE_NAME + " (" +
                     Contract.goals.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                     Contract.goals.COLUMN_NAME_NAME + " TEXT, " +
-                    Contract.goals.COLUMN_NAME_INITIAL+ " TEXT, " +
+                    Contract.goals.COLUMN_NAME_INITIAL + " TEXT, " +
                     Contract.goals.COLUMN_NAME_POSITION + " INTEGER, " +
                     Contract.goals.COLUMN_NAME_EDITION + " INTEGER, " +
                     " FOREIGN KEY (" + Contract.goals.COLUMN_NAME_EDITION + ") REFERENCES " + Contract.editions.TABLE_NAME + "(" + Contract.editions.ID + "))")
@@ -38,23 +38,25 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
-        with(p0!!){
-            execSQL("DROP TABLE IF EXISTS "+ Contract.reports.TABLE_NAME)
-            execSQL("DROP TABLE IF EXISTS "+ Contract.goals.TABLE_NAME)
-            execSQL("DROP TABLE IF EXISTS "+ Contract.editions.TABLE_NAME)
+        with(p0!!) {
+            execSQL("DROP TABLE IF EXISTS " + Contract.reports.TABLE_NAME)
+            execSQL("DROP TABLE IF EXISTS " + Contract.goals.TABLE_NAME)
+            execSQL("DROP TABLE IF EXISTS " + Contract.editions.TABLE_NAME)
             onCreate(this)
         }
     }
+
     companion object {
 
-        @Volatile private var INSTANCE: DbHelper? = null
+        @Volatile
+        private var INSTANCE: DbHelper? = null
 
         fun getInstance(context: Context): DbHelper =
                 INSTANCE ?: synchronized(this) {
                     INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
                 }
 
-        private fun buildDatabase(context: Context) : DbHelper{
+        private fun buildDatabase(context: Context): DbHelper {
             val helper = DbHelper(context)
             helper.sDataBase = helper.writableDatabase
             return helper
@@ -65,7 +67,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
     private var sDataBase: SQLiteDatabase? = null
 
     // push methods:
-    fun pushReport(report: Report) : Long{
+    fun pushReport(report: Report): Long {
         val cv = ContentValues()
         cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
         cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
@@ -75,7 +77,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
         return sDataBase!!.insert(Contract.reports.TABLE_NAME, null, cv)
     }
 
-    fun pushEdition(edition: Edition) : Long{
+    fun pushEdition(edition: Edition): Long {
         val cv = ContentValues()
         cv.put(Contract.editions.COLUMN_NAME_TITLE, edition.title)
         cv.put(Contract.editions.COLUMN_NAME_GOALS_COUNT, edition.goals_count)
@@ -84,7 +86,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
         return sDataBase!!.insert(Contract.editions.TABLE_NAME, null, cv)
     }
 
-    fun pushGoal(goal: Goal) : Long{
+    fun pushGoal(goal: Goal): Long {
         val cv = ContentValues()
         cv.put(Contract.goals.COLUMN_NAME_NAME, goal.name)
         cv.put(Contract.goals.COLUMN_NAME_INITIAL, goal.initial)
@@ -94,7 +96,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
     }
 
     // get methods:
-    fun getReports(edition:Edition) : MutableList<Report> {
+    fun getReports(edition: Edition): MutableList<Report> {
 
 //        val projection = arrayOf(
 //                Contract.reports.TABLE_NAME + "." + Contract.reports.ID,
@@ -123,7 +125,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
 
         val cursor = sDataBase!!.rawQuery(
                 "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? ORDER BY reports._id ASC",
-                arrayOf( edition.ID.toString() )
+                arrayOf(edition.ID.toString())
         )
 
         val reports = mutableListOf<Report>()
@@ -143,7 +145,7 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
         return reports
     }
 
-    fun getEditions() : MutableList<Edition> {
+    fun getEditions(): MutableList<Edition> {
         val cursor = sDataBase!!.rawQuery("SELECT * FROM editions ORDER BY _id ASC", null)
 
         val editions = mutableListOf<Edition>()
@@ -162,8 +164,8 @@ class DbHelper private constructor (context: Context) : SQLiteOpenHelper(context
         return editions
     }
 
-    fun getGoals(edition:Edition) : MutableList<Goal> {
-        val cursor = sDataBase!!.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC",  arrayOf( edition.ID.toString() ))
+    fun getGoals(edition: Edition): MutableList<Goal> {
+        val cursor = sDataBase!!.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC", arrayOf(edition.ID.toString()))
 
         val goals = mutableListOf<Goal>()
 

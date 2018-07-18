@@ -33,20 +33,20 @@ object EditionsManager {
         return newEdition
     }
 
-    public fun getEditionsCount(context: Context) : Int {
+    public fun getEditionsCount(context: Context): Int {
         setup(context)
         return editions.size
     }
 
-    public fun getCurrentEdition(context: Context) : Edition? {
+    public fun getCurrentEdition(context: Context): Edition? {
         setup(context)
-        if(editions.size == 0) return null
+        if (editions.size == 0) return null
 
-        val latest = editions.get(editions.size-1)
+        val latest = editions.get(editions.size - 1)
         val latest_endDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
         val now = Calendar.getInstance().timeInMillis
 
-        if(latest_endDay > now) return latest
+        if (latest_endDay > now) return latest
         return null
     }
 

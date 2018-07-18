@@ -4,7 +4,7 @@ import org.junit.Test
 import org.junit.Assert.*
 import java.util.*
 
-class TimeHelperTests {
+class TimeHelperTest {
     @Test
     fun yearString_iscorrect() {
         val stamp = 0L

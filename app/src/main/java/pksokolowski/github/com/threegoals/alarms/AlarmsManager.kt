@@ -15,7 +15,7 @@ object AlarmsManager {
     public fun setupAlarms(context: Context) {
 
         val calendar = Calendar.getInstance()
-        calendar.setTimeInMillis(System.currentTimeMillis())
+        calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
         calendar.add(Calendar.DAY_OF_YEAR, 1)

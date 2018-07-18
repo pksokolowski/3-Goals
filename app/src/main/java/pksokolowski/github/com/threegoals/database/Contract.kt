@@ -34,7 +34,7 @@ internal object Contract {
             val COLUMN_NAME_TITLE = "title"
             val COLUMN_NAME_GOALS_COUNT = "goals_count"
             val COLUMN_NAME_START_DAY_0_HOUR = "start_day_0_hour"
-            val COLUMN_NAME_EDITION_LENGTH ="length_in_days"
+            val COLUMN_NAME_EDITION_LENGTH = "length_in_days"
         }
     }
 }
