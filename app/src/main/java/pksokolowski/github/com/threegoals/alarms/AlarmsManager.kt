@@ -29,6 +29,12 @@ object AlarmsManager {
         }
     }
 
+    public fun cancelAlarms(context: Context){
+        val pending = getRequestUserReportPendingIntent(context)
+        val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pending)
+    }
+
     private fun getRequestUserReportPendingIntent(context: Context): PendingIntent {
         return PendingIntent.getBroadcast(context, 0, Intent(ACTION_REQUEST_USER_REPORT), PendingIntent.FLAG_CANCEL_CURRENT)
     }
