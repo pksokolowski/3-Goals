@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">3 Goals</string>
+    <string name="notification_channel_user_report_request_title">Codzienne pytania o dzień poprzedni</string>
+    <string name="notification_channel_user_report_request_description">Te notyfikacje wyświetlane są każdego nowego dnia. Proszą o wypełnienie ankiety dotyczącej dnia poprzedniego. Są kluczowe dla wygodnego użytkowania aplikacji.</string>
+    <string name="notification_open_reporter_content_text">Kliknij aby dodać dzienny raport</string>
+</resources>

@@ -30,6 +30,12 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".notifications.NotificationsClickReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.github.pksokolowski.threegoals.action.open_reporter" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
