@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <pksokolowski.github.com.threegoals.reporter.ReportForm
+    <fragment
+        android:name="pksokolowski.github.com.threegoals.reporter.ReportForm"
         android:id="@+id/reportForm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -29,7 +30,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <pksokolowski.github.com.threegoals.reporter.ReportForm
+    <fragment
+        android:name="pksokolowski.github.com.threegoals.reporter.ReportForm"
         android:id="@+id/reportForm2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
