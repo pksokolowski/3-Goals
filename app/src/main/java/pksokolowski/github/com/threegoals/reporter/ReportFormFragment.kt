@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.report_form.*
+import kotlinx.android.synthetic.main.tally_counter.*
 import pksokolowski.github.com.threegoals.R
 
 class ReportFormFragment : Fragment() {
@@ -47,4 +48,8 @@ class ReportFormFragment : Fragment() {
 
         return mView
     }
+
+    fun getCustomName() = goal_custom_name.text.toString()
+    fun getPositivesCount() = positives_edittext.text.toString().toInt()
+    fun getTryingHardScore() = likert_scale.value
 }
