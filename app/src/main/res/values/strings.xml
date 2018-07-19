@@ -3,4 +3,12 @@
     <string name="notification_channel_user_report_request_title">Daily report requests</string>
     <string name="notification_channel_user_report_request_description">The notifications shown daily, asking to fulfill the questionnaire about the previous day. Vital for the app\'s functionality.</string>
     <string name="notification_open_reporter_content_text">Tap here to add a daily report</string>
+
+    <string-array name="likert_textual_explanations">
+        <item>Strongly disagree</item>
+        <item>Disagree</item>
+        <item>Neither disagree nor agree</item>
+        <item>Agree</item>
+        <item>Strongly agree</item>
+    </string-array>
 </resources>

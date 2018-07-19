@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/add_one_button"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+
+        android:text="+" />
+
+        <EditText
+            android:id="@+id/positives_edittext"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="3"
+            android:text="0" />
+</LinearLayout>
