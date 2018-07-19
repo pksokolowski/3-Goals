@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.tally_counter.view.*
 import pksokolowski.github.com.threegoals.R
 
 class TallyCounter @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : ConstraintLayout(context, attrs, defStyle) {
-    val MAX_VALUE = 999
+    private val MAX_VALUE = 999
 
     init {
         View.inflate(context, R.layout.tally_counter, this)

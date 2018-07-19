@@ -5,11 +5,10 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.likert_scale.*
 import kotlinx.android.synthetic.main.report_form.*
 import pksokolowski.github.com.threegoals.R
 
-class ReportForm : Fragment() {
+class ReportFormFragment : Fragment() {
     private val romanNums = arrayOf("Ⅰ", " Ⅱ", "Ⅲ", "?")
     private lateinit var mView: View
 
@@ -19,7 +18,7 @@ class ReportForm : Fragment() {
         private const val ARG_SCORE_POSITIVES = "positives"
         private const val ARG_SCORE_TRYING_HARD = "trying_hard"
 
-        fun newInstance(position: Int, name: String? = null, scorePositives: Int = 0, scoreTryingHard: Int = -1) = ReportForm().apply {
+        fun newInstance(position: Int, name: String? = null, scorePositives: Int = 0, scoreTryingHard: Int = -1) = ReportFormFragment().apply {
             arguments = Bundle().apply {
                 ARG_POSITION to position
                 ARG_NAME to name
