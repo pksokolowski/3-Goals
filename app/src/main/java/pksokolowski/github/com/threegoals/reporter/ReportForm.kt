@@ -9,7 +9,7 @@ import pksokolowski.github.com.threegoals.R
 
 class ReportForm : Fragment() {
     private val romanNums = arrayOf("Ⅰ", "Ⅱ", "Ⅲ")
-    private var mView : View? = null
+    private lateinit var mView : View
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.report_form, container)
