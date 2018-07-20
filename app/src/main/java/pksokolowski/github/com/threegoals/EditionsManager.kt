@@ -3,6 +3,7 @@ package pksokolowski.github.com.threegoals
 import android.content.Context
 import pksokolowski.github.com.threegoals.database.DbHelper
 import pksokolowski.github.com.threegoals.models.Edition
+import pksokolowski.github.com.threegoals.models.Goal
 import java.util.*
 
 object EditionsManager {
@@ -27,7 +28,16 @@ object EditionsManager {
 
         val edition = Edition(-1, generateTitle(now), 3, today0hour, 365)
 
-        val id = DbHelper.getInstance(context).pushEdition(edition)
+        val db = DbHelper.getInstance(context)
+        val id = db.pushEdition(edition)
+
+        // create as many goals as defined by the edition
+        val romanNums = arrayOf("Ⅰ", "Ⅱ", "Ⅲ", "?")
+        for (i in 0 until edition.goals_count) {
+            val initial = romanNums[Math.min(romanNums.size - 1, i)]
+            db.pushGoal(Goal(-1, "", initial, i, id))
+        }
+
         val newEdition = Edition(id, edition.title, edition.goals_count, edition.start_day_timestamp, edition.length_in_days)
         editions.add(newEdition)
         return newEdition
@@ -47,6 +57,14 @@ object EditionsManager {
         val now = Calendar.getInstance().timeInMillis
 
         if (latest_endDay > now) return latest
+        return null
+    }
+
+    public fun getEditionById(context: Context, id: Long): Edition? {
+        setup(context)
+        for (e in editions) {
+            if (e.ID == id) return e
+        }
         return null
     }
 
