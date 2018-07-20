@@ -7,6 +7,8 @@
     <string name="reporter_done_button_text">OK</string>
     <string name="report_form_positives_title">Kliknij + tyle razy, ile pozytywnych rzeczy wydarzyło się przy okazji tego wysiłku</string>
     <string name="report_form_trying_hard_title">Czy dałeś/aś z siebie wszystko?</string>
+    <string name="reporter_activity_error_select_values">Wprowadź dane dla każdego celu.</string>
+    <string name="reporter_activity_message_reports_saved">Raport zapisany. Miłego dnia!</string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>

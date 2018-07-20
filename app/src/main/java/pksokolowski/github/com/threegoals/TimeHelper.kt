@@ -30,5 +30,7 @@ class TimeHelper {
 
             return c.timeInMillis
         }
+
+        fun now() = Calendar.getInstance().timeInMillis
     }
 }

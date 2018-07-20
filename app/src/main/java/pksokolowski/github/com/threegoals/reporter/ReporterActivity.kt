@@ -4,11 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.Toast
 import kotlinx.android.synthetic.main.reporter_activity.*
 import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
+import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.database.DbHelper
+import pksokolowski.github.com.threegoals.models.Edition
+import pksokolowski.github.com.threegoals.models.Goal
 import pksokolowski.github.com.threegoals.models.Report
+import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class ReporterActivity : AppCompatActivity() {
     companion object {
@@ -22,44 +27,88 @@ class ReporterActivity : AppCompatActivity() {
         }
     }
 
-    private var editingMode = false
-    private var reportsToBeModified = mutableListOf<Report>()
+    private var mReportsToBeModified = mutableListOf<Report>()
+    private var mGoals = mutableListOf<Goal>()
+    private lateinit var mEdition: Edition
+    private var mDayNumber: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
+        showData(intent.extras)
 
-        val bundle = intent.extras
+        done_button.setOnClickListener {
+            if (mReportsToBeModified.size == 0) {
+                // brand new report, no editing of existing reports
+                var isAllValid = true
+                val forms = getReportForms()
+                for (f in forms) {
+                    if (f.getTryingHardScore() == -1) {
+                        isAllValid = false; break
+                    }
+                }
+                if (!isAllValid) {
 
-        showData(bundle)
+                    Toast.makeText(this,
+                            getString(R.string.reporter_activity_error_select_values),
+                            Toast.LENGTH_LONG).show()
+
+                    return@setOnClickListener
+                }
+
+                val db = DbHelper.getInstance(this)
+                // todo: check for goal name changes. Save them if any
+
+                val now = TimeHelper.now()
+                for (i: Int in forms.indices) {
+                    val f = forms[i]
+                    db.pushReport(Report(
+                            -1,
+                            mDayNumber,
+                            now,
+                            f.getTryingHardScore(),
+                            f.getPositivesCount(),
+                            mGoals[i].ID)
+                    )
+                }
+                NotificationsManager.cancelNotification(this)
+
+                Toast.makeText(this,
+                        getString(R.string.reporter_activity_message_reports_saved),
+                        Toast.LENGTH_LONG).show()
+
+                finish()
+            } else {
+                // editing existing reports
+            }
+        }
     }
 
     private fun showData(bundle: Bundle?) {
         if (bundle == null) return
         val editionID = bundle.getLong(EXTRAS_EDITION_ID, -1)
-        val dayNumber = bundle.getInt(EXTRAS_EDITION_DAY_NUMBER, -1)
-        if (editionID == -1L || dayNumber == -1) return
+        mDayNumber = bundle.getInt(EXTRAS_EDITION_DAY_NUMBER, -1)
+        if (editionID == -1L || mDayNumber == -1) return
 
-        val edition = EditionsManager.getEditionById(this, editionID) ?: return
+        mEdition = EditionsManager.getEditionById(this, editionID) ?: return
         val db = DbHelper.getInstance(this)
-        val goals = db.getGoals(edition)
-        reportsToBeModified = db.getReportsForDay(edition, dayNumber)
+        mGoals = db.getGoals(mEdition)
+        mReportsToBeModified = db.getReportsForDay(mEdition, mDayNumber)
 
         val reportForms = getReportForms()
-        if (reportsToBeModified.size > 0) {
+        if (mReportsToBeModified.size > 0) {
             // modification of an existing report,
-            editingMode = true
             for (i in reportForms.indices) {
                 reportForms[i].setData(
                         i,
-                        goals[i].name,
-                        reportsToBeModified[i].score_trying_hard,
-                        reportsToBeModified[i].score_positives)
+                        mGoals[i].name,
+                        mReportsToBeModified[i].score_trying_hard,
+                        mReportsToBeModified[i].score_positives)
             }
         } else {
             // in case of new day, not modification of existing
             for (i in reportForms.indices) {
-                reportForms[i].setData(i, goals[i].name)
+                reportForms[i].setData(i, mGoals[i].name)
             }
         }
     }
