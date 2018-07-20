@@ -3,7 +3,9 @@
     <string name="notification_channel_user_report_request_title">Daily report requests</string>
     <string name="notification_channel_user_report_request_description">The notifications shown daily, asking to fulfill the questionnaire about the previous day. Vital for the app\'s functionality.</string>
     <string name="notification_open_reporter_content_text">Tap here to add a daily report</string>
-    <string name="reporter_done_button_text">Done</string>
+    <string name="reporter_done_button_text">done</string>
+    <string name="report_form_positives_title">Tap on + for each positive thing related to the endevour.</string>
+    <string name="report_form_trying_hard_title">Do you agree that you\'ve tried as hard as you could?</string>
 
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>

@@ -4,6 +4,9 @@
     <string name="notification_channel_user_report_request_title">Codzienne pytania o dzień poprzedni</string>
     <string name="notification_channel_user_report_request_description">Te notyfikacje wyświetlane są każdego nowego dnia. Proszą o wypełnienie ankiety dotyczącej dnia poprzedniego. Są kluczowe dla wygodnego użytkowania aplikacji.</string>
     <string name="notification_open_reporter_content_text">Kliknij aby dodać dzienny raport</string>
+    <string name="reporter_done_button_text">OK</string>
+    <string name="report_form_positives_title">Kliknij + tyle razy, ile pozytywnych rzeczy wydarzyło się przy okazji tego wysiłku</string>
+    <string name="report_form_trying_hard_title">Czy dałeś/aś z siebie wszystko?</string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>
@@ -12,4 +15,12 @@
         <item>Raczej tak</item>
         <item>Zdecydowanie tak</item>
     </string-array>
+
+    <string-array name="goal_titles">
+        <item>Cel Ⅰ</item>
+        <item>Cel Ⅱ</item>
+        <item>Cel Ⅲ</item>
+        <item>Cel \?</item>
+    </string-array>
+
 </resources>
