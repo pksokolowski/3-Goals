@@ -95,6 +95,14 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         return sDataBase!!.insert(Contract.goals.TABLE_NAME, null, cv)
     }
 
+    fun updateGoalCustomName(goal: Goal, newCustomName: String){
+        val cv = ContentValues()
+        cv.put(Contract.goals.COLUMN_NAME_NAME, newCustomName)
+        val whereClause = Contract.goals.ID + " =? "
+        val whereArgs = arrayOf(goal.ID.toString())
+        sDataBase!!.update(Contract.goals.TABLE_NAME, cv, whereClause, whereArgs).toLong()
+    }
+
     // get methods:
     fun getReports(edition: Edition): MutableList<Report> {
 

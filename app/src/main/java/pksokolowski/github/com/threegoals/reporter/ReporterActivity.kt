@@ -57,11 +57,16 @@ class ReporterActivity : AppCompatActivity() {
                 }
 
                 val db = DbHelper.getInstance(this)
-                // todo: check for goal name changes. Save them if any
 
                 val now = TimeHelper.now()
                 for (i: Int in forms.indices) {
                     val f = forms[i]
+                    // update custom goal name if needed
+                    if(mGoals[i].name != f.getCustomName()){
+                        db.updateGoalCustomName(mGoals[i], f.getCustomName())
+                    }
+
+                    // save report
                     db.pushReport(Report(
                             -1,
                             mDayNumber,
