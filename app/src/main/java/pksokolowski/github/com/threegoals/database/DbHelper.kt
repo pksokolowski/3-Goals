@@ -145,6 +145,29 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         return reports
     }
 
+    fun getReportsForDay(edition: Edition, dayNumber: Int): MutableList<Report>{
+        val cursor = sDataBase!!.rawQuery(
+                "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? AND reports.day_num = ? ORDER BY reports._id ASC",
+                arrayOf(edition.ID.toString(), dayNumber.toString())
+        )
+
+        val reports = mutableListOf<Report>()
+
+        while (cursor.moveToNext()) {
+            reports.add(Report(
+                    cursor.getLong(cursor.getColumnIndex(Contract.reports.ID)),
+                    cursor.getInt(cursor.getColumnIndex(Contract.reports.COLUMN_NAME_DAY_NUM)),
+                    cursor.getLong(cursor.getColumnIndex(Contract.reports.COLUMN_NAME_TIME_STAMP)),
+                    cursor.getInt(cursor.getColumnIndex(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD)),
+                    cursor.getInt(cursor.getColumnIndex(Contract.reports.COLUMN_NAME_SCORE_POSITIVES)),
+                    cursor.getLong(cursor.getColumnIndex(Contract.reports.COLUMN_NAME_GOAL)))
+            )
+        }
+
+        cursor.close()
+        return reports
+    }
+
     fun getEditions(): MutableList<Edition> {
         val cursor = sDataBase!!.rawQuery("SELECT * FROM editions ORDER BY _id ASC", null)
 
@@ -181,5 +204,16 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
         cursor.close()
         return goals
+    }
+
+    fun isThereReportForDay(dayNum: Int, edition: Edition) : Boolean{
+        val cursor = sDataBase!!.rawQuery(
+                "SELECT reports._id FROM reports JOIN goals ON goals._id = reports.goal WHERE goals.edition = ? AND reports.day_num = ?",
+                arrayOf(edition.ID.toString(), dayNum.toString()))
+
+        var count = cursor.count
+        cursor.close()
+
+        return count > 0
     }
 }
