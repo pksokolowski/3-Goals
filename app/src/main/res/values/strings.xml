@@ -12,4 +12,11 @@
         <item>Agree</item>
         <item>Strongly agree</item>
     </string-array>
+
+    <string-array name="goal_titles">
+        <item>Goal Ⅰ</item>
+        <item>Goal Ⅱ</item>
+        <item>Goal Ⅲ</item>
+        <item>Goal \?</item>
+    </string-array>
 </resources>

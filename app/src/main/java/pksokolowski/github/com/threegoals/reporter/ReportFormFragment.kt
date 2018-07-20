@@ -10,7 +10,6 @@ import kotlinx.android.synthetic.main.tally_counter.*
 import pksokolowski.github.com.threegoals.R
 
 class ReportFormFragment : Fragment() {
-    private val romanNums = arrayOf("Ⅰ", " Ⅱ", "Ⅲ", "?")
     private lateinit var mView: View
 
     companion object {
@@ -47,7 +46,8 @@ class ReportFormFragment : Fragment() {
         return mView
     }
 
-    fun setData(position: Int, name: String, scoreTryingHard: Int, scorePositives: Int){
+    fun setData(position: Int, name: String? = null, scoreTryingHard: Int = -1, scorePositives: Int = 0) {
+        val romanNums = resources.getStringArray(R.array.goal_titles)
         val goalNumber = if (position >= 0 && position < romanNums.size) position else romanNums.size - 1
 
         goal_official_name.text = romanNums[goalNumber]
