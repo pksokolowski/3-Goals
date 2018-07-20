@@ -35,18 +35,25 @@ class ReportFormFragment : Fragment() {
         if (arguments != null) {
             val args = arguments as Bundle
             with(args) {
-                // ensure position is within indices of array of supported positions
-                val position = args.getInt(ARG_POSITION, -1)
-                val goalNumber = if (position >= 0 && position < romanNums.size) position else romanNums.size - 1
-
-                goal_official_name.text = romanNums[goalNumber]
-                goal_custom_name.setText(args.getString(ARG_NAME, ""))
-                likert_scale.value = args.getInt(ARG_SCORE_TRYING_HARD, -1)
-                tally_counter.value = args.getInt(ARG_SCORE_POSITIVES, 0)
+                setData(
+                        args.getInt(ARG_POSITION, -1),
+                        args.getString(ARG_NAME, ""),
+                        args.getInt(ARG_SCORE_TRYING_HARD, -1),
+                        args.getInt(ARG_SCORE_POSITIVES, 0)
+                )
             }
         }
 
         return mView
+    }
+
+    fun setData(position: Int, name: String, scoreTryingHard: Int, scorePositives: Int){
+        val goalNumber = if (position >= 0 && position < romanNums.size) position else romanNums.size - 1
+
+        goal_official_name.text = romanNums[goalNumber]
+        goal_custom_name.setText(name)
+        likert_scale.value = scoreTryingHard
+        tally_counter.value = scorePositives
     }
 
     fun getCustomName() = goal_custom_name.text.toString()
