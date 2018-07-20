@@ -172,7 +172,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         while (cursor.moveToNext()) {
             goals.add(Goal(
                     cursor.getLong(cursor.getColumnIndex(Contract.goals.ID)),
-                    cursor.getString(cursor.getColumnIndex(Contract.goals.TABLE_NAME)),
+                    cursor.getString(cursor.getColumnIndex(Contract.goals.COLUMN_NAME_NAME)),
                     cursor.getString(cursor.getColumnIndex(Contract.goals.COLUMN_NAME_INITIAL)),
                     cursor.getInt(cursor.getColumnIndex(Contract.goals.COLUMN_NAME_POSITION)),
                     cursor.getLong(cursor.getColumnIndex(Contract.goals.COLUMN_NAME_EDITION)))
