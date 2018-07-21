@@ -32,5 +32,6 @@ class TimeHelper {
         }
 
         fun now() = Calendar.getInstance().timeInMillis
+        fun yesterday0Hour() = get0HourTimeOfAGivenDay(now() - dayInMillis)
     }
 }
