@@ -35,7 +35,9 @@ class ReporterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
-        showData(intent.extras)
+
+        obtainDataFromExtras(intent.extras)
+        showData()
         // block saving if there is a problem with data provided
         // most likely cause is not-using the newIntent() method
         // and forging and intent manually, without the required
@@ -119,7 +121,7 @@ class ReporterActivity : AppCompatActivity() {
         return true
     }
 
-    private fun showData(bundle: Bundle?) {
+    private fun obtainDataFromExtras(bundle: Bundle?) {
         if (bundle == null) return
         val editionID = bundle.getLong(EXTRAS_EDITION_ID, -1)
         mDayNumber = bundle.getInt(EXTRAS_EDITION_DAY_NUMBER, -1)
@@ -129,7 +131,9 @@ class ReporterActivity : AppCompatActivity() {
         val db = DbHelper.getInstance(this)
         mGoals = db.getGoals(mEdition)
         mReportsToBeModified = db.getReportsForDay(mEdition, mDayNumber)
+    }
 
+    private fun showData(){
         val reportForms = getReportForms()
         if (mReportsToBeModified.size > 0) {
             // modification of an existing report,
