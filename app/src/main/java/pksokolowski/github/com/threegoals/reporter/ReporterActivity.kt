@@ -42,6 +42,7 @@ class ReporterActivity : AppCompatActivity() {
             val forms = getReportForms()
             val db = DbHelper.getInstance(this)
 
+            val reports = mutableListOf<Report>()
             if (mReportsToBeModified.size == 0) {
                 // brand new report, no editing of existing reports
                 val db = DbHelper.getInstance(this)
@@ -54,8 +55,7 @@ class ReporterActivity : AppCompatActivity() {
                         db.updateGoalCustomName(mGoals[i], f.getCustomName())
                     }
 
-                    // save report
-                    db.pushReport(Report(
+                    reports.add(Report(
                             -1,
                             mDayNumber,
                             now,
@@ -63,7 +63,12 @@ class ReporterActivity : AppCompatActivity() {
                             f.getPositivesCount(),
                             mGoals[i].ID)
                     )
+
                 }
+
+                // save reports
+                db.pushReports(reports, mEdition)
+
                 NotificationsManager.cancelNotification(this)
 
                 Toast.makeText(this,

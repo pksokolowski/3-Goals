@@ -67,15 +67,65 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     private var sDataBase: SQLiteDatabase? = null
 
-    // push methods:
-    fun pushReport(report: Report): Long {
-        val cv = ContentValues()
-        cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
-        cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
-        cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
-        cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
-        cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
-        return sDataBase!!.insert(Contract.reports.TABLE_NAME, null, cv)
+    fun isReportsBatchValid(reports: MutableList<Report>, edition: Edition): Boolean{
+        return try {
+            validateReportsBatch(reports, edition)
+            true
+        } catch (e: RuntimeException){
+            false
+        }
+    }
+
+    private fun validateReportsBatch(reports: MutableList<Report>, edition: Edition){
+        // validate the number of reports - must match number of reports expected given the edition
+        if(reports.size != edition.goals_count) throw RuntimeException("Attempted to save an incorrect number of reports.")
+
+        // validate that reports timeStamps are later than the edition's start day timeStamp.
+        // Note: This won't necessarily work for the end time of the edition, as reports may
+        // be provided later than the edition end and it's not only valid but expected.
+        for(report in reports) {
+            if(report.time_stamp < edition.start_day_timestamp) throw RuntimeException("Attempting to save a report with timeStamp earlier than the edition start day.")
+        }
+
+        // validate that all reports are for the same day
+        val expectedDayNum = reports[0].day_num
+        for(report in reports){
+            if(report.day_num != expectedDayNum) throw RuntimeException("Attempted to save reports for different days, in the same batch.")
+        }
+
+        // validate that each goal only appears once
+        val uniqueGoals = HashSet<Long>(reports.size)
+        for(report in reports){
+            val goal = report.goal
+            if(uniqueGoals.contains(goal)) throw RuntimeException("Attempted to save reports batch with duplicate goal IDs")
+            uniqueGoals.add(goal)
+        }
+
+        // validate that goals of all of the reports exist in the edition
+        val editionsGoals = getGoals(edition)
+        for(i in editionsGoals.indices) {
+            if(reports[i].goal != editionsGoals[i].ID) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
+        }
+
+        // validate that the reports are not already present for the day
+        val existingReportsForTheSameDay = getReportsForDay(edition, expectedDayNum)
+        if(existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
+    }
+
+    fun pushReports(reports: MutableList<Report>, edition: Edition){
+        // perform validation which throws exceptions if reports batch is corrupted
+        validateReportsBatch(reports, edition)
+
+        // all good, we can save them
+        for(report in reports){
+            val cv = ContentValues()
+            cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
+            cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
+            cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
+            cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
+            cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
+            sDataBase!!.insert(Contract.reports.TABLE_NAME, null, cv)
+        }
     }
 
     fun updateReport(report: Report) {
