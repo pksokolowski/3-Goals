@@ -51,61 +51,69 @@ class ReporterActivity : AppCompatActivity() {
 
             val reports = mutableListOf<Report>()
             if (mReportsToBeModified.size == 0) {
-                // brand new report, no editing of existing reports
-                val db = DbHelper.getInstance(this)
-
-                val now = TimeHelper.now()
-                for (i: Int in forms.indices) {
-                    val f = forms[i]
-                    // update custom goal name if needed
-                    if (mGoals[i].name != f.getCustomName()) {
-                        db.updateGoalCustomName(mGoals[i], f.getCustomName())
-                    }
-
-                    reports.add(Report(
-                            -1,
-                            mDayNumber,
-                            now,
-                            f.getTryingHardScore(),
-                            f.getPositivesCount(),
-                            mGoals[i].ID)
-                    )
-
-                }
-
-                // save reports
-                db.pushReports(reports, mEdition)
-
-                NotificationsManager.cancelNotification(this)
-
-                Toast.makeText(this,
-                        getString(R.string.reporter_activity_message_reports_saved),
-                        Toast.LENGTH_LONG).show()
-
-                finish()
+                saveBrandNewReports(forms, reports)
             } else {
-                // editing existing reports
-                // todo: implement updating report rows
-                for (i: Int in forms.indices) {
-                    val rep = mReportsToBeModified[i]
-                    val f = forms[i]
-
-                    db.updateReport(Report(
-                            rep.ID,
-                            rep.day_num,
-                            rep.time_stamp,
-                            f.getTryingHardScore(),
-                            f.getPositivesCount(),
-                            rep.goal)
-                    )
-
-                }
-                Toast.makeText(this,
-                        getString(R.string.reporter_activity_message_reports_updated),
-                        Toast.LENGTH_LONG).show()
-                finish()
+                editExistingReports(forms, db)
             }
         }
+    }
+
+    private fun editExistingReports(forms: Array<ReportFormFragment>, db: DbHelper) {
+        // editing existing reports
+        // todo: implement updating report rows
+        for (i: Int in forms.indices) {
+            val rep = mReportsToBeModified[i]
+            val f = forms[i]
+
+            db.updateReport(Report(
+                    rep.ID,
+                    rep.day_num,
+                    rep.time_stamp,
+                    f.getTryingHardScore(),
+                    f.getPositivesCount(),
+                    rep.goal)
+            )
+
+        }
+        Toast.makeText(this,
+                getString(R.string.reporter_activity_message_reports_updated),
+                Toast.LENGTH_LONG).show()
+        finish()
+    }
+
+    private fun saveBrandNewReports(forms: Array<ReportFormFragment>, reports: MutableList<Report>) {
+        // brand new report, no editing of existing reports
+        val db = DbHelper.getInstance(this)
+
+        val now = TimeHelper.now()
+        for (i: Int in forms.indices) {
+            val f = forms[i]
+            // update custom goal name if needed
+            if (mGoals[i].name != f.getCustomName()) {
+                db.updateGoalCustomName(mGoals[i], f.getCustomName())
+            }
+
+            reports.add(Report(
+                    -1,
+                    mDayNumber,
+                    now,
+                    f.getTryingHardScore(),
+                    f.getPositivesCount(),
+                    mGoals[i].ID)
+            )
+
+        }
+
+        // save reports
+        db.pushReports(reports, mEdition)
+
+        NotificationsManager.cancelNotification(this)
+
+        Toast.makeText(this,
+                getString(R.string.reporter_activity_message_reports_saved),
+                Toast.LENGTH_LONG).show()
+
+        finish()
     }
 
     private fun isInputValid(): Boolean {
