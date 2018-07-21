@@ -8,6 +8,7 @@
     <string name="report_form_trying_hard_title">Do you agree that you\'ve tried as hard as you could?</string>
     <string name="reporter_activity_error_select_values">Select values for every goal first.</string>
     <string name="reporter_activity_message_reports_saved">Report saved. Thank you!</string>
+    <string name="reporter_activity_message_reports_updated">Report updated.</string>
 
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>

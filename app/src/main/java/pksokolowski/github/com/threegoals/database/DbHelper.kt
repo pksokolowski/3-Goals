@@ -4,6 +4,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import junit.framework.Assert.fail
 import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.models.Goal
 import pksokolowski.github.com.threegoals.models.Report
@@ -75,6 +76,18 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
         cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
         return sDataBase!!.insert(Contract.reports.TABLE_NAME, null, cv)
+    }
+
+    fun updateReport(report: Report) {
+        val cv = ContentValues()
+        cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
+        cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
+        cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
+        cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
+        cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
+        val whereClause = Contract.reports.ID + " =? "
+        val whereArgs = arrayOf(report.ID.toString())
+        sDataBase!!.update(Contract.reports.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
     fun pushEdition(edition: Edition): Long {

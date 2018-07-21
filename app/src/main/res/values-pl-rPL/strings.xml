@@ -9,6 +9,7 @@
     <string name="report_form_trying_hard_title">Czy dałeś/aś z siebie wszystko?</string>
     <string name="reporter_activity_error_select_values">Wprowadź dane dla każdego celu.</string>
     <string name="reporter_activity_message_reports_saved">Raport zapisany. Miłego dnia!</string>
+    <string name="reporter_activity_message_reports_updated">Zaktualizowano raport.</string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>

@@ -38,31 +38,19 @@ class ReporterActivity : AppCompatActivity() {
         showData(intent.extras)
 
         done_button.setOnClickListener {
+            if (!isInputValid()) return@setOnClickListener
+            val forms = getReportForms()
+            val db = DbHelper.getInstance(this)
+
             if (mReportsToBeModified.size == 0) {
                 // brand new report, no editing of existing reports
-                var isAllValid = true
-                val forms = getReportForms()
-                for (f in forms) {
-                    if (f.getTryingHardScore() == -1) {
-                        isAllValid = false; break
-                    }
-                }
-                if (!isAllValid) {
-
-                    Toast.makeText(this,
-                            getString(R.string.reporter_activity_error_select_values),
-                            Toast.LENGTH_LONG).show()
-
-                    return@setOnClickListener
-                }
-
                 val db = DbHelper.getInstance(this)
 
                 val now = TimeHelper.now()
                 for (i: Int in forms.indices) {
                     val f = forms[i]
                     // update custom goal name if needed
-                    if(mGoals[i].name != f.getCustomName()){
+                    if (mGoals[i].name != f.getCustomName()) {
                         db.updateGoalCustomName(mGoals[i], f.getCustomName())
                     }
 
@@ -85,8 +73,40 @@ class ReporterActivity : AppCompatActivity() {
                 finish()
             } else {
                 // editing existing reports
+                // todo: implement updating report rows
+                for (i: Int in forms.indices) {
+                    val rep = mReportsToBeModified[i]
+                    val f = forms[i]
+
+                    db.updateReport(Report(
+                            rep.ID,
+                            rep.day_num,
+                            rep.time_stamp,
+                            f.getTryingHardScore(),
+                            f.getPositivesCount(),
+                            rep.goal)
+                    )
+
+                }
+                Toast.makeText(this,
+                        getString(R.string.reporter_activity_message_reports_updated),
+                        Toast.LENGTH_LONG).show()
+                finish()
             }
         }
+    }
+
+    private fun isInputValid(): Boolean {
+        val forms = getReportForms()
+        for (f in forms) {
+            if (f.getTryingHardScore() == -1) {
+                Toast.makeText(this,
+                        getString(R.string.reporter_activity_error_select_values),
+                        Toast.LENGTH_LONG).show()
+                return false
+            }
+        }
+        return true
     }
 
     private fun showData(bundle: Bundle?) {
