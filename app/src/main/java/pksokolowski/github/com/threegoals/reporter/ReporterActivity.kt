@@ -36,6 +36,11 @@ class ReporterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
         showData(intent.extras)
+        // block saving if there is a problem with data provided
+        // most likely cause is not-using the newIntent() method
+        // and forging and intent manually, without the required
+        // extras.
+        lockSavingIfDataIsMissing()
 
         done_button.setOnClickListener {
             if (!isInputValid()) return@setOnClickListener
@@ -140,6 +145,12 @@ class ReporterActivity : AppCompatActivity() {
             for (i in reportForms.indices) {
                 reportForms[i].setData(i, mGoals[i].name)
             }
+        }
+    }
+
+    private fun lockSavingIfDataIsMissing(){
+        if(mDayNumber == -1 || !this::mEdition.isInitialized){
+            done_button.isEnabled = false
         }
     }
 
