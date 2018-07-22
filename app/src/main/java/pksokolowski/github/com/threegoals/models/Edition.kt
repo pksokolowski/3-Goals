@@ -10,4 +10,9 @@ data class Edition (val ID: Long, val title: String, val goals_count: Int, val s
         val sinceEditionStart = timestamp - start_day_timestamp
         return (sinceEditionStart / TimeHelper.dayInMillis).toInt()
     }
+
+    fun dateByDayNum(dayNum: Int): String{
+        val inMillis = start_day_timestamp + (dayNum * TimeHelper.dayInMillis)
+        return TimeHelper.getDate(inMillis)
+    }
 }

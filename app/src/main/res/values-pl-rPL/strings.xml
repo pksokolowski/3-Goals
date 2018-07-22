@@ -10,6 +10,9 @@
     <string name="reporter_activity_error_select_values">Wprowadź dane dla każdego celu.</string>
     <string name="reporter_activity_message_reports_saved">Raport zapisany. Miłego dnia!</string>
     <string name="reporter_activity_message_reports_updated">Zaktualizowano raport.</string>
+    <string name="reports_editor_title">Edytor raportów</string>
+    <string name="editor_report_status_submitted">raport zapisany</string>
+    <string name="editor_report_status_missing">brakujący raport</string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>

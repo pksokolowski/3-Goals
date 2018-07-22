@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import junit.framework.Assert.fail
+import pksokolowski.github.com.threegoals.models.Day
 import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.models.Goal
 import pksokolowski.github.com.threegoals.models.Report
@@ -237,6 +238,30 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
         cursor.close()
         return reports
+    }
+
+    fun getDays(edition: Edition): Array<Day?> {
+        val days = arrayOfNulls<Day>(edition.length_in_days)
+        val reports = getReports(edition)
+        val daysInProgress = arrayOfNulls<MutableList<Report>>(edition.length_in_days)
+        // group reports by day
+        for (report in reports) {
+            if (daysInProgress[report.day_num] == null) {
+                // create day in progress list
+                daysInProgress[report.day_num] = mutableListOf()
+            }
+            daysInProgress[report.day_num]!!.add(report)
+        }
+
+        // create days
+        for (i in daysInProgress.indices) {
+            val daysReports = daysInProgress[i]
+            if (daysReports != null) {
+                days[i] = Day(i, daysReports.toTypedArray())
+            }
+        }
+
+        return days
     }
 
     fun getEditions(): MutableList<Edition> {

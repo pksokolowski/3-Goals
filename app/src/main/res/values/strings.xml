@@ -9,6 +9,9 @@
     <string name="reporter_activity_error_select_values">Select values for every goal first.</string>
     <string name="reporter_activity_message_reports_saved">Report saved. Thank you!</string>
     <string name="reporter_activity_message_reports_updated">Report updated.</string>
+    <string name="reports_editor_title">Reports editor</string>
+    <string name="editor_report_status_submitted">report submitted</string>
+    <string name="editor_report_status_missing">report missing</string>
 
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>

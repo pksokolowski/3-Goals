@@ -19,6 +19,11 @@ class TimeHelper {
             return formatter.format(Date(timeStamp))
         }
 
+        fun getDate(timeStamp: Long): String {
+            val formatter = SimpleDateFormat("dd.MM.yy")
+            return formatter.format(Date(timeStamp))
+        }
+
         fun get0HourTimeOfAGivenDay(any_moment_within_the_day: Long): Long {
             val c = Calendar.getInstance()
             c.timeInMillis = any_moment_within_the_day
