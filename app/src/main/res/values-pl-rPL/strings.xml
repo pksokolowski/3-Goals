@@ -13,6 +13,7 @@
     <string name="reports_editor_title">Edytor raportów</string>
     <string name="editor_report_status_submitted">raport zapisany</string>
     <string name="editor_report_status_missing">brakujący raport</string>
+    <string name="main_pie_no_data_message">Brak danych</string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>

@@ -2,6 +2,7 @@ package pksokolowski.github.com.threegoals
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
@@ -13,6 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         NotificationsManager.createNotificationChannels(this)
         setContentView(R.layout.activity_main)
+
+        pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
+        pieChart.mainColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         // assign UI actions
         val edition = EditionsManager.getCurrentEdition(this)

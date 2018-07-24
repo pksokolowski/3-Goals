@@ -12,6 +12,7 @@
     <string name="reports_editor_title">Reports editor</string>
     <string name="editor_report_status_submitted">report submitted</string>
     <string name="editor_report_status_missing">report missing</string>
+    <string name="main_pie_no_data_message">No data to show</string>
 
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>
