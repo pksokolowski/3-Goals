@@ -71,7 +71,7 @@ class PieChart : View {
             }
 
             mColors = prepareColors(mData!!.size, mainColor)
-            mGrayedOutColors = prepareColors(mData!!.size, notSelectedColor)
+            mGrayedOutColors = prepareColors(mData!!.size, notSelectedColor, 5)
             lastTouchedIndex = -1
 
             invalidate()
@@ -180,9 +180,8 @@ class PieChart : View {
                 mNoDataText)
     }
 
-    private fun prepareColors(len: Int, baseColor: Int): IntArray {
+    private fun prepareColors(len: Int, baseColor: Int, colorStep: Int = 10): IntArray {
         val colors = IntArray(len)
-        val colorIncrement = 10
         var r = Color.red(baseColor)
         var g = Color.green(baseColor)
         var b = Color.blue(baseColor)
@@ -190,9 +189,9 @@ class PieChart : View {
         for (i in 0 until len) {
             val color = Color.argb(255, r, g, b)
             colors[i] = color
-            r = Math.min(r + colorIncrement, 255)
-            g = Math.min(g + colorIncrement, 255)
-            b = Math.min(b + colorIncrement, 255)
+            r = Math.min(r + colorStep, 255)
+            g = Math.min(g + colorStep, 255)
+            b = Math.min(b + colorStep, 255)
         }
 
         return colors
