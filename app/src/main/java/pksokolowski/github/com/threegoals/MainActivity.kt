@@ -6,27 +6,43 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
+import pksokolowski.github.com.threegoals.models.DaysData
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class MainActivity : AppCompatActivity() {
-
+    var data: DaysData? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationsManager.createNotificationChannels(this)
         setContentView(R.layout.activity_main)
+        val edition = EditionsManager.getCurrentEdition(this)
+        if (edition != null) data = DaysData(this, edition)
 
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
         pieChart.mainColor = ContextCompat.getColor(this, R.color.colorPrimary)
         pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
+        val data = data
+        if (data != null) {
+            val pieData = mutableListOf<PieChart.Datum>()
+            val scoresPerGoal = data.getScoresPerGoal()
+            for (i: Int in scoresPerGoal.indices) {
+                pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
+                        scoresPerGoal[i].toLong(),
+                        i.toLong()))
+            }
+
+            pieChart.data = pieData
+        }
+
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), 1)
-        selectionButtons.selectionChangedListener = {  }
+        selectionButtons.selectionChangedListener = { }
 
         // assign UI actions
-        val edition = EditionsManager.getCurrentEdition(this)
-        if(edition != null) {
+        if (edition != null) {
             editor_imageview.setOnClickListener { EditorDialogFragment.showDialog(this, edition) }
         }
     }
