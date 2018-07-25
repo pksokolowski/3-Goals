@@ -17,7 +17,7 @@ import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 
 class EditorDialogFragment(): DialogFragment(), DaysDataAdapter.OnItemSelectedListener {
     override fun onItemSelected(dayNum: Int, editionID: Long) {
-        context?.startActivity(ReporterActivity.newIntent(mActivity, editionID, dayNum))
+        context?.startActivity(ReporterActivity.newIntent(requireActivity(), editionID, dayNum))
     }
 
     companion object {
@@ -26,12 +26,10 @@ class EditorDialogFragment(): DialogFragment(), DaysDataAdapter.OnItemSelectedLi
         fun showDialog(activity: AppCompatActivity, edition: Edition){
             val dialog = EditorDialogFragment()
             dialog.mEdition = edition
-            dialog.mActivity = activity
             dialog.show(activity.supportFragmentManager, FRAGMENT_TAG_LOGS)
         }
     }
     private lateinit var mEdition: Edition
-    private lateinit var mActivity: AppCompatActivity
     private lateinit var mView: View
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -47,12 +45,12 @@ class EditorDialogFragment(): DialogFragment(), DaysDataAdapter.OnItemSelectedLi
 
     override fun onResume() {
         super.onResume()
-        if(::mEdition.isInitialized && ::mActivity.isInitialized) {
-            val data = DaysData(mActivity, mEdition)
+        if(::mEdition.isInitialized) {
+            val data = DaysData(requireActivity(), mEdition)
 
             mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
             val numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
-            mView.editor_recycler.adapter = DaysDataAdapter(mActivity, data, numOfDaysToShow, this )
+            mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this )
         }
     }
 }
