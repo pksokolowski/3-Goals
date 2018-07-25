@@ -14,6 +14,10 @@
     <string name="editor_report_status_missing">report missing</string>
     <string name="main_pie_no_data_message">No data to show</string>
 
+    <string name="selection_buttons_sum">Sum</string>
+    <string name="selection_buttons_delta">delta</string>
+    <string name="selection_buttons_weekly">weekly</string>
+
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>
         <item>Disagree</item>
@@ -27,5 +31,11 @@
         <item>Goal Ⅱ</item>
         <item>Goal Ⅲ</item>
         <item>Goal \?</item>
+    </string-array>
+
+    <string-array name="charts_selection">
+        <item>delta</item>
+        <item>sum</item>
+        <item>weekly</item>
     </string-array>
 </resources>

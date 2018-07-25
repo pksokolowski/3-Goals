@@ -3,4 +3,6 @@
     <color name="colorPrimary">#4a8c2e</color>
     <color name="colorPrimaryDark">#264b15</color>
     <color name="colorAccent">#5da44e</color>
+
+    <color name="selector_inactive_connection">#dadada</color>
 </resources>

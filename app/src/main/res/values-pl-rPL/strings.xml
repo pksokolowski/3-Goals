@@ -15,6 +15,10 @@
     <string name="editor_report_status_missing">brakujący raport</string>
     <string name="main_pie_no_data_message">Brak danych</string>
 
+    <string name="selection_buttons_sum">Suma</string>
+    <string name="selection_buttons_delta">zmiana</string>
+    <string name="selection_buttons_weekly">dni tyg.</string>
+
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>
         <item>Raczej nie</item>
@@ -28,6 +32,12 @@
         <item>Cel Ⅱ</item>
         <item>Cel Ⅲ</item>
         <item>Cel \?</item>
+    </string-array>
+
+    <string-array name="charts_selection">
+        <item>delta</item>
+        <item>suma</item>
+        <item>dni. tyg.</item>
     </string-array>
 
 </resources>
