@@ -39,16 +39,22 @@ class MainActivity : AppCompatActivity() {
             pieChart.data = pieData
         }
 
+        pieChart.sliceSelectionChanged = {
+            if(data != null){
+            charts_holder.removeAllViews()
+            charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
+        }}
+
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), CURRENT_CHART_SELECTION)
         selectionButtons.selectionChangedListener = {
             if(data != null){
+                CURRENT_CHART_SELECTION = it
                 charts_holder.removeAllViews()
-                charts_holder.addView(ChartProvider.getChart(this, data!!, it, pieChart.lastTouchedIndex))
+                charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
             }
         }
 
-        // test code
         if (data != null) {
             charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
         }

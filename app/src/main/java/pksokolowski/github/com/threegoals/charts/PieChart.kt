@@ -77,8 +77,6 @@ class PieChart : View {
             invalidate()
         }
 
-    private var mListener: OnSliceSelected? = null
-
     constructor(context: Context) : super(context) {
         preparePaints()
     }
@@ -232,10 +230,10 @@ class PieChart : View {
                 if (touchedIndex != -1) {
                     if (touchedIndex == lastTouchedIndex) {
                         lastTouchedIndex = -1
-                        mListener?.onSliceSelected(null)
+                        sliceSelectionChanged?.invoke(null)
                     } else {
                         lastTouchedIndex = touchedIndex
-                        mListener?.onSliceSelected(mData!![touchedIndex])
+                        sliceSelectionChanged?.invoke(mData!![touchedIndex])
                     }
                     invalidate()
                 }
@@ -273,13 +271,7 @@ class PieChart : View {
         return -1
     }
 
-    interface OnSliceSelected {
-        fun onSliceSelected(datumOrNull: Datum?)
-    }
-
-    fun setOnSliceSelectedListener(listener: OnSliceSelected) {
-        mListener = listener
-    }
+    var sliceSelectionChanged: ((datumOrNull: Datum?) -> Unit)? = null
 
     data class Datum(val title: String, val value: Long, val ID: Long)
 
