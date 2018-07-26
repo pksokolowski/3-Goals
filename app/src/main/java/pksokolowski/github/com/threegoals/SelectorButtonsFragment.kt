@@ -37,6 +37,7 @@ class SelectorButtonsFragment : Fragment() {
     }
 
     private fun generateLayout(titles: Array<String>): View {
+        layout.removeAllViews()
         val set = ConstraintSet()
         val n = titles.size
 
