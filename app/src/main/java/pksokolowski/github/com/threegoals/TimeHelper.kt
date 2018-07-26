@@ -1,6 +1,8 @@
 package pksokolowski.github.com.threegoals
 
+import pksokolowski.github.com.threegoals.models.DaysData
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
 import java.util.*
 
 class TimeHelper {
@@ -17,6 +19,18 @@ class TimeHelper {
         public fun getYearLast2Digits(timeStamp: Long): String {
             val formatter = SimpleDateFormat("yy")
             return formatter.format(Date(timeStamp))
+        }
+
+        fun getDayOfWeekShortName(timeStamp: Long): String {
+            val c = Calendar.getInstance()
+            c.timeInMillis = timeStamp
+            return c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
+        }
+
+        fun getDayOfWeekShortNameByDaysNumber(dayOfWeek: Int): String{
+            val c = Calendar.getInstance()
+            c.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+            return getDayOfWeekShortName(c.timeInMillis)
         }
 
         fun getDate(timeStamp: Long): String {
@@ -38,5 +52,12 @@ class TimeHelper {
 
         fun now() = Calendar.getInstance().timeInMillis
         fun yesterday0Hour() = get0HourTimeOfAGivenDay(now() - dayInMillis)
+
+        fun dayOfWeekOf(timeStamp: Long): Int {
+            val c = Calendar.getInstance()
+            c.timeInMillis = timeStamp
+
+            return c.get(Calendar.DAY_OF_WEEK)
+        }
     }
 }

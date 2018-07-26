@@ -15,4 +15,9 @@ data class Edition (val ID: Long, val title: String, val goals_count: Int, val s
         val inMillis = start_day_timestamp + (dayNum * TimeHelper.dayInMillis)
         return TimeHelper.getDate(inMillis)
     }
+
+    fun dayOfWeekByDayNum(dayNum: Int): Int{
+        val inMillis = start_day_timestamp + (dayNum * TimeHelper.dayInMillis)
+        return TimeHelper.dayOfWeekOf(inMillis)
+    }
 }

@@ -6,29 +6,61 @@ import pksokolowski.github.com.threegoals.models.Report
 
 class ScoreCalculator {
     companion object {
-        fun calc(report: Report): Int{
-            return subCalcTryingHard(report.score_trying_hard) + subCalcPositives(report.score_positives)
+
+        const val MAX_POSITIVES_AMOUNT = 999
+        const val MAX_TRYING_HARD_SCORE = 4
+
+        fun calc(report: Report, includeTryingHard: Boolean = true, includePositives: Boolean = true): Int {
+            var sum = 0
+            if (includeTryingHard) sum += subCalcTryingHard(report.score_trying_hard)
+            if (includePositives) sum += subCalcPositives(report.score_positives)
+            return sum
         }
 
-        fun calc(day: Day): Int{
+        fun calc(day: Day, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalPosition: Int = -1): Int {
+            if (goalPosition != -1) {
+                return calc(day.reports[goalPosition], includeTryingHard, includePositives)
+            }
             var sum = 0
-            for(report: Report in day.reports){
-                sum += calc(report)
+            for (report: Report in day.reports) {
+                sum += calc(report, includeTryingHard, includePositives)
             }
             return sum
         }
 
-        fun subCalcPositives(positives: Int): Int{
+        private fun subCalcPositives(positives: Int): Int {
             return Math.sqrt(positives.toDouble()).toInt()
         }
 
-        fun subCalcTryingHard(trying: Int): Int{
+        private fun subCalcTryingHard(trying: Int): Int {
             return Math.pow(trying.toDouble(), 2.5).toInt()
         }
 
-        fun getMaxDailyScore(edition: Edition): Int{
-            val report = Report(-1, 0, 0,4, 999,0)
-            return edition.goals_count * calc(report)
+        fun getMaxDailyScore(edition: Edition): Int {
+            return edition.goals_count * getMaxScoreOfReport(edition)
+        }
+
+        fun getMaxDailyScore(edition: Edition, includeTryingHard: Boolean = true, includePositives: Boolean = true, forASingleGoal: Boolean = false): Int {
+            val report = Report(-1, 0, 0, MAX_TRYING_HARD_SCORE, MAX_POSITIVES_AMOUNT, 0)
+            val reportScore = calc(report, includeTryingHard, includePositives)
+            return if (forASingleGoal) {
+                reportScore
+            } else {
+                edition.goals_count * reportScore
+            }
+        }
+
+        fun getMaxScoreOfReport(edition: Edition): Int {
+            val report = Report(-1, 0, 0, MAX_TRYING_HARD_SCORE, MAX_POSITIVES_AMOUNT, 0)
+            return calc(report)
+        }
+
+        fun getMaxPositivesScorePerReport(): Int {
+            return subCalcPositives(MAX_POSITIVES_AMOUNT)
+        }
+
+        fun getMaxTryingHardScorePerReport(): Int {
+            return subCalcTryingHard(MAX_TRYING_HARD_SCORE)
         }
     }
 }

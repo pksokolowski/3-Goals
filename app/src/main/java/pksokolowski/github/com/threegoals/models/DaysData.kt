@@ -26,8 +26,8 @@ class DaysData(context: Context, val edition: Edition) {
         return days[dayNum] != null
     }
 
-    fun getGoalInitialAt(pos: Int): String{
-        if(pos !in goals.indices) return "?"
+    fun getGoalInitialAt(pos: Int): String {
+        if (pos !in goals.indices) return "?"
         return goals[pos].initial
     }
 
@@ -42,4 +42,42 @@ class DaysData(context: Context, val edition: Edition) {
         }
         return scores
     }
+
+    fun getDailyScores(cumulative: Boolean = false, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int = -1): IntArray {
+        val data = IntArray(edition.length_in_days)
+        var cumulation = 0
+
+        for (i in days.indices) {
+            val day = days[i] ?: continue
+
+            val score = ScoreCalculator.calc(day, includeTryingHard, includePositives, goalNum)
+            if (cumulative) {
+                cumulation += score
+                data[i] = cumulation
+            } else {
+                data[i] = score
+            }
+        }
+        return data
+    }
+
+    fun getDaysOfWeekAverageScores(includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int): IntArray{
+        val daysOfWeek = IntArray(7)
+        val weights = IntArray(7)
+        for (i in days.indices){
+            val day = days[i] ?: continue
+            val score = ScoreCalculator.calc(day, includeTryingHard, includePositives, goalNum)
+            val dayOfWeek = edition.dayOfWeekByDayNum(i) -1
+            daysOfWeek[dayOfWeek] += score
+            weights[dayOfWeek] +=1
+        }
+        // calculate averages
+        val results = IntArray(7)
+        for(i in daysOfWeek.indices){
+            if(weights[i] == 0) continue
+            results[i] = (daysOfWeek[i] / weights[i].toFloat()).toInt()
+        }
+        return results
+    }
+
 }

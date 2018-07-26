@@ -14,6 +14,8 @@ import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class MainActivity : AppCompatActivity() {
     var data: DaysData? = null
+    private var CURRENT_CHART_SELECTION = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationsManager.createNotificationChannels(this)
@@ -25,12 +27,11 @@ class MainActivity : AppCompatActivity() {
         pieChart.mainColor = ContextCompat.getColor(this, R.color.colorPrimary)
         pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
-        val data = data
         if (data != null) {
             val pieData = mutableListOf<PieChart.Datum>()
-            val scoresPerGoal = data.getScoresPerGoal()
+            val scoresPerGoal = data!!.getScoresPerGoal()
             for (i: Int in scoresPerGoal.indices) {
-                pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
+                pieData.add(PieChart.Datum(data!!.getGoalInitialAt(i),
                         scoresPerGoal[i].toLong(),
                         i.toLong()))
             }
@@ -39,8 +40,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         val selectionButtons = selection_buttons as SelectorButtonsFragment
-        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), 1)
-        selectionButtons.selectionChangedListener = { }
+        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), CURRENT_CHART_SELECTION)
+        selectionButtons.selectionChangedListener = {
+            if(data != null){
+                charts_holder.removeAllViews()
+                charts_holder.addView(ChartProvider.getChart(this, data!!, it, pieChart.lastTouchedIndex))
+            }
+        }
+
+        // test code
+        if (data != null) {
+            charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
+        }
 
         // assign UI actions
         if (edition != null) {
