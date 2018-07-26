@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
+import pksokolowski.github.com.threegoals.charts.BarChart
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
 import pksokolowski.github.com.threegoals.models.DaysData
