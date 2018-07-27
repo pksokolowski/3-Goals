@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
+import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
@@ -12,67 +13,71 @@ import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class MainActivity : AppCompatActivity() {
-    var data: DaysData? = null
+    private lateinit var data: DaysData
+    private lateinit var topBar: TopBarFragment
     private var currentChartSelection = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NotificationsManager.createNotificationChannels(this)
         setContentView(R.layout.activity_main)
-        val edition = EditionsManager.getCurrentEdition(this)
-        if (edition != null) data = DaysData(this, edition)
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        topBar = (top_bar as TopBarFragment)
+
+        val edition = topBar.getSelectedEdition()
+        data = DaysData(this, edition)
 
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
         pieChart.mainColor = ContextCompat.getColor(this, R.color.colorPrimary)
         pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
-        if (data != null) {
+        showData()
+        setupListeners(edition)
+    }
+
+    private fun showData() {
+        displayPieChart()
+        displayBarChart()
+    }
+
+    private fun displayPieChart() {
             val pieData = mutableListOf<PieChart.Datum>()
-            val scoresPerGoal = data!!.getScoresPerGoal()
+            val scoresPerGoal = data.getScoresPerGoal()
             for (i: Int in scoresPerGoal.indices) {
-                pieData.add(PieChart.Datum(data!!.getGoalInitialAt(i),
+                pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
                         scoresPerGoal[i].toLong(),
                         i.toLong()))
             }
 
             pieChart.data = pieData
-        }
+    }
 
-        displayChart()
-
-        setupListeners(edition)
+    fun displayBarChart() {
+            charts_holder.removeAllViews()
+            charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
     }
 
     private fun setupListeners(edition: Edition?) {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
         selectionButtons.selectionChangedListener = {
-            if (data != null) {
                 currentChartSelection = it
-                displayChart()
-            }
+                displayBarChart()
         }
-
 
         if (edition != null) {
             editor_imageview.setOnClickListener {
-                val data = data
-                if (data != null) {
                     EditorDialogFragment.showDialog(this, data.edition)
-                }
             }
         }
 
         pieChart.sliceSelectionChanged = {
-            displayChart()
+            displayBarChart()
         }
-    }
 
-    fun displayChart() {
-        val data = data
-        if (data != null) {
-            charts_holder.removeAllViews()
-            charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
+        topBar.editionSelected = {
+            data = DaysData(this, it)
+            showData()
         }
     }
 

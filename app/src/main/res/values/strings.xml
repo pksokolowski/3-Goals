@@ -18,6 +18,8 @@
     <string name="selection_buttons_delta">delta</string>
     <string name="selection_buttons_weekly">weekly</string>
 
+    <string name="top_bar_message_start_new_edition">tap here to start next edition</string>
+
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>
         <item>Disagree</item>

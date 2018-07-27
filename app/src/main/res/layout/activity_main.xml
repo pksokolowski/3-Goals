@@ -7,6 +7,15 @@
     tools:context=".MainActivity">
 
     <fragment
+        android:id="@+id/top_bar"
+        android:name="pksokolowski.github.com.threegoals.TopBarFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <fragment
         android:id="@+id/selection_buttons"
         android:name="pksokolowski.github.com.threegoals.SelectorButtonsFragment"
         android:layout_width="match_parent"
@@ -56,11 +65,10 @@
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/selection_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/top_bar">
 
     </FrameLayout>
 </android.support.constraint.ConstraintLayout>

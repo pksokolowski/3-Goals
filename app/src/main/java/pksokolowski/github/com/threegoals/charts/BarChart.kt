@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.TypedValue
 import android.view.View
-import java.lang.Math.max
 
 class BarChart(context: Context, private val data: IntArray, private val maxValue: Int, private val dim2Data: IntArray, private val dim2MaxValue: Int, private val columnTitles: Array<String>? = null) : View(context) {
     private lateinit var framePaint: Paint
@@ -72,12 +71,12 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
 
     private fun convertIntValsToFloats(height: Int) {
         val maxYForPlotting = SpecialCalculateY(height)
-        val skalaY = (maxYForPlotting - dpToPixels(4)) / maxValue.toFloat()
+        val scaleY = (maxYForPlotting - scaleLinesPaint.strokeWidth / 2F) / maxValue.toFloat()
 
         for (i in scaledData.indices) {
-            scaledData[i] = Math.max(0, data[i]).toFloat() * skalaY
+            scaledData[i] = Math.max(0, data[i]).toFloat() * scaleY
         }
-        scaledMaxValue = maxValue * skalaY
+        scaledMaxValue = maxValue * scaleY
     }
 
     override fun onDraw(canvas: Canvas) {

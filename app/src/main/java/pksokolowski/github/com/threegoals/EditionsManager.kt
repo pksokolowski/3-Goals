@@ -9,20 +9,28 @@ import java.util.*
 
 object EditionsManager {
     private var editions = mutableListOf<Edition>()
-    private var isReady: Boolean = false
+    private var setupAlreadyInitiated: Boolean = false
 
     private fun setup(context: Context) {
-        if (isReady) return
+        if (setupAlreadyInitiated) return
+        setupAlreadyInitiated = true
+
         getEditionsData(context)
-        isReady = true
     }
 
     private fun getEditionsData(context: Context) {
         editions = DbHelper.getInstance(context).getEditions()
+        // if there are no editions in existence, create
+        // the first one:
+        if(editions.isEmpty()) createEdition(context)
     }
 
-    public fun createEdition(context: Context): Edition {
+    fun createEdition(context: Context): Edition {
         setup(context)
+
+        // if there already is an ongoing edition, return it instead.
+        val current = getCurrentEdition(context)
+        if(current != null) return current
 
         val now = Calendar.getInstance().timeInMillis
         val today0hour = TimeHelper.get0HourTimeOfAGivenDay(now)
@@ -52,14 +60,13 @@ object EditionsManager {
 
     public fun getCurrentEdition(context: Context): Edition? {
         setup(context)
-        // if there never was an edition, create one and return it
-        if (editions.size == 0) return createEdition(context)
 
-        val latest = editions.get(editions.size - 1)
-        val latest_endDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
+        if(editions.size == 0) return null
+        val latest = editions.last()
+        val latestEndDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
         val now = Calendar.getInstance().timeInMillis
 
-        if (latest_endDay > now) return latest
+        if (latestEndDay > now) return latest
         return null
     }
 
@@ -75,5 +82,15 @@ object EditionsManager {
         return with(TimeHelper) {
             getYear(timeStamp) + "/" + getYearLast2Digits(timeStamp + yearInMillis)
         }
+    }
+
+    fun getEditionsTitles(context: Context): Array<String> {
+        setup(context)
+        return Array(editions.size) { editions[it].title }
+    }
+
+    fun getAllEditions(context: Context): Array<Edition>{
+        setup(context)
+        return Array(editions.size) { editions[it]}
     }
 }

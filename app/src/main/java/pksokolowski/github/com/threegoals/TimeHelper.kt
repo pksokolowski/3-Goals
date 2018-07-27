@@ -3,6 +3,7 @@ package pksokolowski.github.com.threegoals
 import pksokolowski.github.com.threegoals.models.DaysData
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
+import java.time.format.TextStyle
 import java.util.*
 
 class TimeHelper {

@@ -19,6 +19,8 @@
     <string name="selection_buttons_delta">zmiana</string>
     <string name="selection_buttons_weekly">dni tyg.</string>
 
+    <string name="top_bar_message_start_new_edition">rozpocznij nową edycję</string>
+
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>
         <item>Raczej nie</item>
