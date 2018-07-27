@@ -1,6 +1,7 @@
 package pksokolowski.github.com.threegoals
 
 import android.content.Context
+import pksokolowski.github.com.threegoals.alarms.AlarmsManager
 import pksokolowski.github.com.threegoals.database.DbHelper
 import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.models.Goal
@@ -40,6 +41,7 @@ object EditionsManager {
 
         val newEdition = Edition(id, edition.title, edition.goals_count, edition.start_day_timestamp, edition.length_in_days)
         editions.add(newEdition)
+        AlarmsManager.setupAlarms(context)
         return newEdition
     }
 
