@@ -4,17 +4,16 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.view.View
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
-import pksokolowski.github.com.threegoals.charts.BarChart
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
 import pksokolowski.github.com.threegoals.models.DaysData
+import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class MainActivity : AppCompatActivity() {
     var data: DaysData? = null
-    private var CURRENT_CHART_SELECTION = 1
+    private var currentChartSelection = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,29 +38,41 @@ class MainActivity : AppCompatActivity() {
             pieChart.data = pieData
         }
 
-        pieChart.sliceSelectionChanged = {
-            if(data != null){
-            charts_holder.removeAllViews()
-            charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
-        }}
+        displayChart()
 
+        setupListeners(edition)
+    }
+
+    private fun setupListeners(edition: Edition?) {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
-        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), CURRENT_CHART_SELECTION)
+        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
         selectionButtons.selectionChangedListener = {
-            if(data != null){
-                CURRENT_CHART_SELECTION = it
-                charts_holder.removeAllViews()
-                charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
+            if (data != null) {
+                currentChartSelection = it
+                displayChart()
             }
         }
 
-        if (data != null) {
-            charts_holder.addView(ChartProvider.getChart(this, data!!, CURRENT_CHART_SELECTION, pieChart.lastTouchedIndex))
+
+        if (edition != null) {
+            editor_imageview.setOnClickListener {
+                val data = data
+                if (data != null) {
+                    EditorDialogFragment.showDialog(this, data.edition)
+                }
+            }
         }
 
-        // assign UI actions
-        if (edition != null) {
-            editor_imageview.setOnClickListener { EditorDialogFragment.showDialog(this, edition) }
+        pieChart.sliceSelectionChanged = {
+            displayChart()
+        }
+    }
+
+    fun displayChart() {
+        val data = data
+        if (data != null) {
+            charts_holder.removeAllViews()
+            charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
         }
     }
 
