@@ -50,7 +50,8 @@ object EditionsManager {
 
     public fun getCurrentEdition(context: Context): Edition? {
         setup(context)
-        if (editions.size == 0) return null
+        // if there never was an edition, create one and return it
+        if (editions.size == 0) return createEdition(context)
 
         val latest = editions.get(editions.size - 1)
         val latest_endDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
