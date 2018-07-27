@@ -49,7 +49,8 @@ class EditorDialogFragment(): DialogFragment(), DaysDataAdapter.OnItemSelectedLi
             val data = DaysData(requireActivity(), mEdition)
 
             mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
-            val numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
+            var numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
+            if(numOfDaysToShow == -1) numOfDaysToShow = data.edition.length_in_days
             mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this )
         }
     }
