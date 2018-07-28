@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.view.WindowManager
 import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.reporter_activity.*
@@ -37,6 +38,7 @@ class ReporterActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         obtainDataFromExtras(intent.extras)
         showData()
@@ -57,16 +59,6 @@ class ReporterActivity : AppCompatActivity() {
             } else {
                 editExistingReports(forms, db)
             }
-        }
-
-        scrollToXY(0,0)
-    }
-
-    private fun scrollToXY(x: Int, y: Int) {
-        // make sure the scrollView is scrolled all the way up
-        scroll_view.post {
-            // scrollview.fullScroll(ScrollView.FOCUS_UP);
-            scroll_view.scrollTo(x, y)
         }
     }
 
