@@ -70,6 +70,12 @@ object EditionsManager {
         return null
     }
 
+    fun getLatestEdition(context: Context): Edition?{
+        setup(context)
+        if(editions.size==0) return null
+        return editions.last()
+    }
+
     public fun getEditionById(context: Context, id: Long): Edition? {
         setup(context)
         for (e in editions) {

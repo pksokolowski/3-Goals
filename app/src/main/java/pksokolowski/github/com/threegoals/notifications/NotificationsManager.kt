@@ -8,7 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
+import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
+import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.database.DbHelper
+import pksokolowski.github.com.threegoals.models.Edition
 
 object NotificationsManager {
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
@@ -26,11 +30,28 @@ object NotificationsManager {
                 .setContentIntent(getOpenReporterPendingIntent(context))
 
         val notif = B.build()
-        val NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // to 0 to ID, pozwoli mi potem manipulować tym notification, w szczególności je usunąc lub zastąpić
-        NotificationManager.notify(NOTIFICATION_ID_USER_REPORT_REQUEST, notif)
+        notificationManager.notify(NOTIFICATION_ID_USER_REPORT_REQUEST, notif)
     }
+
+    fun showNotificationIfNeeded(context: Context) {
+        val db = DbHelper.getInstance(context)
+        val edition = EditionsManager.getLatestEdition(context) ?: return
+
+        // check if yesterday is eligible for getting a report within the last edition
+        val yesterday0Hour = TimeHelper.yesterday0Hour()
+        val yesterdayNum = edition.dayNumOf(yesterday0Hour)
+        if (yesterdayNum < 0) return
+
+        // check if there is already a report for the day
+        val hasReports = db.isThereReportForDay(yesterdayNum, edition)
+        if (hasReports) return
+
+        showNotification(context)
+    }
+
 
     public fun cancelNotification(context: Context) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
