@@ -33,7 +33,7 @@ class ScoreCalculator {
         }
 
         private fun subCalcTryingHard(trying: Int): Int {
-            return Math.pow(trying.toDouble(), 2.5).toInt()
+            return (Math.pow(trying.toDouble(), 1.2) * 10).toInt()
         }
 
         fun getMaxDailyScore(edition: Edition): Int {
