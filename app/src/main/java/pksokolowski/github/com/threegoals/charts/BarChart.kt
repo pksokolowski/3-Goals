@@ -164,7 +164,8 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
 
     private fun SpecialMeasurements(width: Float, height: Float) {
         // setting bar thickness:
-        val barThickness = width / data.size.toFloat() * 0.9f
+        val relativeThickness = if(data.size > 48) 1F else 0.9F
+        val barThickness = width / data.size.toFloat() * relativeThickness
         barPaint.strokeWidth = Math.max(1f, barThickness)
     }
 

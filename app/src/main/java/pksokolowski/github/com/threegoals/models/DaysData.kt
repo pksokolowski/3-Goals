@@ -48,7 +48,11 @@ class DaysData(context: Context, val edition: Edition) {
         var cumulation = 0
 
         for (i in days.indices) {
-            val day = days[i] ?: continue
+            val day = days[i]
+            if(day == null) {
+                data[i] = cumulation
+                continue
+            }
 
             val score = ScoreCalculator.calc(day, includeTryingHard, includePositives, goalNum)
             if (cumulative) {
