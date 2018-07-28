@@ -21,6 +21,14 @@
 
     <string name="top_bar_message_start_new_edition">rozpocznij nową edycję</string>
 
+    <string name="help_dialog_header">Pomoc</string>
+    <string name="help_topic_getting_started">Pierwsze kroki</string>
+    <string name="help_universal_getting_started">Witaj w 3 Goals![p]tekst paragrafu.[/p]</string>
+    <string name="help_topic_charts">Charts</string>
+    <string name="help_universal_charts">Wykres kołowy[p]opis wykresu kołowego.[/p]</string>
+    <string name="help_topic_reports">Raporty</string>
+    <string name="help_universal_reports">Tworzenie raportów[p]Aplikacja sama poprosi o wypełnienie krótkiego, codziennego raportu, wyświetlając odpowiednią notyfikację. Raporty można też dodawać lub edytować ręcznie, klikając przycisk w lewym dolnym rogu głównego interfejsu.[/p]</string>
+
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>
         <item>Raczej nie</item>

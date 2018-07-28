@@ -3,11 +3,13 @@ package pksokolowski.github.com.threegoals
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
+import pksokolowski.github.com.threegoals.help.HelpProvider
 import pksokolowski.github.com.threegoals.models.DaysData
 import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
@@ -69,6 +71,10 @@ class MainActivity : AppCompatActivity() {
             editor_imageview.setOnClickListener {
                     EditorDialogFragment.showDialog(this, data.edition)
             }
+        }
+
+        help_imageview.setOnClickListener {
+            HelpProvider.requestHelp(this, HelpProvider.TOPIC_GETTING_STARTED)
         }
 
         pieChart.sliceSelectionChanged = {

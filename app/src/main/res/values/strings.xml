@@ -20,6 +20,15 @@
 
     <string name="top_bar_message_start_new_edition">tap here to start next edition</string>
 
+    <string name="help_dialog_header">Help</string>
+    <string name="help_topic_getting_started">Getting Started</string>
+    <string name="help_universal_getting_started">Welcome to 3 Goals![p]SomeParagraph text[/p]</string>
+    <string name="help_topic_charts">Charts</string>
+    <string name="help_universal_charts">Pie chart[p]The pie chart\'s help paragraph.[/p]</string>
+    <string name="help_topic_reports">Reports</string>
+    <string name="help_universal_reports">Creating reports[p]The app will request filling a report form on a daily basis, you can also modify existing reports or add missing ones by tapping on the bottom left edit button in the main activity.[/p]</string>
+
+
     <string-array name="likert_textual_explanations">
         <item>Strongly disagree</item>
         <item>Disagree</item>
