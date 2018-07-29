@@ -23,11 +23,35 @@
 
     <string name="help_dialog_header">Pomoc</string>
     <string name="help_topic_getting_started">Pierwsze kroki</string>
-    <string name="help_universal_getting_started">Witaj w 3 Goals![p]tekst paragrafu.[/p]</string>
+    <string name="help_universal_getting_started">
+        3 cele na rok[p]Aplikacja została skonfigurowana automatycznie i nie jest wymagana żadna konfiguracja przez użyciem.[/p]
+
+        Do zrobienia[p]Wybierz 3 cele na następnych 365 dni, wykonalne ale znacząco poprawiające jakość twojego życia, i dziś zacznij je realizować.[/p]
+
+        Jutro[p]Po każdym z tych 365 dni, aplikacja poprosi o wypełnienie krótkiej ankiety dotyczącej poprzedniego dnia. Po 2 pytania na cel.[/p]
+
+        Teraz[p]Wszystko gotowe! Możesz zabierać się za zrealizowanie swoich marzeń. 3 istotne kroki na rok są w pełni wykonalne.[/p]
+    </string>
     <string name="help_topic_charts">Charts</string>
-    <string name="help_universal_charts">Wykres kołowy[p]opis wykresu kołowego.[/p]</string>
+    <string name="help_universal_charts">
+        Wykres kołowy[p]Pokazuje względne wyniki w ramach poszczególnych celów. Możesz kliknąć na daną część wykresu, wówczas na pozostałych wykresach wyświetlane będą tylko dane zaznaczonego na wykresie kołoym celu.[/p]
+
+        Suma[p]Skumulowane wyniki w czasie. Suma punktów od początku do danego dnia włącznie. Wysokość słupków reprezentuje włożone staranie zaś kolor mówi o pozytywnych rzeczach, jakie miały miejsce w związku z nimi.[/p]
+
+        Delta[p]Wyniki dzienne. Wysokość słupków to staranie, kolor to pozytywy - im zieleńszy, tym było ich więcej.[/p]
+
+        Dni. tyg.[p]Pokazuje średnie wyniki dla każdego z 7 dni tygodnia.[/p]
+    </string>
     <string name="help_topic_reports">Raporty</string>
-    <string name="help_universal_reports">Tworzenie raportów[p]Aplikacja sama poprosi o wypełnienie krótkiego, codziennego raportu, wyświetlając odpowiednią notyfikację. Raporty można też dodawać lub edytować ręcznie, klikając przycisk w lewym dolnym rogu głównego interfejsu.[/p]</string>
+    <string name="help_universal_reports">
+        Tworzenie raportów[p]Aplikacja sama poprosi o wypełnienie krótkiego, codziennego raportu, wyświetlając odpowiednią notyfikację.[/p]
+
+        Edytowanie raportu[p]Możesz edytować zapisane raporty. W tym celu kliknij na ikonkę ołówka po lewej stronie pod wykresem kołowym.[/p]
+
+        Brakujący raport[p]Bez obaw, w razie niewprowadzenia raportu, istnieje możliwość dodania go później. W tym celu kliknij na ikonę ołówka po lewej stronie pod wykresem kołowym, a następnie na datę brakującego raportu.[/p]
+
+        Tytuł celu[p]Jeżeli chcesz, móżesz przypisać celom tytuły. Jest to możliwe podczas wypełniania codziennego raportu. Kliknij na pole tekstowe obok wyboldowanego nagłówka sekcji danego celu. Tytuł zostanie zapisany razem z raportem.[/p]
+    </string>
 
     <string-array name="likert_textual_explanations">
         <item>Zdecydowanie nie</item>

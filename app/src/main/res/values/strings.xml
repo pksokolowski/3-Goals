@@ -21,12 +21,39 @@
     <string name="top_bar_message_start_new_edition">tap here to start next edition</string>
 
     <string name="help_dialog_header">Help</string>
+
     <string name="help_topic_getting_started">Getting Started</string>
-    <string name="help_universal_getting_started">Welcome to 3 Goals![p]SomeParagraph text[/p]</string>
+    <string name="help_universal_getting_started">
+        Welcome to 3 Goals![p]The app has been set up for you and requires no further configuration.[/p]
+
+        To do[p]Choose 3 smart, attainable but still life changing goals for the next 365 days and start making them come true today![/p]
+
+        Tomorrow[p]After each and every day of the 365 period, the app will ask you to fill a short questionnaire about the last day. Expect notifications.[/p]
+
+        Now[p]You\'re good to go! Make your dreams come true. 3 significant steps a year are perfectly doable.[/p]
+    </string>
+
     <string name="help_topic_charts">Charts</string>
-    <string name="help_universal_charts">Pie chart[p]The pie chart\'s help paragraph.[/p]</string>
+    <string name="help_universal_charts">
+        Pie chart[p]The chart presents the scores, for each of 3 goals, compared to each other. You can click on a slice representing a given goal to restrict data shown at the other charts, above the pie chart, to that single goal.[/p]
+
+        Sum chart[p]Cumulative scores of how hard you\'ve been trying to achieve your goals on consecutive days are presented as bar heights. Meanwhile positive things related to the effort are presented as color of the graph, which turns more and more green as you go. It\'s cumulative as well[/p]
+
+        Delta chart[p]Shows daily changes to the scores. How hard you\'ve tried is shown as bar height and the positive things encountered, related to the effort of achieving your goals, are presented as color of the bars - the move positives, the greener they appear.[/p]
+
+        Weekly chart[p]Shows average scores of each of the 7 days of week. How hard you\'ve tried is presented as bar height, color is representing the positives encountered in the effort.[/p]
+    </string>
+
     <string name="help_topic_reports">Reports</string>
-    <string name="help_universal_reports">Creating reports[p]The app will request filling a report form on a daily basis, you can also modify existing reports or add missing ones by tapping on the bottom left edit button in the main activity.[/p]</string>
+    <string name="help_universal_reports">
+        Creating reports[p]The app will request, via notification, filling a report questionnaire on a daily basis.[/p]
+
+        Editing a report[p]You can edit any and all of the reports saved. Tap on the pencil icon in the bottom left corner, below the pie chart.[/p]
+
+        Missing report[p]No worries, you can add reports you\'ve missed later. Open the reports editor as described above and tap on the date of the missing report.[/p]
+
+        Adding titles to goals[p]If you wish to assign titles to your goals, you can do it in the report questionnaire. Tap next to the bold Goal title and type the title. It will be saved as you submit the report.[/p]
+    </string>
 
 
     <string-array name="likert_textual_explanations">
