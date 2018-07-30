@@ -12,11 +12,16 @@ class NotificationsClickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
         if (action == ACTION_OPEN_REPORTER) {
-            val latestEdition = EditionsManager.getLatestEdition(context) ?: return
+            val latestEdition = EditionsManager.getLatestEdition(context)
+            if(latestEdition == null) { onFailure(context); return }
             val dayOfEdition = latestEdition.dayNumOf(TimeHelper.yesterday0Hour())
-            if(dayOfEdition < 0) return
+            if(dayOfEdition < 0) { onFailure(context); return }
 
             context.startActivity(ReporterActivity.newIntent(context, latestEdition.ID, dayOfEdition))
         }
+    }
+
+    private fun onFailure(context: Context){
+        NotificationsManager.cancelNotification(context)
     }
 }
