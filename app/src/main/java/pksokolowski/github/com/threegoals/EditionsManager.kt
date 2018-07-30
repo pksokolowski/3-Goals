@@ -50,6 +50,7 @@ object EditionsManager {
         val newEdition = Edition(id, edition.title, edition.goals_count, edition.start_day_timestamp, edition.length_in_days)
         editions.add(newEdition)
         AlarmsManager.setupAlarms(context)
+        BootFinishedReceiver.setBootFinishedReceiverEnabled(context, true)
         return newEdition
     }
 
