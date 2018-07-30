@@ -26,7 +26,6 @@ object NotificationsManager {
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_timeline_white_24dp)
                 .setOngoing(true)
-                .setPriority(Notification.PRIORITY_MAX)
                 .setContentIntent(getOpenReporterPendingIntent(context))
 
         val notif = B.build()
@@ -68,7 +67,7 @@ object NotificationsManager {
             val name = context.getString(R.string.notification_channel_user_report_request_title)
             val description = context.getString(R.string.notification_channel_user_report_request_description)
 
-            val importance = NotificationManager.IMPORTANCE_HIGH
+            val importance = NotificationManager.IMPORTANCE_LOW
             val channel = NotificationChannel(CHANNEL_ID_USER_REPORT_REQUEST, name, importance)
             channel.description = description
 
