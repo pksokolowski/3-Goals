@@ -68,6 +68,8 @@ class ReporterActivity : AppCompatActivity() {
         for (i: Int in forms.indices) {
             val rep = mReportsToBeModified[i]
             val f = forms[i]
+            // update custom goal name if needed
+            updateCustomGoalName(i, f, db)
 
             db.updateReport(Report(
                     rep.ID,
@@ -93,9 +95,7 @@ class ReporterActivity : AppCompatActivity() {
         for (i: Int in forms.indices) {
             val f = forms[i]
             // update custom goal name if needed
-            if (mGoals[i].name != f.getCustomName()) {
-                db.updateGoalCustomName(mGoals[i], f.getCustomName())
-            }
+            updateCustomGoalName(i, f, db)
 
             reports.add(Report(
                     -1,
@@ -118,6 +118,12 @@ class ReporterActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG).show()
 
         finish()
+    }
+
+    private fun updateCustomGoalName(i: Int, f: ReportFormFragment, db: DbHelper) {
+        if (mGoals[i].name != f.getCustomName()) {
+            db.updateGoalCustomName(mGoals[i], f.getCustomName())
+        }
     }
 
     private fun isInputValid(): Boolean {
