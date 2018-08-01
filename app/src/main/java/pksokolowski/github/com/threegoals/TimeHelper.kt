@@ -1,9 +1,7 @@
 package pksokolowski.github.com.threegoals
 
-import pksokolowski.github.com.threegoals.models.DaysData
 import java.text.SimpleDateFormat
 import java.time.DayOfWeek
-import java.time.format.TextStyle
 import java.util.*
 
 class TimeHelper {
@@ -30,7 +28,8 @@ class TimeHelper {
 
         fun getDayOfWeekShortNameByDaysNumber(dayOfWeek: Int): String{
             val c = Calendar.getInstance()
-            c.set(Calendar.DAY_OF_WEEK, dayOfWeek)
+            val currentCultureBased = convertDayOfWeekBetweenCultures(dayOfWeek, ConversionDiraction.TO_SUNDAY_BASED)
+            c.set(Calendar.DAY_OF_WEEK, currentCultureBased)
             return getDayOfWeekShortName(c.timeInMillis)
         }
 
@@ -57,8 +56,36 @@ class TimeHelper {
         fun dayOfWeekOf(timeStamp: Long): Int {
             val c = Calendar.getInstance()
             c.timeInMillis = timeStamp
+            val sundayBased = c.get(Calendar.DAY_OF_WEEK)
+            return convertDayOfWeekBetweenCultures(sundayBased, ConversionDiraction.TO_CURRENT_CULTURE)
+        }
 
-            return c.get(Calendar.DAY_OF_WEEK)
+        enum class ConversionDiraction(val multiplier: Int) {
+            TO_CURRENT_CULTURE(-1),
+            TO_SUNDAY_BASED(1)
+        }
+
+        fun convertDayOfWeekBetweenCultures(dayOfWeek: Int, direction: ConversionDiraction): Int {
+            // only days of week of 1 through 7 are accepted
+            require(dayOfWeek in 1..7)
+
+            // ensure use of valid directional
+            // convert to zero based, in order to work with a 0-6 instead 1-7 range
+            // this allows use of more convenient modulo transformation instead of 2 special cases.
+            val zeroBasedDayOfWeek = dayOfWeek - 1
+
+            // this gives us the shift in days between current culture and the default, sunday based
+            // constant values like Calendar.SUNDAY etc
+            val culturalDifference = Calendar.getInstance().firstDayOfWeek - 1
+
+            // shift dayOfWeek by the difference times direction
+            var zeroBasedShiftedDay = (zeroBasedDayOfWeek + (direction.multiplier * culturalDifference)) % 7
+            // modulo operator is not floorMod, so negative numbers can happen, lets remove them
+            if(zeroBasedShiftedDay < 0 ) zeroBasedShiftedDay += 7
+
+            // return after shifting back by 1 ahead, so the first dayOfWeek of week is number 1 and the
+            // last is number 7 again.
+            return zeroBasedShiftedDay + 1
         }
     }
 }
