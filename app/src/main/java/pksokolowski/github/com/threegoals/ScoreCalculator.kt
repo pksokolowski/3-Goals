@@ -29,7 +29,10 @@ class ScoreCalculator {
         }
 
         private fun subCalcPositives(positives: Int): Int {
-            return Math.sqrt(positives.toDouble()).toInt()
+            val steepness = 0.04
+            val asymptoticMultiplier = 1- Math.pow(Math.E, steepness * -positives.toDouble())
+            val maxValue = 40
+            return ( maxValue * asymptoticMultiplier ).toInt()
         }
 
         private fun subCalcTryingHard(trying: Int): Int {

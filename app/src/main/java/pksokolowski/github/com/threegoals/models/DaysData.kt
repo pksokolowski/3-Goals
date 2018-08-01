@@ -43,13 +43,13 @@ class DaysData(context: Context, val edition: Edition) {
         return scores
     }
 
-    fun getDailyScores(cumulative: Boolean = false, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int = -1): IntArray {
-        val data = IntArray(edition.length_in_days)
+    fun getDailyScores(cumulative: Boolean = false, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int = -1, dayCap: Int = edition.length_in_days): IntArray {
+        val data = IntArray(dayCap)
         var cumulation = 0
 
-        for (i in days.indices) {
+        for (i in 0 until dayCap) {
             val day = days[i]
-            if(day == null) {
+            if (day == null) {
                 data[i] = cumulation
                 continue
             }
@@ -65,20 +65,23 @@ class DaysData(context: Context, val edition: Edition) {
         return data
     }
 
-    fun getDaysOfWeekAverageScores(includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int): IntArray{
+    fun getDaysOfWeekAverageScores(includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int, dayCap: Int = edition.length_in_days): IntArray {
         val daysOfWeek = IntArray(7)
         val weights = IntArray(7)
-        for (i in days.indices){
+        for (i in 0 until dayCap) {
+            // increase weight for the day as it had zero score which needs to be counted
+            val dayOfWeek = edition.dayOfWeekByDayNum(i) - 1
+            if (days[i] == null) weights[dayOfWeek] += 1
+
             val day = days[i] ?: continue
             val score = ScoreCalculator.calc(day, includeTryingHard, includePositives, goalNum)
-            val dayOfWeek = edition.dayOfWeekByDayNum(i) -1
             daysOfWeek[dayOfWeek] += score
-            weights[dayOfWeek] +=1
+            weights[dayOfWeek] += 1
         }
         // calculate averages
         val results = IntArray(7)
-        for(i in daysOfWeek.indices){
-            if(weights[i] == 0) continue
+        for (i in daysOfWeek.indices) {
+            if (weights[i] == 0) continue
             results[i] = (daysOfWeek[i] / weights[i].toFloat()).toInt()
         }
         return results
