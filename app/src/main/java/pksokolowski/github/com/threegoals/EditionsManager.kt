@@ -22,7 +22,7 @@ object EditionsManager {
         editions = DbHelper.getInstance(context).getEditions()
         // if there are no editions in existence, create
         // the first one:
-        if(editions.isEmpty()) createEdition(context)
+        if (editions.isEmpty()) createEdition(context)
     }
 
     fun createEdition(context: Context): Edition {
@@ -30,7 +30,7 @@ object EditionsManager {
 
         // if there already is an ongoing edition, return it instead.
         val current = getCurrentEdition(context)
-        if(current != null) return current
+        if (current != null) return current
 
         val now = Calendar.getInstance().timeInMillis
         val today0hour = TimeHelper.get0HourTimeOfAGivenDay(now)
@@ -54,15 +54,15 @@ object EditionsManager {
         return newEdition
     }
 
-    public fun getEditionsCount(context: Context): Int {
+    fun getEditionsCount(context: Context): Int {
         setup(context)
         return editions.size
     }
 
-    public fun getCurrentEdition(context: Context): Edition? {
+    fun getCurrentEdition(context: Context): Edition? {
         setup(context)
 
-        if(editions.size == 0) return null
+        if (editions.size == 0) return null
         val latest = editions.last()
         val latestEndDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
         val now = Calendar.getInstance().timeInMillis
@@ -71,13 +71,13 @@ object EditionsManager {
         return null
     }
 
-    fun getLatestEdition(context: Context): Edition?{
+    fun getLatestEdition(context: Context): Edition? {
         setup(context)
-        if(editions.size==0) return null
+        if (editions.size == 0) return null
         return editions.last()
     }
 
-    public fun getEditionById(context: Context, id: Long): Edition? {
+    fun getEditionById(context: Context, id: Long): Edition? {
         setup(context)
         for (e in editions) {
             if (e.ID == id) return e
@@ -96,8 +96,8 @@ object EditionsManager {
         return Array(editions.size) { editions[it].title }
     }
 
-    fun getAllEditions(context: Context): Array<Edition>{
+    fun getAllEditions(context: Context): Array<Edition> {
         setup(context)
-        return Array(editions.size) { editions[it]}
+        return Array(editions.size) { editions[it] }
     }
 }

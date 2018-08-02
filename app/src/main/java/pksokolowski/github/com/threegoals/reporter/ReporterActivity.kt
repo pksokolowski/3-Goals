@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
-import android.widget.ScrollView
 import android.widget.Toast
 import kotlinx.android.synthetic.main.reporter_activity.*
 import pksokolowski.github.com.threegoals.EditionsManager
@@ -63,7 +62,7 @@ class ReporterActivity : AppCompatActivity() {
 
         reporter_constraint_layout.setOnApplyWindowInsetsListener insetsListener@{ _, windowInsets ->
             reporter_constraint_layout.setPadding(0, 0, 0,
-                windowInsets.systemWindowInsetBottom)
+                    windowInsets.systemWindowInsetBottom)
             return@insetsListener windowInsets.consumeSystemWindowInsets()
         }
     }
@@ -157,7 +156,7 @@ class ReporterActivity : AppCompatActivity() {
         mReportsToBeModified = db.getReportsForDay(mEdition, mDayNumber)
     }
 
-    private fun showData(){
+    private fun showData() {
         date_textview.text = mEdition.dateByDayNum(mDayNumber)
         val reportForms = getReportForms()
         if (mReportsToBeModified.size > 0) {
@@ -177,8 +176,8 @@ class ReporterActivity : AppCompatActivity() {
         }
     }
 
-    private fun lockSavingIfDataIsMissing(){
-        if(mDayNumber == -1 || !this::mEdition.isInitialized){
+    private fun lockSavingIfDataIsMissing() {
+        if (mDayNumber == -1 || !this::mEdition.isInitialized) {
             done_button.isEnabled = false
         }
     }

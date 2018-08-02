@@ -4,7 +4,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import junit.framework.Assert.fail
 import pksokolowski.github.com.threegoals.models.Day
 import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.models.Goal
@@ -66,66 +65,66 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     }
 
-    private var sDataBase: SQLiteDatabase? = null
+    private lateinit var sDataBase: SQLiteDatabase
 
-    fun isReportsBatchValid(reports: MutableList<Report>, edition: Edition): Boolean{
+    fun isReportsBatchValid(reports: MutableList<Report>, edition: Edition): Boolean {
         return try {
             validateReportsBatch(reports, edition)
             true
-        } catch (e: RuntimeException){
+        } catch (e: RuntimeException) {
             false
         }
     }
 
-    private fun validateReportsBatch(reports: MutableList<Report>, edition: Edition){
+    private fun validateReportsBatch(reports: MutableList<Report>, edition: Edition) {
         // validate the number of reports - must match number of reports expected given the edition
-        if(reports.size != edition.goals_count) throw RuntimeException("Attempted to save an incorrect number of reports.")
+        if (reports.size != edition.goals_count) throw RuntimeException("Attempted to save an incorrect number of reports.")
 
         // validate that reports timeStamps are later than the edition's start day timeStamp.
         // Note: This won't necessarily work for the end time of the edition, as reports may
         // be provided later than the edition end and it's not only valid but expected.
-        for(report in reports) {
-            if(report.time_stamp < edition.start_day_timestamp) throw RuntimeException("Attempting to save a report with timeStamp earlier than the edition start day.")
+        for (report in reports) {
+            if (report.time_stamp < edition.start_day_timestamp) throw RuntimeException("Attempting to save a report with timeStamp earlier than the edition start day.")
         }
 
         // validate that all reports are for the same day
         val expectedDayNum = reports[0].day_num
-        for(report in reports){
-            if(report.day_num != expectedDayNum) throw RuntimeException("Attempted to save reports for different days, in the same batch.")
+        for (report in reports) {
+            if (report.day_num != expectedDayNum) throw RuntimeException("Attempted to save reports for different days, in the same batch.")
         }
 
         // validate that each goal only appears once
         val uniqueGoals = HashSet<Long>(reports.size)
-        for(report in reports){
+        for (report in reports) {
             val goal = report.goal
-            if(uniqueGoals.contains(goal)) throw RuntimeException("Attempted to save reports batch with duplicate goal IDs")
+            if (uniqueGoals.contains(goal)) throw RuntimeException("Attempted to save reports batch with duplicate goal IDs")
             uniqueGoals.add(goal)
         }
 
         // validate that goals of all of the reports exist in the edition
         val editionsGoals = getGoals(edition)
-        for(i in editionsGoals.indices) {
-            if(reports[i].goal != editionsGoals[i].ID) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
+        for (i in editionsGoals.indices) {
+            if (reports[i].goal != editionsGoals[i].ID) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
         }
 
         // validate that the reports are not already present for the day
         val existingReportsForTheSameDay = getReportsForDay(edition, expectedDayNum)
-        if(existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
+        if (existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
     }
 
-    fun pushReports(reports: MutableList<Report>, edition: Edition){
+    fun pushReports(reports: MutableList<Report>, edition: Edition) {
         // perform validation which throws exceptions if reports batch is corrupted
         validateReportsBatch(reports, edition)
 
         // all good, we can save them
-        for(report in reports){
+        for (report in reports) {
             val cv = ContentValues()
             cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
             cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
             cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
             cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
             cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
-            sDataBase!!.insert(Contract.reports.TABLE_NAME, null, cv)
+            sDataBase.insert(Contract.reports.TABLE_NAME, null, cv)
         }
     }
 
@@ -138,7 +137,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
         val whereClause = Contract.reports.ID + " =? "
         val whereArgs = arrayOf(report.ID.toString())
-        sDataBase!!.update(Contract.reports.TABLE_NAME, cv, whereClause, whereArgs).toLong()
+        sDataBase.update(Contract.reports.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
     fun pushEdition(edition: Edition): Long {
@@ -147,7 +146,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         cv.put(Contract.editions.COLUMN_NAME_GOALS_COUNT, edition.goals_count)
         cv.put(Contract.editions.COLUMN_NAME_START_DAY_0_HOUR, edition.start_day_timestamp)
         cv.put(Contract.editions.COLUMN_NAME_EDITION_LENGTH, edition.length_in_days)
-        return sDataBase!!.insert(Contract.editions.TABLE_NAME, null, cv)
+        return sDataBase.insert(Contract.editions.TABLE_NAME, null, cv)
     }
 
     fun pushGoal(goal: Goal): Long {
@@ -156,15 +155,15 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         cv.put(Contract.goals.COLUMN_NAME_INITIAL, goal.initial)
         cv.put(Contract.goals.COLUMN_NAME_POSITION, goal.position)
         cv.put(Contract.goals.COLUMN_NAME_EDITION, goal.edition)
-        return sDataBase!!.insert(Contract.goals.TABLE_NAME, null, cv)
+        return sDataBase.insert(Contract.goals.TABLE_NAME, null, cv)
     }
 
-    fun updateGoalCustomName(goal: Goal, newCustomName: String){
+    fun updateGoalCustomName(goal: Goal, newCustomName: String) {
         val cv = ContentValues()
         cv.put(Contract.goals.COLUMN_NAME_NAME, newCustomName)
         val whereClause = Contract.goals.ID + " =? "
         val whereArgs = arrayOf(goal.ID.toString())
-        sDataBase!!.update(Contract.goals.TABLE_NAME, cv, whereClause, whereArgs).toLong()
+        sDataBase.update(Contract.goals.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
     // get methods:
@@ -195,7 +194,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 //                Contract.reports.TABLE_NAME + ".rowid ASC"
 //        )
 
-        val cursor = sDataBase!!.rawQuery(
+        val cursor = sDataBase.rawQuery(
                 "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? ORDER BY reports._id ASC",
                 arrayOf(edition.ID.toString())
         )
@@ -217,8 +216,8 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         return reports
     }
 
-    fun getReportsForDay(edition: Edition, dayNumber: Int): MutableList<Report>{
-        val cursor = sDataBase!!.rawQuery(
+    fun getReportsForDay(edition: Edition, dayNumber: Int): MutableList<Report> {
+        val cursor = sDataBase.rawQuery(
                 "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? AND reports.day_num = ? ORDER BY reports._id ASC",
                 arrayOf(edition.ID.toString(), dayNumber.toString())
         )
@@ -265,7 +264,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
     }
 
     fun getEditions(): MutableList<Edition> {
-        val cursor = sDataBase!!.rawQuery("SELECT * FROM editions ORDER BY _id ASC", null)
+        val cursor = sDataBase.rawQuery("SELECT * FROM editions ORDER BY _id ASC", null)
 
         val editions = mutableListOf<Edition>()
 
@@ -284,7 +283,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
     }
 
     fun getGoals(edition: Edition): MutableList<Goal> {
-        val cursor = sDataBase!!.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC", arrayOf(edition.ID.toString()))
+        val cursor = sDataBase.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC", arrayOf(edition.ID.toString()))
 
         val goals = mutableListOf<Goal>()
 
@@ -302,14 +301,13 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         return goals
     }
 
-    fun isThereReportForDay(dayNum: Int, edition: Edition) : Boolean{
-        val cursor = sDataBase!!.rawQuery(
+    fun isThereReportForDay(dayNum: Int, edition: Edition): Boolean {
+        val cursor = sDataBase.rawQuery(
                 "SELECT reports._id FROM reports JOIN goals ON goals._id = reports.goal WHERE goals.edition = ? AND reports.day_num = ?",
                 arrayOf(edition.ID.toString(), dayNum.toString()))
 
-        var count = cursor.count
+        val count = cursor.count
         cursor.close()
-
         return count > 0
     }
 }

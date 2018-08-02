@@ -7,8 +7,8 @@ import pksokolowski.github.com.threegoals.models.Report
 class ScoreCalculator {
     companion object {
 
-        const val MAX_POSITIVES_AMOUNT = 999
-        const val MAX_TRYING_HARD_SCORE = 4
+        private const val MAX_POSITIVES_AMOUNT = 999
+        private const val MAX_TRYING_HARD_SCORE = 4
 
         fun calc(report: Report, includeTryingHard: Boolean = true, includePositives: Boolean = true): Int {
             var sum = 0
@@ -30,9 +30,9 @@ class ScoreCalculator {
 
         private fun subCalcPositives(positives: Int): Int {
             val steepness = 0.04
-            val asymptoticMultiplier = 1- Math.pow(Math.E, steepness * -positives.toDouble())
+            val asymptoticMultiplier = 1 - Math.pow(Math.E, steepness * -positives.toDouble())
             val maxValue = 40
-            return ( maxValue * asymptoticMultiplier ).toInt()
+            return (maxValue * asymptoticMultiplier).toInt()
         }
 
         private fun subCalcTryingHard(trying: Int): Int {

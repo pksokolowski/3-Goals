@@ -3,17 +3,15 @@ package pksokolowski.github.com.threegoals
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import kotlinx.android.synthetic.main.top_bar.view.*
-import pksokolowski.github.com.threegoals.models.Edition
 import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import kotlinx.android.synthetic.main.top_bar.*
-import java.awt.font.TextAttribute
+import kotlinx.android.synthetic.main.top_bar.view.*
+import pksokolowski.github.com.threegoals.models.Edition
 
 
 class TopBarFragment : Fragment() {
@@ -65,10 +63,10 @@ class TopBarFragment : Fragment() {
         }
     }
 
-    private fun makeNewEditionOffer(){
+    private fun makeNewEditionOffer() {
         // if there already is an ongoing edition, return
         val current = EditionsManager.getCurrentEdition(requireContext())
-        if(current != null) return
+        if (current != null) return
 
         // create a small UI piece as an interactive message to the user
         val textView = TextView(requireContext())

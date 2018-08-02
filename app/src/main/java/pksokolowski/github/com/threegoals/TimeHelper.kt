@@ -1,21 +1,20 @@
 package pksokolowski.github.com.threegoals
 
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.util.*
 
 class TimeHelper {
     companion object {
 
-        public val yearInMillis = 31536000000L
-        public val dayInMillis = 86400000L
+        val yearInMillis = 31536000000L
+        val dayInMillis = 86400000L
 
-        public fun getYear(timeStamp: Long): String {
+        fun getYear(timeStamp: Long): String {
             val formatter = SimpleDateFormat("yyyy")
             return formatter.format(Date(timeStamp))
         }
 
-        public fun getYearLast2Digits(timeStamp: Long): String {
+        fun getYearLast2Digits(timeStamp: Long): String {
             val formatter = SimpleDateFormat("yy")
             return formatter.format(Date(timeStamp))
         }
@@ -26,7 +25,7 @@ class TimeHelper {
             return c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault())
         }
 
-        fun getDayOfWeekShortNameByDaysNumber(dayOfWeek: Int): String{
+        fun getDayOfWeekShortNameByDaysNumber(dayOfWeek: Int): String {
             val c = Calendar.getInstance()
             val currentCultureBased = convertDayOfWeekBetweenCultures(dayOfWeek, ConversionDiraction.TO_SUNDAY_BASED)
             c.set(Calendar.DAY_OF_WEEK, currentCultureBased)
@@ -81,7 +80,7 @@ class TimeHelper {
             // shift dayOfWeek by the difference times direction
             var zeroBasedShiftedDay = (zeroBasedDayOfWeek + (direction.multiplier * culturalDifference)) % 7
             // modulo operator is not floorMod, so negative numbers can happen, lets remove them
-            if(zeroBasedShiftedDay < 0 ) zeroBasedShiftedDay += 7
+            if (zeroBasedShiftedDay < 0) zeroBasedShiftedDay += 7
 
             // return after shifting back by 1 ahead, so the first dayOfWeek of week is number 1 and the
             // last is number 7 again.

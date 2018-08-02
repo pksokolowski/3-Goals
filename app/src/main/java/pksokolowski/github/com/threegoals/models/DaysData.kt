@@ -71,7 +71,9 @@ class DaysData(context: Context, val edition: Edition) {
         for (i in 0 until dayCap) {
             // increase weight for the day as it had zero score which needs to be counted
             val dayOfWeek = edition.dayOfWeekByDayNum(i) - 1
-            if (days[i] == null) weights[dayOfWeek] += 1
+            if (days[i] == null) {
+                weights[dayOfWeek] += 1
+            }
 
             val day = days[i] ?: continue
             val score = ScoreCalculator.calc(day, includeTryingHard, includePositives, goalNum)

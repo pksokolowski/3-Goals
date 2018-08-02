@@ -1,10 +1,12 @@
 package pksokolowski.github.com.threegoals.editor
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import kotlinx.android.synthetic.main.reports_editor_list_item.view.*
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.models.DaysData
@@ -31,15 +33,15 @@ class DaysDataAdapter(val context: Context, val data: DaysData, private val numO
         }
     }
 
-    private fun reverseOrder(pos: Int) = (numOfDaysToShow-1) - pos
+    private fun reverseOrder(pos: Int) = (numOfDaysToShow - 1) - pos
 
     class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvDate = itemView.date
-        val tvStatus = itemView.status
-        val layout = itemView.layout
+        val tvDate: TextView = itemView.date
+        val tvStatus: TextView = itemView.status
+        val layout: ConstraintLayout = itemView.layout
     }
 
-    var mListener: OnItemSelectedListener? = null
+    private var mListener: OnItemSelectedListener? = null
 
     interface OnItemSelectedListener {
         fun onItemSelected(dayNum: Int, editionID: Long)

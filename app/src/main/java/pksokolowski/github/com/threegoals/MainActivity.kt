@@ -1,9 +1,8 @@
 package pksokolowski.github.com.threegoals
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -43,33 +42,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun displayPieChart() {
-            val pieData = mutableListOf<PieChart.Datum>()
-            val scoresPerGoal = data.getScoresPerGoal()
-            for (i: Int in scoresPerGoal.indices) {
-                pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
-                        scoresPerGoal[i].toLong(),
-                        i.toLong()))
-            }
+        val pieData = mutableListOf<PieChart.Datum>()
+        val scoresPerGoal = data.getScoresPerGoal()
+        for (i: Int in scoresPerGoal.indices) {
+            pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
+                    scoresPerGoal[i].toLong(),
+                    i.toLong()))
+        }
 
-            pieChart.data = pieData
+        pieChart.data = pieData
     }
 
-    fun displayBarChart() {
-            charts_holder.removeAllViews()
-            charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
+    private fun displayBarChart() {
+        charts_holder.removeAllViews()
+        charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
     }
 
     private fun setupListeners(edition: Edition?) {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
         selectionButtons.selectionChangedListener = {
-                currentChartSelection = it
-                displayBarChart()
+            currentChartSelection = it
+            displayBarChart()
         }
 
         if (edition != null) {
             editor_imageview.setOnClickListener {
-                    EditorDialogFragment.showDialog(this, data.edition)
+                EditorDialogFragment.showDialog(this, data.edition)
             }
         }
 
@@ -82,7 +81,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         topBar.editionSelected = lambda@{
-            if(data.edition == it) return@lambda
+            if (data.edition == it) return@lambda
             data = DaysData(this, it)
             showData()
         }

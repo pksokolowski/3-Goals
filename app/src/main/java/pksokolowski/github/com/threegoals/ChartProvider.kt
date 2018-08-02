@@ -12,10 +12,6 @@ class ChartProvider {
         const val TYPE_WEEK = 2
 
         fun getChart(context: Context, data: DaysData, type: Int, goalPosition: Int): View {
-            // amount of goals for which data is requested to be on the chart
-            // -1 means no selection, so all goals are taken in, otherwise just one
-            val goalsInvolved = if (goalPosition == -1) data.edition.goals_count else 1
-
             // the number of days of edition to display
             val dayOfEditionToday = data.edition.dayNumOf(TimeHelper.now())
             val daysOfEdition = if (dayOfEditionToday != -1) dayOfEditionToday else data.edition.length_in_days

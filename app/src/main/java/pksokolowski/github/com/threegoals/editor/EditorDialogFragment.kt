@@ -1,9 +1,7 @@
 package pksokolowski.github.com.threegoals.editor
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.support.v4.app.DialogFragment
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -18,7 +16,7 @@ import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 
 
-class EditorDialogFragment() : DialogFragment(), DaysDataAdapter.OnItemSelectedListener {
+class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedListener {
     override fun onItemSelected(dayNum: Int, editionID: Long) {
         context?.startActivity(ReporterActivity.newIntent(requireActivity(), editionID, dayNum))
     }
