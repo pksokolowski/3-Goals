@@ -81,7 +81,8 @@ class MainActivity : AppCompatActivity() {
             displayBarChart()
         }
 
-        topBar.editionSelected = {
+        topBar.editionSelected = lambda@{
+            if(data.edition == it) return@lambda
             data = DaysData(this, it)
             showData()
         }
