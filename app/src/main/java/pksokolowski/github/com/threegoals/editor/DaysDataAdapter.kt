@@ -13,6 +13,12 @@ import pksokolowski.github.com.threegoals.models.DaysData
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 
 class DaysDataAdapter(val context: Context, val data: DaysData, private val numOfDaysToShow: Int, itemSelectedListener: OnItemSelectedListener) : RecyclerView.Adapter<DaysDataAdapter.ItemViewHolder>() {
+    private var mListener: OnItemSelectedListener? = null
+
+    init {
+        mListener = itemSelectedListener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
             ItemViewHolder(LayoutInflater.from(context).inflate(R.layout.reports_editor_list_item, parent, false))
 
@@ -28,7 +34,6 @@ class DaysDataAdapter(val context: Context, val data: DaysData, private val numO
             context.getString(R.string.editor_report_status_submitted) else
             context.getString(R.string.editor_report_status_missing)
         holder.layout.setOnClickListener {
-            context.startActivity(ReporterActivity.newIntent(context, data.edition.ID, reversedPosition))
             mListener?.onItemSelected(reversedPosition, data.edition.ID)
         }
     }
@@ -40,8 +45,6 @@ class DaysDataAdapter(val context: Context, val data: DaysData, private val numO
         val tvStatus: TextView = itemView.status
         val layout: ConstraintLayout = itemView.layout
     }
-
-    private var mListener: OnItemSelectedListener? = null
 
     interface OnItemSelectedListener {
         fun onItemSelected(dayNum: Int, editionID: Long)
