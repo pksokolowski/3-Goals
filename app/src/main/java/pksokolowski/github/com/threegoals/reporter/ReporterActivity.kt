@@ -60,6 +60,12 @@ class ReporterActivity : AppCompatActivity() {
                 editExistingReports(forms, db)
             }
         }
+
+        reporter_constraint_layout.setOnApplyWindowInsetsListener insetsListener@{ _, windowInsets ->
+            reporter_constraint_layout.setPadding(0, 0, 0,
+                windowInsets.systemWindowInsetBottom)
+            return@insetsListener windowInsets.consumeSystemWindowInsets()
+        }
     }
 
     private fun editExistingReports(forms: Array<ReportFormFragment>, db: DbHelper) {
