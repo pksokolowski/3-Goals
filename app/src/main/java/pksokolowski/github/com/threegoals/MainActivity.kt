@@ -10,7 +10,6 @@ import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
 import pksokolowski.github.com.threegoals.help.HelpProvider
 import pksokolowski.github.com.threegoals.models.DaysData
-import pksokolowski.github.com.threegoals.models.Edition
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class MainActivity : AppCompatActivity() {
@@ -33,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
 
         showData()
-        setupListeners(edition)
+        setupListeners()
     }
 
     private fun showData() {
@@ -44,10 +43,8 @@ class MainActivity : AppCompatActivity() {
     private fun displayPieChart() {
         val pieData = mutableListOf<PieChart.Datum>()
         val scoresPerGoal = data.getScoresPerGoal()
-        for (i: Int in scoresPerGoal.indices) {
-            pieData.add(PieChart.Datum(data.getGoalInitialAt(i),
-                    scoresPerGoal[i].toLong(),
-                    i.toLong()))
+        scoresPerGoal.indices.mapTo(pieData) {
+            PieChart.Datum(data.getGoalInitialAt(it), scoresPerGoal[it].toLong(), it.toLong())
         }
 
         pieChart.data = pieData
@@ -58,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
     }
 
-    private fun setupListeners(edition: Edition?) {
+    private fun setupListeners() {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
         selectionButtons.selectionChangedListener = {
@@ -66,10 +63,8 @@ class MainActivity : AppCompatActivity() {
             displayBarChart()
         }
 
-        if (edition != null) {
-            editor_imageview.setOnClickListener {
-                EditorDialogFragment.showDialog(this, data.edition)
-            }
+        editor_imageview.setOnClickListener {
+            EditorDialogFragment.showDialog(this, data.edition)
         }
 
         help_imageview.setOnClickListener {

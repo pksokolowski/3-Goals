@@ -31,7 +31,7 @@ class SelectorButtonsFragment : Fragment() {
         }
     }
 
-    public fun setData(titles: Array<String>, defaultSelection: Int) {
+    fun setData(titles: Array<String>, defaultSelection: Int) {
         generateLayout(titles)
         if (defaultSelection in titles.indices) highlightLink(defaultSelection)
     }

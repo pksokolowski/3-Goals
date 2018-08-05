@@ -87,7 +87,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         val y = SpecialCalculateY(yBottom)
 
         if (scaledData.isEmpty()) {
-            SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), yBottom.toFloat(), canvas)
+            SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), canvas)
             return
         }
 
@@ -97,7 +97,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         val xPerEntry = x.toFloat() / lenToUseInXScaleCalc.toFloat()
 
         plot(y, x, xPerEntry, canvas, 0f)
-        SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), yBottom.toFloat(), canvas)
+        SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), canvas)
     }
 
     /**
@@ -119,7 +119,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         val modifiedXPerEntry = modifiedX / lenToUseInXScaleCalc
 
         // drawing
-        for (i in 0 until scaledData.size) {
+        for (i in scaledData.indices) {
             if (scaledData[i] == 0f) {
                 continue
             }
@@ -134,14 +134,10 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
             canvas.drawLine(calculatedX, y.toFloat(), calculatedX, calculatedY, barPaint)
 
             // column titles
-            if (columnTitles != null) {
-                if (i in columnTitles.indices) {
-                    canvas.drawText(columnTitles[i],
-                            calculatedX,
-                            y - dpToPixels(8),
-                            textPaint
-                    )
-                }
+            columnTitles?.apply {
+                if (i !in indices) return@apply
+                val textY = y - dpToPixels(8)
+                canvas.drawText(this[i], calculatedX, textY, textPaint)
             }
 
         }
@@ -164,12 +160,12 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
 
     private fun SpecialMeasurements(width: Float, height: Float) {
         // setting bar thickness:
-        val relativeThickness = if(data.size > 48) 1F else 0.9F
+        val relativeThickness = if (data.size > 48) 1F else 0.9F
         val barThickness = width / data.size.toFloat() * relativeThickness
         barPaint.strokeWidth = Math.max(1f, barThickness)
     }
 
-    private fun SpecialOzdobyWykresu(x: Float, y: Float, y_bottom: Float, canvas: Canvas) {
+    private fun SpecialOzdobyWykresu(x: Float, y: Float, canvas: Canvas) {
         val fiftyMark = y - (scaledMaxValue / 2)
         val hundredMark = y - scaledMaxValue
 
