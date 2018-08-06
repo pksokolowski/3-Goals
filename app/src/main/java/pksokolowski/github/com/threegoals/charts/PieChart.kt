@@ -70,7 +70,7 @@ class PieChart : View {
                 mAngles!![i] = data[i].value.toFloat() / sum * 360f
             }
 
-            mColors = prepareColors(mData!!.size, mainColor)
+            mColors = prepareColors(mData!!.size, mainColor, 5)
             mGrayedOutColors = prepareColors(mData!!.size, notSelectedColor, 5)
             lastTouchedIndex = -1
 

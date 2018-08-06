@@ -47,7 +47,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         }
 
         scaleLinesPaint = Paint().apply {
-            color = Color.GRAY
+            color = Color.LTGRAY
             style = Paint.Style.STROKE
             strokeWidth = Math.max(1f, dpToPixels(1))
         }
@@ -57,7 +57,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         val widthSize = View.MeasureSpec.getSize(widthMeasureSpec)
         val heightSize = View.MeasureSpec.getSize(heightMeasureSpec)
 
-        SpecialMeasurements(widthSize.toFloat(), heightSize.toFloat())
+        specialMeasurements(widthSize.toFloat(), heightSize.toFloat())
 
         //MUST CALL THIS
         setMeasuredDimension(widthSize, heightSize)
@@ -70,7 +70,7 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
     }
 
     private fun convertIntValsToFloats(height: Int) {
-        val maxYForPlotting = SpecialCalculateY(height)
+        val maxYForPlotting = calculateHeightOfThePlottingArea(height)
         val scaleY = (maxYForPlotting - scaleLinesPaint.strokeWidth / 2F) / maxValue.toFloat()
 
         for (i in scaledData.indices) {
@@ -84,20 +84,15 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
 
         val x = width
         val yBottom = height
-        val y = SpecialCalculateY(yBottom)
+        val y = calculateHeightOfThePlottingArea(yBottom)
 
         if (scaledData.isEmpty()) {
-            SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), canvas)
+            drawScale(x.toFloat(), y.toFloat(), canvas)
             return
         }
 
-        // chart data:
-        var lenToUseInXScaleCalc = scaledData.size - 1
-        if (data.isNotEmpty()) lenToUseInXScaleCalc = data.size - 1
-        val xPerEntry = x.toFloat() / lenToUseInXScaleCalc.toFloat()
-
-        plot(y, x, xPerEntry, canvas, 0f)
-        SpecialOzdobyWykresu(x.toFloat(), y.toFloat(), canvas)
+        plot(y, x, canvas)
+        drawScale(x.toFloat(), y.toFloat(), canvas)
     }
 
     /**
@@ -106,11 +101,11 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
      * @param y_bottom
      * @return maxY for drawable area for the plot
      */
-    private fun SpecialCalculateY(y_bottom: Int): Int {
+    private fun calculateHeightOfThePlottingArea(y_bottom: Int): Int {
         return y_bottom - framePaint.strokeWidth.toInt()
     }
 
-    private fun plot(y: Int, x: Int, x_per_entry: Float, canvas: Canvas, minX: Float) {
+    private fun plot(y: Int, x: Int, canvas: Canvas) {
         val halfTheStrokeWidth = barPaint.strokeWidth / 2f
         val maxX = x - halfTheStrokeWidth
         val modifiedX = maxX - halfTheStrokeWidth
@@ -158,14 +153,14 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
         return Color.argb(255, r, shiftedG.toInt(), b)
     }
 
-    private fun SpecialMeasurements(width: Float, height: Float) {
+    private fun specialMeasurements(width: Float, height: Float) {
         // setting bar thickness:
         val relativeThickness = if (data.size > 48) 1F else 0.9F
         val barThickness = width / data.size.toFloat() * relativeThickness
         barPaint.strokeWidth = Math.max(1f, barThickness)
     }
 
-    private fun SpecialOzdobyWykresu(x: Float, y: Float, canvas: Canvas) {
+    private fun drawScale(x: Float, y: Float, canvas: Canvas) {
         val fiftyMark = y - (scaledMaxValue / 2)
         val hundredMark = y - scaledMaxValue
 

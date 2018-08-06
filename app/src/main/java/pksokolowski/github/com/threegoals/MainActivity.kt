@@ -28,8 +28,8 @@ class MainActivity : AppCompatActivity() {
         data = DaysData(this, edition)
 
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
-        pieChart.mainColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        pieChart.mainColor = ContextCompat.getColor(this, R.color.pieChartPrimary)
+        pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.pieChartSecondary)
 
         showData()
         setupListeners()
