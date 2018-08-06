@@ -19,7 +19,6 @@ class PieChart : View {
     private lateinit var mText: Paint
     private lateinit var mNoDataText: Paint
 
-    private var mData: MutableList<Datum>? = null
     private var mPercentages: FloatArray? = null
     private var mAngles: FloatArray? = null
 
@@ -37,41 +36,42 @@ class PieChart : View {
 
     var lastTouchedID: Long = -1
         private set
-        get() = mData?.getOrNull(lastTouchedIndex)?.ID ?: -1L
+        get() = data?.getOrNull(lastTouchedIndex)?.ID ?: -1L
 
-    var data: MutableList<Datum>?
-        get() = mData
-        set(data) {
-            mData = data
-            if (data == null || data.size == 0) {
+    var data: MutableList<Datum>? = null
+        set(value) {
+            field = value
+            if (value == null || value.size == 0) {
                 mAngles = null
                 mPercentages = null
                 invalidate()
                 return
             }
-            val n = data.size
+            val n = value.size
             for (i in n - 1 downTo 0) {
-                if (mData!![i].value == 0L) mData!!.removeAt(i) else break
+                if (value[i].value == 0L) value.removeAt(i) else break
             }
-            if (mData!!.size == 0) {
+            if (value.size == 0) {
                 invalidate()
                 return
             }
 
-            mPercentages = FloatArray(n)
-            mAngles = FloatArray(n)
             var sum: Long = -1
             for (i in 0 until n) {
-                sum += data[i].value
+                sum += value[i].value
             }
 
+            val percentages = FloatArray(n)
+            val angles = FloatArray(n)
             for (i in 0 until n) {
-                mPercentages!![i] = data[i].value.toFloat() / sum
-                mAngles!![i] = data[i].value.toFloat() / sum * 360f
+                percentages[i] = value[i].value.toFloat() / sum
+                angles[i] = value[i].value.toFloat() / sum * 360f
             }
+            mPercentages = percentages
+            mAngles = angles
 
-            mColors = prepareColors(mData!!.size, mainColor, 5)
-            mGrayedOutColors = prepareColors(mData!!.size, notSelectedColor, 5)
+            mColors = prepareColors(value.size, mainColor, 5)
+            mGrayedOutColors = prepareColors(value.size, notSelectedColor, 5)
             lastTouchedIndex = -1
 
             invalidate()
@@ -131,7 +131,7 @@ class PieChart : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        if (mData == null || mData!!.size == 0) {
+        if (data == null || data!!.size == 0) {
             drawNoDataMessage(canvas)
             return
         }
@@ -140,7 +140,7 @@ class PieChart : View {
         var segStartAngle = STARTING_ANGLE
 
         for (i in mAngles!!.indices) {
-            val datum = mData!![i]
+            val datum = data!![i]
             mFill.color = mColors!![i]
             if (lastTouchedIndex != -1) {
                 if (i != lastTouchedIndex) {
@@ -233,7 +233,7 @@ class PieChart : View {
                         sliceSelectionChanged?.invoke(null)
                     } else {
                         lastTouchedIndex = touchedIndex
-                        sliceSelectionChanged?.invoke(mData!![touchedIndex])
+                        sliceSelectionChanged?.invoke(data!![touchedIndex])
                     }
                     invalidate()
                 }
