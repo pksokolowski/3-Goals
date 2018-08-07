@@ -13,26 +13,22 @@ class ChartProvider {
 
         fun getChart(context: Context, data: DaysData, type: Int, goalPosition: Int): View {
             // the number of days of edition to display
-            val dayOfEditionToday = data.edition.dayNumOf(TimeHelper.now())
-            val daysOfEdition = if (dayOfEditionToday != -1) dayOfEditionToday else data.edition.length_in_days
-
-            val firstDimMaxValue = ScoreCalculator.getMaxDailyScore(data.edition, true, false, goalPosition != -1)
-            val secondDimMaxValue = ScoreCalculator.getMaxDailyScore(data.edition, false, true, goalPosition != -1)
+            val daysOfEdition = data.edition.daysOfEditionPassed(TimeHelper.now())
 
             when (type) {
                 TYPE_DELTA -> {
                     val firstDimScores = data.getDailyScores(includePositives = false, goalNum = goalPosition, dayCap = daysOfEdition)
                     val secondDimScores = data.getDailyScores(includeTryingHard = false, goalNum = goalPosition, dayCap = daysOfEdition)
 
-                    return BarChart(context, firstDimScores, firstDimMaxValue, secondDimScores, secondDimMaxValue)
+                    return BarChart(context, firstDimScores.values, firstDimScores.maxValue, secondDimScores.values, secondDimScores.maxValue)
                 }
                 TYPE_SUM -> {
                     val firstDimScores = data.getDailyScores(cumulative = true, includePositives = false, goalNum = goalPosition, dayCap = daysOfEdition)
                     val secondDimScores = data.getDailyScores(cumulative = true, includeTryingHard = false, goalNum = goalPosition, dayCap = daysOfEdition)
-                    val firstDimMaxVal = if(daysOfEdition == 0) 1 else firstDimMaxValue * daysOfEdition
-                    val secondDimMaxVal = if(daysOfEdition == 0) 1 else secondDimMaxValue * daysOfEdition
+                    val firstDimMaxVal = if(daysOfEdition == 0) 1 else firstDimScores.maxValue
+                    val secondDimMaxVal = if(daysOfEdition == 0) 1 else secondDimScores.maxValue
 
-                    return BarChart(context, firstDimScores, firstDimMaxVal, secondDimScores, secondDimMaxVal)
+                    return BarChart(context, firstDimScores.values, firstDimMaxVal, secondDimScores.values, secondDimMaxVal)
                 }
                 TYPE_WEEK -> {
                     val firstDimScores = data.getDaysOfWeekAverageScores(includePositives = false, goalNum = goalPosition, dayCap = daysOfEdition)
@@ -40,7 +36,7 @@ class ChartProvider {
                     // prepare days of week names
                     val dayNames = Array(7) { TimeHelper.getDayOfWeekShortNameByDaysNumber(it + 1) }
 
-                    return BarChart(context, firstDimScores, firstDimMaxValue, secondDimScores, secondDimMaxValue, dayNames)
+                    return BarChart(context, firstDimScores.values, firstDimScores.maxValue, secondDimScores.values, secondDimScores.maxValue, dayNames)
                 }
             }
             return View(context)

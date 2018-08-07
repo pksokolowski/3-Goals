@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.TypedValue
 import android.view.View
+import pksokolowski.github.com.threegoals.ColorHelper
 
 class BarChart(context: Context, private val data: IntArray, private val maxValue: Int, private val dim2Data: IntArray, private val dim2MaxValue: Int, private val columnTitles: Array<String>? = null) : View(context) {
     private lateinit var framePaint: Paint
@@ -140,17 +141,8 @@ class BarChart(context: Context, private val data: IntArray, private val maxValu
 
     private fun colorDimensionAt(pos: Int): Int {
         if (pos !in dim2Data.indices) return Color.RED
-        val baseColor = Color.GRAY
-        val r = Color.red(baseColor)
-        val g = Color.green(baseColor)
-        val b = Color.blue(baseColor)
 
-        // modify green:
-        val rangeLeft = 255 - g
-        val percentageOfMaxScore = dim2Data[pos] / dim2MaxValue.toFloat()
-
-        val shiftedG = Math.min(255F, g + (rangeLeft * percentageOfMaxScore))
-        return Color.argb(255, r, shiftedG.toInt(), b)
+        return ColorHelper.getScoreInColor(dim2Data[pos], dim2MaxValue)
     }
 
     private fun specialMeasurements(width: Float, height: Float) {

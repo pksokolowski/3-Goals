@@ -31,12 +31,12 @@ class ScoreCalculator {
         private fun subCalcPositives(positives: Int): Int {
             val steepness = 0.04
             val asymptoticMultiplier = 1 - Math.pow(Math.E, steepness * -positives.toDouble())
-            val maxValue = 40
+            val maxValue = 400
             return (maxValue * asymptoticMultiplier).toInt()
         }
 
         private fun subCalcTryingHard(trying: Int): Int {
-            return (Math.pow(trying.toDouble(), 1.2) * 10).toInt()
+            return (Math.pow(trying.toDouble(), 1.2) * 100).toInt()
         }
 
         fun getMaxDailyScore(edition: Edition): Int {

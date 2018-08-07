@@ -3,6 +3,7 @@ package pksokolowski.github.com.threegoals.models
 import android.content.Context
 import pksokolowski.github.com.threegoals.ScoreCalculator
 import pksokolowski.github.com.threegoals.database.DbHelper
+import kotlin.math.max
 
 class DaysData(context: Context, val edition: Edition) {
     private val goals: MutableList<Goal>
@@ -24,19 +25,23 @@ class DaysData(context: Context, val edition: Edition) {
         return goals[pos].initial
     }
 
-    fun getScoresPerGoal(): IntArray {
+    class Scores(val values: IntArray, val maxValue: Int)
+
+    fun getScoresPerGoal(includeTryingHard: Boolean = true, includePositives: Boolean = true, dayCap: Int = edition.length_in_days): Scores {
         val scores = IntArray(edition.goals_count)
-        for (day in days) {
+        for (d in 0 until dayCap) {
+            val day = days[d]
             if (day != null) {
                 for (i: Int in 0 until edition.goals_count) {
-                    scores[i] += ScoreCalculator.calc(day.reports[i])
+                    scores[i] += ScoreCalculator.calc(day.reports[i], includeTryingHard, includePositives)
                 }
             }
         }
-        return scores
+        val maxValue = dayCap * ScoreCalculator.getMaxDailyScore(edition, includeTryingHard, includePositives, true)
+        return Scores(scores, maxValue)
     }
 
-    fun getDailyScores(cumulative: Boolean = false, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int = -1, dayCap: Int = edition.length_in_days): IntArray {
+    fun getDailyScores(cumulative: Boolean = false, includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int = -1, dayCap: Int = edition.length_in_days): Scores {
         val data = IntArray(dayCap)
         var cumulation = 0
 
@@ -55,10 +60,12 @@ class DaysData(context: Context, val edition: Edition) {
                 data[i] = score
             }
         }
-        return data
+        val multiplier = if(cumulative) dayCap else 1
+        val maxValue = multiplier * ScoreCalculator.getMaxDailyScore(edition, includeTryingHard, includePositives, goalNum != -1)
+        return Scores(data, maxValue)
     }
 
-    fun getDaysOfWeekAverageScores(includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int, dayCap: Int = edition.length_in_days): IntArray {
+    fun getDaysOfWeekAverageScores(includeTryingHard: Boolean = true, includePositives: Boolean = true, goalNum: Int, dayCap: Int = edition.length_in_days): Scores {
         val daysOfWeek = IntArray(7)
         val weights = IntArray(7)
         for (i in 0 until dayCap) {
@@ -79,7 +86,8 @@ class DaysData(context: Context, val edition: Edition) {
             if (weights[i] == 0) continue
             results[i] = (daysOfWeek[i] / weights[i].toFloat()).toInt()
         }
-        return results
+        val maxValue = ScoreCalculator.getMaxDailyScore(edition, includeTryingHard, includePositives, goalNum != -1)
+        return Scores(results, maxValue)
     }
 
 }

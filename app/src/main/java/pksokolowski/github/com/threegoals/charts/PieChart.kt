@@ -25,10 +25,8 @@ class PieChart : View {
     private lateinit var rnd: Random
     private lateinit var mRectF: RectF
     private var mColors: IntArray? = null
-    private var mGrayedOutColors: IntArray? = null
 
     var mainColor: Int = Color.GRAY
-    var notSelectedColor: Int = Color.DKGRAY
     var noDataMessage: String? = null
 
     var lastTouchedIndex = -1
@@ -70,8 +68,7 @@ class PieChart : View {
             mPercentages = percentages
             mAngles = angles
 
-            mColors = prepareColors(value.size, mainColor, 5)
-            mGrayedOutColors = prepareColors(value.size, notSelectedColor, 5)
+            mColors = prepareColors(value, mainColor, 5)
             lastTouchedIndex = -1
 
             invalidate()
@@ -85,30 +82,38 @@ class PieChart : View {
         preparePaints()
     }
 
+    private fun dpToPixels(dp: Int): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp.toFloat(), resources.displayMetrics)
+    }
+
     private fun preparePaints() {
         val textSizeInSpUnits = 15 //5dp
 
         val textSizeInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,
                 textSizeInSpUnits.toFloat(), resources.displayMetrics).toInt()
 
-        mStroke = Paint()
-        mStroke.style = Paint.Style.STROKE
-        mStroke.color = Color.GRAY
-        mStroke.strokeWidth = Math.max(1, textSizeInPixels / 9).toFloat()
-        mStroke.isAntiAlias = true
+        mStroke = Paint().apply {
+            style = Paint.Style.STROKE
+            color = Color.GRAY
+            strokeWidth = Math.max(1, textSizeInPixels / 9).toFloat()
+            isAntiAlias = true
+        }
 
-        mFill = Paint()
-        mFill.style = Paint.Style.FILL
-        mFill.isAntiAlias = true
+        mFill = Paint().apply {
+            style = Paint.Style.FILL
+            isAntiAlias = true
+        }
 
-        mText = Paint()
-        mText.color = Color.WHITE
-        mText.textSize = textSizeInPixels.toFloat()
-        mText.textAlign = Paint.Align.CENTER
+        mText = Paint().apply {
+            color = Color.WHITE
+            textSize = textSizeInPixels.toFloat()
+            textAlign = Paint.Align.CENTER
+        }
 
-        mNoDataText = Paint()
-        mNoDataText.color = Color.BLACK
-        mNoDataText.textSize = textSizeInPixels * 1.5f
+        mNoDataText = Paint().apply {
+            color = Color.BLACK
+            textSize = textSizeInPixels * 1.5f
+        }
 
         rnd = Random()
         mRectF = RectF(0f, 0f, right.toFloat(), bottom.toFloat())
@@ -131,29 +136,36 @@ class PieChart : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         if (data == null || data!!.size == 0) {
             drawNoDataMessage(canvas)
             return
         }
 
+        // null safety: if any of these are null, skip drawing
+        val data = data ?: return
+        val angles = mAngles ?: return
+        val colors = mColors ?: return
+
+        val factor = dpToPixels(10)
+
         val radius = height / 2f
         var segStartAngle = STARTING_ANGLE
 
-        for (i in mAngles!!.indices) {
-            val datum = data!![i]
-            mFill.color = mColors!![i]
+        for (i in angles.indices) {
+            val datum = data[i]
+            mFill.color = colors[i]
             if (lastTouchedIndex != -1) {
                 if (i != lastTouchedIndex) {
-                    mFill.color = mGrayedOutColors!![i]
+                    mFill.color = makeSemiTransparent(colors[i])
                 }
             }
-            //mText.setColor(mColors[mAngles.length-i-1]);
-            canvas.drawArc(mRectF, segStartAngle, mAngles!![i], true, mFill)
+            canvas.drawArc(mRectF, segStartAngle, angles[i], true, mFill)
 
             // drawing text on slice
-            drawTextIfThereIsSpaceEnough(canvas, segStartAngle, segStartAngle + mAngles!![i], radius, datum.title)
+            drawTextIfThereIsSpaceEnough(canvas, segStartAngle, segStartAngle + angles[i], radius, datum.title)
 
-            segStartAngle += mAngles!![i]
+            segStartAngle += angles[i]
         }
     }
 
@@ -178,21 +190,31 @@ class PieChart : View {
                 mNoDataText)
     }
 
-    private fun prepareColors(len: Int, baseColor: Int, colorStep: Int = 10): IntArray {
-        val colors = IntArray(len)
+    private fun prepareColors(data: MutableList<Datum>, baseColor: Int, colorStep: Int = 10): IntArray {
+        val colors = IntArray(data.size)
         var r = Color.red(baseColor)
         var g = Color.green(baseColor)
         var b = Color.blue(baseColor)
 
-        for (i in 0 until len) {
+        for (i in data.indices) {
+            // assign color, unless there is one defined in data parameter
             val color = Color.argb(255, r, g, b)
-            colors[i] = color
+            colors[i] = data[i].sliceColor ?: color
+
+            // prepare next color
             r = Math.min(r + colorStep, 255)
             g = Math.min(g + colorStep, 255)
             b = Math.min(b + colorStep, 255)
         }
 
         return colors
+    }
+
+    private fun makeSemiTransparent(color: Int): Int {
+        val r = Color.red(color)
+        val g = Color.green(color)
+        val b = Color.blue(color)
+        return Color.argb(45, r, g, b)
     }
 
     private fun drawTextIfThereIsSpaceEnough(canvas: Canvas, startAngle: Float, endAngle: Float, radius: Float, textToDraw: String) {
@@ -273,7 +295,7 @@ class PieChart : View {
 
     var sliceSelectionChanged: ((datumOrNull: Datum?) -> Unit)? = null
 
-    data class Datum(val title: String, val value: Long, val ID: Long)
+    data class Datum(val title: String, val value: Long, val ID: Long, val sliceColor: Int? = null)
 
     companion object {
 

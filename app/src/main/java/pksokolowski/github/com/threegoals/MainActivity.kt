@@ -29,7 +29,6 @@ class MainActivity : AppCompatActivity() {
 
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
         pieChart.mainColor = ContextCompat.getColor(this, R.color.pieChartPrimary)
-        pieChart.notSelectedColor = ContextCompat.getColor(this, R.color.pieChartSecondary)
 
         showData()
         setupListeners()
@@ -42,9 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun displayPieChart() {
         val pieData = mutableListOf<PieChart.Datum>()
-        val scoresPerGoal = data.getScoresPerGoal()
-        scoresPerGoal.indices.mapTo(pieData) {
-            PieChart.Datum(data.getGoalInitialAt(it), scoresPerGoal[it].toLong(), it.toLong())
+        val daysOfEditionPassed = data.edition.daysOfEditionPassed(TimeHelper.now())
+        val tryingHardPerGoal = data.getScoresPerGoal(includePositives = false, dayCap = daysOfEditionPassed)
+        val positivesPerGoal = data.getScoresPerGoal(includeTryingHard = false, dayCap = daysOfEditionPassed)
+        val sliceColors = ColorHelper.getScoreInColor(positivesPerGoal.values, positivesPerGoal.maxValue)
+        for(i in 0 until data.edition.goals_count)
+        {
+            pieData.add(PieChart.Datum(data.getGoalInitialAt(i), tryingHardPerGoal.values[i].toLong(), i.toLong(), sliceColors[i]))
         }
 
         pieChart.data = pieData
