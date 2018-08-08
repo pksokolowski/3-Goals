@@ -150,7 +150,7 @@ class PieChart : View {
         val factor = dpToPixels(10)
 
         val radius = height / 2f
-        var segStartAngle = STARTING_ANGLE
+        var segStartAngle = START_ANGLE
 
         for (i in angles.indices) {
             val datum = data[i]
@@ -171,7 +171,7 @@ class PieChart : View {
 
     private fun drawNoDataMessage(canvas: Canvas) {
         mFill.color = mainColor
-        canvas.drawArc(mRectF, STARTING_ANGLE, 360f, true, mFill)
+        canvas.drawArc(mRectF, START_ANGLE, 360f, true, mFill)
 
         if (noDataMessage == null) return
         // shift for the text color, compared to background, is applied uniformly to all channels:
@@ -183,7 +183,7 @@ class PieChart : View {
 
         val angle = 360f
         val radius = height / 2f
-        val textAngle = STARTING_ANGLE + angle / 2
+        val textAngle = START_ANGLE + angle / 2
         canvas.drawText(noDataMessage!!,
                 xProjectedAtAngle(textAngle, radius * 0.7f, radius),
                 yProjectedAtAngle(textAngle, radius * 0.7f, radius),
@@ -282,7 +282,7 @@ class PieChart : View {
         // make it work for negative angles too, because theta might be small or even negative in some scenarios
         angle = (angle + 360) % 360
 
-        var startAngle = STARTING_ANGLE
+        var startAngle = START_ANGLE
         for (i in mAngles!!.indices) {
             if (angle > startAngle && angle < startAngle + mAngles!![i]) {
                 return i
@@ -293,24 +293,23 @@ class PieChart : View {
         return -1
     }
 
+    private fun xProjectedAtAngle(angle: Float, radius: Float, Xorigin: Float): Float {
+        return Xorigin + radius * Math.cos(Math.toRadians(angle.toDouble())).toFloat()
+    }
+
+    private fun yProjectedAtAngle(angle: Float, radius: Float, Yorigin: Float): Float {
+        return Yorigin + radius * Math.sin(Math.toRadians(angle.toDouble())).toFloat()
+    }
+
+    private fun getDistance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
+        return Math.sqrt(Math.pow((x1 - x2).toDouble(), 2.0) + Math.pow((y1 - y2).toDouble(), 2.0)).toFloat()
+    }
+
     var sliceSelectionChanged: ((datumOrNull: Datum?) -> Unit)? = null
 
     data class Datum(val title: String, val value: Long, val ID: Long, val sliceColor: Int? = null)
 
     companion object {
-
-        private const val STARTING_ANGLE = 0f
-
-        private fun xProjectedAtAngle(angle: Float, radius: Float, Xorigin: Float): Float {
-            return Xorigin + radius * Math.cos(Math.toRadians(angle.toDouble())).toFloat()
-        }
-
-        private fun yProjectedAtAngle(angle: Float, radius: Float, Yorigin: Float): Float {
-            return Yorigin + radius * Math.sin(Math.toRadians(angle.toDouble())).toFloat()
-        }
-
-        private fun getDistance(x1: Float, y1: Float, x2: Float, y2: Float): Float {
-            return Math.sqrt(Math.pow((x1 - x2).toDouble(), 2.0) + Math.pow((y1 - y2).toDouble(), 2.0)).toFloat()
-        }
+        private const val START_ANGLE = 0f
     }
 }
