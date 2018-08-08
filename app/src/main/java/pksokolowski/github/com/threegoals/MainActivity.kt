@@ -24,11 +24,15 @@ class MainActivity : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         topBar = (top_bar as TopBarFragment)
 
-        val edition = topBar.getSelectedEdition()
-        data = DaysData(this, edition)
-
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
         pieChart.mainColor = ContextCompat.getColor(this, R.color.pieChartPrimary)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val edition = topBar.getSelectedEdition()
+        data = DaysData(this, edition)
 
         showData()
         setupListeners()
