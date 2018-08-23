@@ -16,6 +16,7 @@ import pksokolowski.github.com.threegoals.model.Report
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun daysDataDao(): DaysDataDao
+    abstract fun daysDataDao(): ReportsDao
     abstract fun editionsDao(): EditionsDao
+    abstract fun goalsDao(): GoalsDao
 }

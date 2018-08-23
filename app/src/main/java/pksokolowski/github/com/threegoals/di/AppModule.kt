@@ -6,8 +6,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule
 import pksokolowski.github.com.threegoals.data.AppDatabase
-import pksokolowski.github.com.threegoals.data.DaysDataDao
+import pksokolowski.github.com.threegoals.data.ReportsDao
 import pksokolowski.github.com.threegoals.data.EditionsDao
+import pksokolowski.github.com.threegoals.data.GoalsDao
 import pksokolowski.github.com.threegoals.utils.DATABASE_NAME
 import javax.inject.Singleton
 
@@ -26,7 +27,7 @@ open class AppModule {
 
     @Singleton
     @Provides
-    fun provideDaysDataDao(db: AppDatabase): DaysDataDao {
+    fun provideReportsDao(db: AppDatabase): ReportsDao {
         return db.daysDataDao()
     }
 
@@ -34,5 +35,11 @@ open class AppModule {
     @Provides
     fun provideEditionsDao(db: AppDatabase): EditionsDao {
         return db.editionsDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGoalsDao(db: AppDatabase): GoalsDao {
+        return db.goalsDao()
     }
 }

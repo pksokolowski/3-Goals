@@ -3,7 +3,7 @@ package pksokolowski.github.com.threegoals.data
 import android.arch.persistence.room.Dao
 
 @Dao
-interface DaysDataDao {
+interface ReportsDao {
 //    @Query("SELECT * FROM info WHERE id = :id")
 //    fun getInfo(id: Long): LiveData<Info>
 //

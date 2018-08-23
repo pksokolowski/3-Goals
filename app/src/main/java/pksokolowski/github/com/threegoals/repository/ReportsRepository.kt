@@ -1,13 +1,11 @@
 package pksokolowski.github.com.threegoals.repository
 
-import android.arch.lifecycle.LiveData
-import pksokolowski.github.com.threegoals.data.DaysDataDao
-import pksokolowski.github.com.threegoals.model.DaysData
+import pksokolowski.github.com.threegoals.data.ReportsDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DaysDataRepository @Inject constructor(private val daysDao: DaysDataDao) {
+class ReportsRepository @Inject constructor(private val daysDao: ReportsDao) {
 
 //    fun getData(): LiveData<DaysData> {
 //        return daysDao.getInfo()
