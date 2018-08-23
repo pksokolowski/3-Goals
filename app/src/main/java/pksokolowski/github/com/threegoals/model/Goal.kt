@@ -22,4 +22,8 @@ data class Goal(
         @ColumnInfo(name = "edition")
         val edition: Long
 
-)
+){
+        fun changeCustomName(name: String): Goal{
+                return Goal(id, name, initial, position, edition)
+        }
+}

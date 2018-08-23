@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.reporter_activity.*
 import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
@@ -35,6 +36,7 @@ class ReporterActivity : AppCompatActivity() {
     private var mDayNumber: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)

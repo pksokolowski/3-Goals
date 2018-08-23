@@ -1,10 +1,7 @@
 package pksokolowski.github.com.threegoals.data
 
 import android.arch.lifecycle.LiveData
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import android.arch.persistence.room.Transaction
+import android.arch.persistence.room.*
 import pksokolowski.github.com.threegoals.model.Goal
 
 @Dao
@@ -19,4 +16,7 @@ interface GoalsDao {
     fun insertGoals(goals: MutableList<Goal>) {
         goals.forEach { insertGoal(it) }
     }
+
+    @Update
+    fun updateGoal(goal: Goal)
 }

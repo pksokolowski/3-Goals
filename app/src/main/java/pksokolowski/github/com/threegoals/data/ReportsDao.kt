@@ -1,16 +1,27 @@
 package pksokolowski.github.com.threegoals.data
 
+import android.arch.lifecycle.LiveData
 import android.arch.persistence.room.Dao
+import android.arch.persistence.room.Insert
+import android.arch.persistence.room.Query
+import android.arch.persistence.room.Update
+import pksokolowski.github.com.threegoals.model.Report
+
 
 @Dao
 interface ReportsDao {
-//    @Query("SELECT * FROM info WHERE id = :id")
-//    fun getInfo(id: Long): LiveData<Info>
-//
-//    @Query("SELECT * FROM info ORDER BY id")
-//    fun getInfo(): LiveData<List<Info>>
-//
-//    @Insert
-//    fun insertInfo(info: Info): Long
+
+    @Update
+    fun updateReports(vararg reports: Report)
+
+    @Insert
+    fun insertReports(vararg reports: Report)
+
+    @Query("SELECT reports.id, dayNum, timeStamp, scoreTryingHard, scorePositives, goal FROM reports JOIN goals ON goals.id = reports.goal WHERE edition = :editionId ORDER BY reports.id ASC")
+    fun getReports(editionId: Long): LiveData<MutableList<Report>>
+
+    @Query("SELECT reports.id, dayNum, timeStamp, scoreTryingHard, scorePositives, goal FROM reports JOIN goals ON goals.id = reports.goal WHERE edition = :editionId AND reports.dayNum = :dayNumber ORDER BY reports.id ASC")
+    fun getReportsForDay(editionId: Long, dayNumber: Int): LiveData<MutableList<Report>>
+
 
 }
