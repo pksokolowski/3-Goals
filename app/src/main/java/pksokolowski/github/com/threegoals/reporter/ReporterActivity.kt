@@ -1,5 +1,7 @@
 package pksokolowski.github.com.threegoals.reporter
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -17,6 +19,7 @@ import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Goal
 import pksokolowski.github.com.threegoals.model.Report
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
+import javax.inject.Inject
 
 class ReporterActivity : AppCompatActivity() {
     companion object {
@@ -35,10 +38,17 @@ class ReporterActivity : AppCompatActivity() {
     private lateinit var mEdition: Edition
     private var mDayNumber: Int = -1
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var activityViewModel: ReporterActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
+        activityViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReporterActivityViewModel::class.java)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         obtainDataFromExtras(intent.extras)
