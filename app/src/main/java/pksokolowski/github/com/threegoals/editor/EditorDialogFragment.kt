@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.reports_editor_dialog.view.*
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.help.HelpProvider
-import pksokolowski.github.com.threegoals.models.DaysData
-import pksokolowski.github.com.threegoals.models.Edition
+import pksokolowski.github.com.threegoals.model.DaysData
+import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 
 
@@ -50,7 +50,7 @@ class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedLis
 
             mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
             var numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
-            if (numOfDaysToShow == -1) numOfDaysToShow = data.edition.length_in_days
+            if (numOfDaysToShow == -1) numOfDaysToShow = data.edition.lengthInDays
             mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this)
         }
     }

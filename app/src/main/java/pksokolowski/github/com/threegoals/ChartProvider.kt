@@ -3,7 +3,7 @@ package pksokolowski.github.com.threegoals
 import android.content.Context
 import android.view.View
 import pksokolowski.github.com.threegoals.charts.BarChart
-import pksokolowski.github.com.threegoals.models.DaysData
+import pksokolowski.github.com.threegoals.model.DaysData
 
 class ChartProvider {
     companion object {

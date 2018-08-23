@@ -17,7 +17,7 @@ class NotificationsClickReceiver : BroadcastReceiver() {
             val dayOfEdition = latestEdition.dayNumOf(TimeHelper.yesterday0Hour())
             if(dayOfEdition < 0) { onFailure(context); return }
 
-            context.startActivity(ReporterActivity.newIntent(context, latestEdition.ID, dayOfEdition))
+            context.startActivity(ReporterActivity.newIntent(context, latestEdition.id, dayOfEdition))
         }
     }
 

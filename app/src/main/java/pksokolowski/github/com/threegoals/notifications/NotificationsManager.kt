@@ -11,8 +11,7 @@ import android.support.v4.app.NotificationCompat
 import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
-import pksokolowski.github.com.threegoals.database.DbHelper
-import pksokolowski.github.com.threegoals.models.Edition
+import pksokolowski.github.com.threegoals.data.DbHelper
 
 object NotificationsManager {
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
@@ -31,7 +30,7 @@ object NotificationsManager {
         val notif = B.build()
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        // to 0 to ID, pozwoli mi potem manipulować tym notification, w szczególności je usunąc lub zastąpić
+        // to 0 to id, pozwoli mi potem manipulować tym notification, w szczególności je usunąc lub zastąpić
         notificationManager.notify(NOTIFICATION_ID_USER_REPORT_REQUEST, notif)
     }
 

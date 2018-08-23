@@ -1,13 +1,13 @@
-package pksokolowski.github.com.threegoals.database
+package pksokolowski.github.com.threegoals.data
 
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import pksokolowski.github.com.threegoals.models.Day
-import pksokolowski.github.com.threegoals.models.Edition
-import pksokolowski.github.com.threegoals.models.Goal
-import pksokolowski.github.com.threegoals.models.Report
+import pksokolowski.github.com.threegoals.model.Day
+import pksokolowski.github.com.threegoals.model.Edition
+import pksokolowski.github.com.threegoals.model.Goal
+import pksokolowski.github.com.threegoals.model.Report
 
 class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context, "dataBase.db", null, 1) {
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -78,19 +78,19 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     private fun validateReportsBatch(reports: MutableList<Report>, edition: Edition) {
         // validate the number of reports - must match number of reports expected given the edition
-        if (reports.size != edition.goals_count) throw RuntimeException("Attempted to save an incorrect number of reports.")
+        if (reports.size != edition.goalsCount) throw RuntimeException("Attempted to save an incorrect number of reports.")
 
         // validate that reports timeStamps are later than the edition's start day timeStamp.
         // Note: This won't necessarily work for the end time of the edition, as reports may
         // be provided later than the edition end and it's not only valid but expected.
         for (report in reports) {
-            if (report.time_stamp < edition.start_day_timestamp) throw RuntimeException("Attempting to save a report with timeStamp earlier than the edition start day.")
+            if (report.timeStamp < edition.startDay0HourStamp) throw RuntimeException("Attempting to save a report with timeStamp earlier than the edition start day.")
         }
 
         // validate that all reports are for the same day
-        val expectedDayNum = reports[0].day_num
+        val expectedDayNum = reports[0].dayNum
         for (report in reports) {
-            if (report.day_num != expectedDayNum) throw RuntimeException("Attempted to save reports for different days, in the same batch.")
+            if (report.dayNum != expectedDayNum) throw RuntimeException("Attempted to save reports for different days, in the same batch.")
         }
 
         // validate that each goal only appears once
@@ -104,7 +104,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         // validate that goals of all of the reports exist in the edition
         val editionsGoals = getGoals(edition)
         for (i in editionsGoals.indices) {
-            if (reports[i].goal != editionsGoals[i].ID) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
+            if (reports[i].goal != editionsGoals[i].id) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
         }
 
         // validate that the reports are not already present for the day
@@ -119,10 +119,10 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         // all good, we can save them
         for (report in reports) {
             val cv = ContentValues()
-            cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
-            cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
-            cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
-            cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
+            cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.dayNum)
+            cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.timeStamp)
+            cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.scoreTryingHard)
+            cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.scorePositives)
             cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
             sDataBase.insert(Contract.reports.TABLE_NAME, null, cv)
         }
@@ -130,22 +130,22 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     fun updateReport(report: Report) {
         val cv = ContentValues()
-        cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.day_num)
-        cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.time_stamp)
-        cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.score_trying_hard)
-        cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.score_positives)
+        cv.put(Contract.reports.COLUMN_NAME_DAY_NUM, report.dayNum)
+        cv.put(Contract.reports.COLUMN_NAME_TIME_STAMP, report.timeStamp)
+        cv.put(Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD, report.scoreTryingHard)
+        cv.put(Contract.reports.COLUMN_NAME_SCORE_POSITIVES, report.scorePositives)
         cv.put(Contract.reports.COLUMN_NAME_GOAL, report.goal)
         val whereClause = Contract.reports.ID + " =? "
-        val whereArgs = arrayOf(report.ID.toString())
+        val whereArgs = arrayOf(report.id.toString())
         sDataBase.update(Contract.reports.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
     fun pushEdition(edition: Edition): Long {
         val cv = ContentValues()
         cv.put(Contract.editions.COLUMN_NAME_TITLE, edition.title)
-        cv.put(Contract.editions.COLUMN_NAME_GOALS_COUNT, edition.goals_count)
-        cv.put(Contract.editions.COLUMN_NAME_START_DAY_0_HOUR, edition.start_day_timestamp)
-        cv.put(Contract.editions.COLUMN_NAME_EDITION_LENGTH, edition.length_in_days)
+        cv.put(Contract.editions.COLUMN_NAME_GOALS_COUNT, edition.goalsCount)
+        cv.put(Contract.editions.COLUMN_NAME_START_DAY_0_HOUR, edition.startDay0HourStamp)
+        cv.put(Contract.editions.COLUMN_NAME_EDITION_LENGTH, edition.lengthInDays)
         return sDataBase.insert(Contract.editions.TABLE_NAME, null, cv)
     }
 
@@ -162,7 +162,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
         val cv = ContentValues()
         cv.put(Contract.goals.COLUMN_NAME_NAME, newCustomName)
         val whereClause = Contract.goals.ID + " =? "
-        val whereArgs = arrayOf(goal.ID.toString())
+        val whereArgs = arrayOf(goal.id.toString())
         sDataBase.update(Contract.goals.TABLE_NAME, cv, whereClause, whereArgs).toLong()
     }
 
@@ -170,7 +170,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
     fun getReports(edition: Edition): MutableList<Report> {
 
 //        val projection = arrayOf(
-//                Contract.reports.TABLE_NAME + "." + Contract.reports.ID,
+//                Contract.reports.TABLE_NAME + "." + Contract.reports.id,
 //                Contract.reports.COLUMN_NAME_DAY_NUM,
 //                Contract.reports.COLUMN_NAME_TIME_STAMP,
 //                Contract.reports.COLUMN_NAME_SCORE_TRYING_HARD,
@@ -180,7 +180,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 //
 //        val fromClause = Contract.reports.TABLE_NAME + " JOIN " +
 //                Contract.goals.TABLE_NAME + " ON " +
-//                Contract.goals.TABLE_NAME+"."+Contract.goals.ID + " = " + Contract.reports.COLUMN_NAME_GOAL
+//                Contract.goals.TABLE_NAME+"."+Contract.goals.id + " = " + Contract.reports.COLUMN_NAME_GOAL
 //
 //        val whereClause = Contract.goals.TABLE_NAME + "." + Contract.goals.COLUMN_NAME_EDITION + " = ? "
 //        val whereArgs = arrayOf( edition.toString() )
@@ -195,8 +195,8 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 //        )
 
         val cursor = sDataBase.rawQuery(
-                "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? ORDER BY reports._id ASC",
-                arrayOf(edition.ID.toString())
+                "SELECT reports._id, dayNum, timeStamp, scoreTryingHard, scorePositives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? ORDER BY reports._id ASC",
+                arrayOf(edition.id.toString())
         )
 
         val reports = mutableListOf<Report>()
@@ -218,8 +218,8 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     fun getReportsForDay(edition: Edition, dayNumber: Int): MutableList<Report> {
         val cursor = sDataBase.rawQuery(
-                "SELECT reports._id, day_num, time_stamp, score_trying_hard, score_positives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? AND reports.day_num = ? ORDER BY reports._id ASC",
-                arrayOf(edition.ID.toString(), dayNumber.toString())
+                "SELECT reports._id, dayNum, timeStamp, scoreTryingHard, scorePositives, goal FROM reports JOIN goals ON goals._id = reports.goal WHERE edition = ? AND reports.dayNum = ? ORDER BY reports._id ASC",
+                arrayOf(edition.id.toString(), dayNumber.toString())
         )
 
         val reports = mutableListOf<Report>()
@@ -240,16 +240,16 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
     }
 
     fun getDays(edition: Edition): Array<Day?> {
-        val days = arrayOfNulls<Day>(edition.length_in_days)
+        val days = arrayOfNulls<Day>(edition.lengthInDays)
         val reports = getReports(edition)
-        val daysInProgress = arrayOfNulls<MutableList<Report>>(edition.length_in_days)
+        val daysInProgress = arrayOfNulls<MutableList<Report>>(edition.lengthInDays)
         // group reports by day
         for (report in reports) {
-            if (daysInProgress[report.day_num] == null) {
+            if (daysInProgress[report.dayNum] == null) {
                 // create day in progress list
-                daysInProgress[report.day_num] = mutableListOf()
+                daysInProgress[report.dayNum] = mutableListOf()
             }
-            daysInProgress[report.day_num]!!.add(report)
+            daysInProgress[report.dayNum]!!.add(report)
         }
 
         // create days
@@ -283,7 +283,7 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
     }
 
     fun getGoals(edition: Edition): MutableList<Goal> {
-        val cursor = sDataBase.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC", arrayOf(edition.ID.toString()))
+        val cursor = sDataBase.rawQuery("SELECT * FROM goals WHERE edition = ? ORDER BY position ASC", arrayOf(edition.id.toString()))
 
         val goals = mutableListOf<Goal>()
 
@@ -303,8 +303,8 @@ class DbHelper private constructor(context: Context) : SQLiteOpenHelper(context,
 
     fun isThereReportForDay(dayNum: Int, edition: Edition): Boolean {
         val cursor = sDataBase.rawQuery(
-                "SELECT reports._id FROM reports JOIN goals ON goals._id = reports.goal WHERE goals.edition = ? AND reports.day_num = ?",
-                arrayOf(edition.ID.toString(), dayNum.toString()))
+                "SELECT reports._id FROM reports JOIN goals ON goals._id = reports.goal WHERE goals.edition = ? AND reports.dayNum = ?",
+                arrayOf(edition.id.toString(), dayNum.toString()))
 
         val count = cursor.count
         cursor.close()

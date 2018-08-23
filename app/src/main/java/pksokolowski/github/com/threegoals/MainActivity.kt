@@ -1,26 +1,39 @@
 package pksokolowski.github.com.threegoals
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.WindowManager
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
 import pksokolowski.github.com.threegoals.help.HelpProvider
-import pksokolowski.github.com.threegoals.models.DaysData
+import pksokolowski.github.com.threegoals.model.DaysData
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+    // todo: remove data from Activity
     private lateinit var data: DaysData
     private lateinit var topBar: TopBarFragment
     private var currentChartSelection = 1
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: MainActivityViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         NotificationsManager.createNotificationChannels(this)
         setContentView(R.layout.activity_main)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainActivityViewModel::class.java)
+
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
         topBar = (top_bar as TopBarFragment)
 
@@ -49,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         val tryingHardPerGoal = data.getScoresPerGoal(includePositives = false, dayCap = daysOfEditionPassed)
         val positivesPerGoal = data.getScoresPerGoal(includeTryingHard = false, dayCap = daysOfEditionPassed)
         val sliceColors = ColorHelper.getScoreInColor(positivesPerGoal.values, positivesPerGoal.maxValue)
-        for(i in 0 until data.edition.goals_count)
+        for(i in 0 until data.edition.goalsCount)
         {
             pieData.add(PieChart.Datum(data.getGoalInitialAt(i), tryingHardPerGoal.values[i].toLong(), i.toLong(), sliceColors[i]))
         }

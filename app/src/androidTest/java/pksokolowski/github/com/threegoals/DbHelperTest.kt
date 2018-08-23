@@ -7,10 +7,10 @@ import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
-import pksokolowski.github.com.threegoals.database.DbHelper
-import pksokolowski.github.com.threegoals.models.Edition
-import pksokolowski.github.com.threegoals.models.Goal
-import pksokolowski.github.com.threegoals.models.Report
+import pksokolowski.github.com.threegoals.data.DbHelper
+import pksokolowski.github.com.threegoals.model.Edition
+import pksokolowski.github.com.threegoals.model.Goal
+import pksokolowski.github.com.threegoals.model.Report
 import java.util.*
 
 class DbHelperInstrumentedTest {
@@ -81,13 +81,13 @@ class DbHelperInstrumentedTest {
         val goals = db.getGoals(edition)
 
         val daysToSkip = arrayOf(0, 3, 13, 19, 200, 304)
-        for (i in 0 until edition.length_in_days) {
+        for (i in 0 until edition.lengthInDays) {
             if(i in daysToSkip) continue
 
-            val timestamp = edition.start_day_timestamp + TimeHelper.dayInMillis * i + rand.nextInt(5555)
+            val timestamp = edition.startDay0HourStamp + TimeHelper.dayInMillis * i + rand.nextInt(5555)
             val reports = mutableListOf<Report>()
 
-            for(ii in 0 until edition.goals_count){
+            for(ii in 0 until edition.goalsCount){
                 reports.add(Report(-1, i, timestamp, rand.nextInt(5), rand.nextInt(100),goals[ii].ID))
             }
 

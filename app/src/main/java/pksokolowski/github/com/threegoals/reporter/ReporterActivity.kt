@@ -11,10 +11,10 @@ import kotlinx.android.synthetic.main.reporter_activity.*
 import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
-import pksokolowski.github.com.threegoals.database.DbHelper
-import pksokolowski.github.com.threegoals.models.Edition
-import pksokolowski.github.com.threegoals.models.Goal
-import pksokolowski.github.com.threegoals.models.Report
+import pksokolowski.github.com.threegoals.data.DbHelper
+import pksokolowski.github.com.threegoals.model.Edition
+import pksokolowski.github.com.threegoals.model.Goal
+import pksokolowski.github.com.threegoals.model.Report
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 
 class ReporterActivity : AppCompatActivity() {
@@ -77,9 +77,9 @@ class ReporterActivity : AppCompatActivity() {
             updateCustomGoalName(i, f, db)
 
             db.updateReport(Report(
-                    rep.ID,
-                    rep.day_num,
-                    rep.time_stamp,
+                    rep.id,
+                    rep.dayNum,
+                    rep.timeStamp,
                     f.getTryingHardScore(),
                     f.getPositivesCount(),
                     rep.goal)
@@ -108,7 +108,7 @@ class ReporterActivity : AppCompatActivity() {
                     now,
                     f.getTryingHardScore(),
                     f.getPositivesCount(),
-                    mGoals[i].ID)
+                    mGoals[i].id)
             )
 
         }
@@ -165,8 +165,8 @@ class ReporterActivity : AppCompatActivity() {
                 reportForms[i].setData(
                         i,
                         mGoals[i].name,
-                        mReportsToBeModified[i].score_trying_hard,
-                        mReportsToBeModified[i].score_positives)
+                        mReportsToBeModified[i].scoreTryingHard,
+                        mReportsToBeModified[i].scorePositives)
             }
         } else {
             // in case of new day, not modification of existing

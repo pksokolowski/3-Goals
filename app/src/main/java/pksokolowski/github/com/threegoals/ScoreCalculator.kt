@@ -1,8 +1,8 @@
 package pksokolowski.github.com.threegoals
 
-import pksokolowski.github.com.threegoals.models.Day
-import pksokolowski.github.com.threegoals.models.Edition
-import pksokolowski.github.com.threegoals.models.Report
+import pksokolowski.github.com.threegoals.model.Day
+import pksokolowski.github.com.threegoals.model.Edition
+import pksokolowski.github.com.threegoals.model.Report
 
 class ScoreCalculator {
     companion object {
@@ -12,8 +12,8 @@ class ScoreCalculator {
 
         fun calc(report: Report, includeTryingHard: Boolean = true, includePositives: Boolean = true): Int {
             var sum = 0
-            if (includeTryingHard) sum += subCalcTryingHard(report.score_trying_hard)
-            if (includePositives) sum += subCalcPositives(report.score_positives)
+            if (includeTryingHard) sum += subCalcTryingHard(report.scoreTryingHard)
+            if (includePositives) sum += subCalcPositives(report.scorePositives)
             return sum
         }
 
@@ -40,7 +40,7 @@ class ScoreCalculator {
         }
 
         fun getMaxDailyScore(edition: Edition): Int {
-            return edition.goals_count * getMaxScoreOfReport(edition)
+            return edition.goalsCount * getMaxScoreOfReport(edition)
         }
 
         fun getMaxDailyScore(edition: Edition, includeTryingHard: Boolean = true, includePositives: Boolean = true, forASingleGoal: Boolean = false): Int {
@@ -49,7 +49,7 @@ class ScoreCalculator {
             return if (forASingleGoal) {
                 reportScore
             } else {
-                edition.goals_count * reportScore
+                edition.goalsCount * reportScore
             }
         }
 

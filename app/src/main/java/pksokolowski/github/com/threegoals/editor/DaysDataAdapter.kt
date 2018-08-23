@@ -9,8 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.reports_editor_list_item.view.*
 import pksokolowski.github.com.threegoals.R
-import pksokolowski.github.com.threegoals.models.DaysData
-import pksokolowski.github.com.threegoals.reporter.ReporterActivity
+import pksokolowski.github.com.threegoals.model.DaysData
 
 class DaysDataAdapter(val context: Context, val data: DaysData, private val numOfDaysToShow: Int, itemSelectedListener: OnItemSelectedListener) : RecyclerView.Adapter<DaysDataAdapter.ItemViewHolder>() {
     private var mListener: OnItemSelectedListener? = null
@@ -34,7 +33,7 @@ class DaysDataAdapter(val context: Context, val data: DaysData, private val numO
             context.getString(R.string.editor_report_status_submitted) else
             context.getString(R.string.editor_report_status_missing)
         holder.layout.setOnClickListener {
-            mListener?.onItemSelected(reversedPosition, data.edition.ID)
+            mListener?.onItemSelected(reversedPosition, data.edition.id)
         }
     }
 

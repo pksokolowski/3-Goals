@@ -2,9 +2,9 @@ package pksokolowski.github.com.threegoals
 
 import android.content.Context
 import pksokolowski.github.com.threegoals.alarms.AlarmsManager
-import pksokolowski.github.com.threegoals.database.DbHelper
-import pksokolowski.github.com.threegoals.models.Edition
-import pksokolowski.github.com.threegoals.models.Goal
+import pksokolowski.github.com.threegoals.data.DbHelper
+import pksokolowski.github.com.threegoals.model.Edition
+import pksokolowski.github.com.threegoals.model.Goal
 import java.util.*
 
 object EditionsManager {
@@ -42,12 +42,12 @@ object EditionsManager {
 
         // create as many goals as defined by the edition
         val romanNums = arrayOf("Ⅰ", "Ⅱ", "Ⅲ", "?")
-        for (i in 0 until edition.goals_count) {
+        for (i in 0 until edition.goalsCount) {
             val initial = romanNums[Math.min(romanNums.size - 1, i)]
             db.pushGoal(Goal(-1, "", initial, i, id))
         }
 
-        val newEdition = Edition(id, edition.title, edition.goals_count, edition.start_day_timestamp, edition.length_in_days)
+        val newEdition = Edition(id, edition.title, edition.goalsCount, edition.startDay0HourStamp, edition.lengthInDays)
         editions.add(newEdition)
         AlarmsManager.setupAlarms(context)
         BootFinishedReceiver.setBootFinishedReceiverEnabled(context, true)
@@ -64,7 +64,7 @@ object EditionsManager {
 
         if (editions.size == 0) return null
         val latest = editions.last()
-        val latestEndDay = latest.start_day_timestamp + (TimeHelper.dayInMillis * latest.length_in_days)
+        val latestEndDay = latest.startDay0HourStamp + (TimeHelper.dayInMillis * latest.lengthInDays)
         val now = Calendar.getInstance().timeInMillis
 
         if (latestEndDay > now) return latest
@@ -80,7 +80,7 @@ object EditionsManager {
     fun getEditionById(context: Context, id: Long): Edition? {
         setup(context)
         for (e in editions) {
-            if (e.ID == id) return e
+            if (e.id == id) return e
         }
         return null
     }

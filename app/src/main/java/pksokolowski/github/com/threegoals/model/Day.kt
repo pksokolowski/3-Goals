@@ -1,4 +1,4 @@
-package pksokolowski.github.com.threegoals.models
+package pksokolowski.github.com.threegoals.model
 
 import java.util.*
 

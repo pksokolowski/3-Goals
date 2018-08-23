@@ -11,7 +11,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import kotlinx.android.synthetic.main.top_bar.*
 import kotlinx.android.synthetic.main.top_bar.view.*
-import pksokolowski.github.com.threegoals.models.Edition
+import pksokolowski.github.com.threegoals.model.Edition
 
 
 class TopBarFragment : Fragment() {
