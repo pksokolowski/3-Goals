@@ -11,7 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.reporter_activity.*
-import pksokolowski.github.com.threegoals.EditionsManager
+//import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.data.DbHelper
@@ -41,13 +41,13 @@ class ReporterActivity : AppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var activityViewModel: ReporterActivityViewModel
+    lateinit var viewModel: ReporterActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
-        activityViewModel = ViewModelProviders.of(this, viewModelFactory).get(ReporterActivityViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReporterActivityViewModel::class.java)
 
         window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
@@ -162,7 +162,7 @@ class ReporterActivity : AppCompatActivity() {
         mDayNumber = bundle.getInt(EXTRAS_EDITION_DAY_NUMBER, -1)
         if (editionID == -1L || mDayNumber == -1) return
 
-        mEdition = EditionsManager.getEditionById(this, editionID) ?: return
+        mEdition = viewModel.getEditionById(editionID) ?: return
         val db = DbHelper.getInstance(this)
         mGoals = db.getGoals(mEdition)
         mReportsToBeModified = db.getReportsForDay(mEdition, mDayNumber)

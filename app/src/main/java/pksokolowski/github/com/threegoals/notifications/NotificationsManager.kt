@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
-import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.data.DbHelper
