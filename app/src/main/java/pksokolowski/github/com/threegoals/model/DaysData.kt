@@ -1,8 +1,6 @@
 package pksokolowski.github.com.threegoals.model
 
-import android.content.Context
 import pksokolowski.github.com.threegoals.ScoreCalculator
-import pksokolowski.github.com.threegoals.data.DbHelper
 
 class DaysData(val edition: Edition, private val goals: MutableList<Goal>, private val days: Array<Day?>) {
 

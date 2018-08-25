@@ -7,13 +7,13 @@ import android.os.Build
 import android.support.v4.app.NotificationCompat
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
-import pksokolowski.github.com.threegoals.data.DbHelper
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
+import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository){
+class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository, private val reportsRepo: ReportsRepository){
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
     val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
     companion object {
@@ -36,7 +36,6 @@ class NotificationsManager @Inject constructor(private val context: Application,
     }
 
     fun showNotificationIfNeeded() {
-        val db = DbHelper.getInstance(context)
         val edition = editionsRepo.getLatestEdition()
 
         // check if yesterday is eligible for getting a report within the last edition
@@ -45,7 +44,8 @@ class NotificationsManager @Inject constructor(private val context: Application,
         if (yesterdayNum < 0) return
 
         // check if there is already a report for the day
-        val hasReports = db.isThereReportForDay(yesterdayNum, edition)
+        val hasReports = reportsRepo.getReportsForDay(edition, yesterdayNum).size > 0
+
         if (hasReports) return
 
         showNotification()

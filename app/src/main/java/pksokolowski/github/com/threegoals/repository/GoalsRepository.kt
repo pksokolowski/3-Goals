@@ -18,4 +18,7 @@ class GoalsRepository @Inject constructor(private val goalsDao: GoalsDao) {
         goalsDao.insertGoals(goals)
     }
 
+    fun updateGoal(goal: Goal){
+        goalsDao.updateGoal(goal)
+    }
 }

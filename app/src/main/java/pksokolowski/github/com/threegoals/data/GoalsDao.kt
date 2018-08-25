@@ -9,6 +9,9 @@ interface GoalsDao {
     @Query("SELECT * FROM goals WHERE edition = :editionId ORDER BY position ASC")
     fun getGoals(editionId: Long): MutableList<Goal>
 
+    @Query("SELECT * FROM goals WHERE id = :id")
+    fun getGoalById(id: Long): Goal
+
     @Insert
     fun insertGoal(goal: Goal): Long
 

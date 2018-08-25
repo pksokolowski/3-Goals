@@ -8,11 +8,12 @@ import pksokolowski.github.com.threegoals.model.Day
 import pksokolowski.github.com.threegoals.model.DaysData
 import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Report
+import pksokolowski.github.com.threegoals.utils.ReportsValidator
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, private val goalsDao: GoalsDao, editionsRepository: EditionsRepository) {
+class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, private val goalsDao: GoalsDao, editionsRepository: EditionsRepository, private val validator: ReportsValidator) {
 
 //    private var editionSelected = editionsRepository.getLatestEdition()
 
@@ -34,6 +35,10 @@ class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, 
         }
 
         return daysData
+    }
+
+    fun getReportsForDay(edition: Edition, dayNum: Int): MutableList<Report>{
+        return reportsDao.getReportsForDay(edition.id, dayNum)
     }
 
     private fun fetchData(edition: Edition) {
@@ -69,5 +74,15 @@ class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, 
         }
 
         return days
+    }
+
+    fun insertReports(reports: List<Report>){
+        validator.validateReportsBatch(reports)
+        reportsDao.insertReports(reports)
+    }
+
+    fun updateReports(reports: List<Report>){
+        validator.validateReportsBatch(reports)
+        reportsDao.updateReports(reports)
     }
 }

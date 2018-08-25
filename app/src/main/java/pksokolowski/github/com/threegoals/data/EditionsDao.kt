@@ -14,6 +14,9 @@ interface EditionsDao {
     @Query("SELECT * FROM editions ORDER BY id ASC")
     fun getEditions(): MutableList<Edition>
 
+    @Query("SELECT * FROM editions WHERE id = :id")
+    fun getEditionById(id: Long): Edition
+
     @Insert
     fun insertEdition(edition: Edition): Long
 

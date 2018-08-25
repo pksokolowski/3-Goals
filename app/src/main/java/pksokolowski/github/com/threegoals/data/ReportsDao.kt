@@ -13,10 +13,10 @@ import pksokolowski.github.com.threegoals.model.Report
 interface ReportsDao {
 
     @Update
-    fun updateReports(vararg reports: Report)
+    fun updateReports(reports: List<Report>)
 
     @Insert
-    fun insertReports(vararg reports: Report)
+    fun insertReports(reports: List<Report>)
 
     @Query("SELECT reports.id, dayNum, timeStamp, scoreTryingHard, scorePositives, goal FROM reports JOIN goals ON goals.id = reports.goal WHERE edition = :editionId ORDER BY reports.id ASC")
     fun getReports(editionId: Long): LiveData<MutableList<Report>>

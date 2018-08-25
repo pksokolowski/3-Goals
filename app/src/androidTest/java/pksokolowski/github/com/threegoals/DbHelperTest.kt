@@ -1,18 +1,5 @@
 package pksokolowski.github.com.threegoals
 
-import android.support.test.InstrumentationRegistry
-import org.junit.After
-
-import org.junit.Test
-
-import org.junit.Assert.*
-import org.junit.Before
-import pksokolowski.github.com.threegoals.data.DbHelper
-import pksokolowski.github.com.threegoals.model.Edition
-import pksokolowski.github.com.threegoals.model.Goal
-import pksokolowski.github.com.threegoals.model.Report
-import java.util.*
-
 class DbHelperInstrumentedTest {
 
     private lateinit var db: DbHelper

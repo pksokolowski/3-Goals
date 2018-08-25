@@ -1,5 +1,6 @@
 package pksokolowski.github.com.threegoals.utils
 
+import pksokolowski.github.com.threegoals.data.EditionsDao
 import pksokolowski.github.com.threegoals.data.GoalsDao
 import pksokolowski.github.com.threegoals.data.ReportsDao
 import pksokolowski.github.com.threegoals.model.Edition
@@ -8,17 +9,24 @@ import pksokolowski.github.com.threegoals.repository.GoalsRepository
 import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
-class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, private val reportsDao: ReportsDao) {
-    fun isReportsBatchValid(reports: MutableList<Report>, edition: Edition): Boolean {
+class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, private val reportsDao: ReportsDao, private val editionsDao: EditionsDao) {
+    fun isReportsBatchValid(reports: List<Report>): Boolean {
         return try {
-            validateReportsBatch(reports, edition)
+            validateReportsBatch(reports)
             true
         } catch (e: RuntimeException) {
             false
         }
     }
 
-    private fun validateReportsBatch(reports: MutableList<Report>, edition: Edition) {
+    fun validateReportsBatch(reports: List<Report>) {
+        // reject empty list
+        if(reports.isEmpty()) throw RuntimeException("Attempted to save an empty list of reports")
+
+        // establish edition based on first report in the batch
+        val goal = goalsDao.getGoalById(reports[0].goal)
+        val edition = editionsDao.getEditionById(goal.edition)
+
         // validate the number of reports - must match number of reports expected given the edition
         if (reports.size != edition.goalsCount) throw RuntimeException("Attempted to save an incorrect number of reports.")
 
