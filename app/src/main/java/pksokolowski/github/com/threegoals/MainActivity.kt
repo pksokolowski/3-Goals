@@ -90,10 +90,6 @@ class MainActivity : AppCompatActivity() {
         pieChart.sliceSelectionChanged = {
             displayBarChart(data)
         }
-
-        topBar.editionSelected = lambda@{
-            viewModel.selectEdition(it)
-        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

@@ -13,10 +13,19 @@ class MainActivityViewModel @Inject constructor(private val reportsRepository: R
     private var selectedEdition = editionsRepository.getLatestEdition()
     private val daysData = reportsRepository.getDaysData(selectedEdition)
 
+    private val editions = editionsRepository.getAllEditionsAsLiveData()
+
     fun getData() = daysData
+
+    fun getEditions() = editions
 
     fun selectEdition(edition: Edition) {
         selectedEdition = edition
         reportsRepository.getDaysData(selectedEdition)
+    }
+
+    fun startNewEdition(){
+        val newEdition = editionsRepository.createEdition()
+        selectEdition(newEdition)
     }
 }

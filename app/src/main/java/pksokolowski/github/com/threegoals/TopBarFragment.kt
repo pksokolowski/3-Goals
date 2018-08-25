@@ -1,5 +1,9 @@
 package pksokolowski.github.com.threegoals
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -9,39 +13,43 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.top_bar.*
 import kotlinx.android.synthetic.main.top_bar.view.*
 import pksokolowski.github.com.threegoals.model.Edition
+import javax.inject.Inject
 
 
 class TopBarFragment : Fragment() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: MainActivityViewModel
+
+    override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(MainActivityViewModel::class.java)
+
+        viewModel.getEditions().observe(this, Observer {
+            if (it == null) return@Observer
+            mView.setupSpinner(it)
+        })
+
+    }
+
     private lateinit var mView: View
-    private lateinit var editions: Array<Edition>
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.top_bar, container)
-        loadEditions()
-        mView.setupSpinner()
         return mView
     }
 
-    fun getSelectedEdition(): Edition {
-        val current = EditionsManager.getCurrentEdition(requireContext())
-        if (current != null) return current
-
-        // no edition right now, it's after the last one for sure
-        // because EditionsManager will create one if no previous editions
-        // exist, and return it. So since it's after the last edition
-        // display previous one. Before returning though, offer the
-        // user a way to start a new edition
-        makeNewEditionOffer()
-        return editions.last()
-    }
-
-    private fun loadEditions() {
-        editions = EditionsManager.getAllEditions(requireContext())
-    }
-
-    private fun View.setupSpinner() {
+    private fun View.setupSpinner(editions: List<Edition>) {
         val spinnerOptions = Array(editions.size) { editions[it].title }
 
         this.editions_spinner.onItemSelectedListener = null
@@ -54,7 +62,7 @@ class TopBarFragment : Fragment() {
         // listener
         this.editions_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                editionSelected?.invoke(editions[position])
+                viewModel.selectEdition(editions[position])
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -74,19 +82,11 @@ class TopBarFragment : Fragment() {
         textView.setTypeface(textView.typeface, Typeface.BOLD)
         textView.setOnClickListener {
             // create new edition,
-            val newEdition = EditionsManager.createEdition(requireContext())
-            // load new data
-            loadEditions()
-            // display all editions on the spinner's list
-            mView.setupSpinner()
-            // let listener know about selection change
-            editionSelected?.invoke(newEdition)
+            viewModel.startNewEdition()
             // remove the offer message
             message_holder.removeAllViews()
         }
         message_holder.removeAllViews()
         message_holder.addView(textView)
     }
-
-    var editionSelected: ((edition: Edition) -> Unit)? = null
 }
