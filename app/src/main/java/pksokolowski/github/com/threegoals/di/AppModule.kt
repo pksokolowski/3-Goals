@@ -5,17 +5,13 @@ import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.android.AndroidInjectionModule
-import pksokolowski.github.com.threegoals.data.AppDatabase
-import pksokolowski.github.com.threegoals.data.ReportsDao
-import pksokolowski.github.com.threegoals.data.EditionsDao
-import pksokolowski.github.com.threegoals.data.GoalsDao
+import dagger.android.support.AndroidSupportInjectionModule
+import pksokolowski.github.com.threegoals.data.*
 import pksokolowski.github.com.threegoals.utils.DATABASE_NAME
 import javax.inject.Singleton
-import dagger.android.support.AndroidSupportInjectionModule
 
 
-
-@Module(includes = [ViewModelModule::class, AndroidInjectionModule::class, AndroidSupportInjectionModule::class])
+@Module(includes = [ViewModelModule::class, BroadcastReceiversModule::class, AndroidInjectionModule::class, AndroidSupportInjectionModule::class])
 open class AppModule {
 
     @Singleton

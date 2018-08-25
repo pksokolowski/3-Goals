@@ -73,7 +73,7 @@ class TopBarFragment : Fragment() {
 
     private fun makeNewEditionOffer() {
         // if there already is an ongoing edition, return
-        val current = EditionsManager.getCurrentEdition(requireContext())
+        val current = viewModel.getCurrentEdition()
         if (current != null) return
 
         // create a small UI piece as an interactive message to the user

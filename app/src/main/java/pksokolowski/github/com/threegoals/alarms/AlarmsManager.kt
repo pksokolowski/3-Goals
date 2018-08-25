@@ -12,7 +12,7 @@ object AlarmsManager {
 
     val ACTION_REQUEST_USER_REPORT = "com.github.pksokolowski.threegoals.action.request_user_report"
 
-    public fun setupAlarms(context: Context) {
+    fun setupAlarms(context: Context) {
 
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
@@ -29,7 +29,7 @@ object AlarmsManager {
         }
     }
 
-    public fun cancelAlarms(context: Context){
+    fun cancelAlarms(context: Context) {
         val pending = getRequestUserReportPendingIntent(context)
         val alarmManager = context.getSystemService(ALARM_SERVICE) as AlarmManager
         alarmManager.cancel(pending)

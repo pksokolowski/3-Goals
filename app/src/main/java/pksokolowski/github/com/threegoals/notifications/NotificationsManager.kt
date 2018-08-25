@@ -12,13 +12,14 @@ import pksokolowski.github.com.threegoals.EditionsManager
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.data.DbHelper
+import pksokolowski.github.com.threegoals.repository.EditionsRepository
 
 object NotificationsManager {
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
     val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
     val ACTION_OPEN_REPORTER = "com.github.pksokolowski.threegoals.action.open_reporter"
 
-    public fun showNotification(context: Context) {
+    fun showNotification(context: Context) {
 
         val B = NotificationCompat.Builder(context, CHANNEL_ID_USER_REPORT_REQUEST)
                 .setContentText(context.getString(R.string.notification_open_reporter_content_text))
@@ -34,9 +35,9 @@ object NotificationsManager {
         notificationManager.notify(NOTIFICATION_ID_USER_REPORT_REQUEST, notif)
     }
 
-    fun showNotificationIfNeeded(context: Context) {
+    fun showNotificationIfNeeded(context: Context, editionsRepository: EditionsRepository) {
         val db = DbHelper.getInstance(context)
-        val edition = EditionsManager.getLatestEdition(context) ?: return
+        val edition = editionsRepository.getLatestEdition()
 
         // check if yesterday is eligible for getting a report within the last edition
         val yesterday0Hour = TimeHelper.yesterday0Hour()
@@ -51,7 +52,7 @@ object NotificationsManager {
     }
 
 
-    public fun cancelNotification(context: Context) {
+    fun cancelNotification(context: Context) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NOTIFICATION_ID_USER_REPORT_REQUEST)
     }
@@ -60,7 +61,7 @@ object NotificationsManager {
         return PendingIntent.getBroadcast(context, 0, Intent(ACTION_OPEN_REPORTER), PendingIntent.FLAG_CANCEL_CURRENT)
     }
 
-    public fun createNotificationChannels(context: Context) {
+    fun createNotificationChannels(context: Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_user_report_request_title)
             val description = context.getString(R.string.notification_channel_user_report_request_description)

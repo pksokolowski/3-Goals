@@ -3,17 +3,24 @@ package pksokolowski.github.com.threegoals.notifications
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import pksokolowski.github.com.threegoals.EditionsManager
+import dagger.android.AndroidInjection
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager.ACTION_OPEN_REPORTER
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
+import pksokolowski.github.com.threegoals.repository.EditionsRepository
+import javax.inject.Inject
 
 class NotificationsClickReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var editionsRepo: EditionsRepository
+
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
+        AndroidInjection.inject(this, context)
+
         if (action == ACTION_OPEN_REPORTER) {
-            val latestEdition = EditionsManager.getLatestEdition(context)
-            if(latestEdition == null) { onFailure(context); return }
+            val latestEdition = editionsRepo.getLatestEdition()
             val dayOfEdition = latestEdition.dayNumOf(TimeHelper.yesterday0Hour())
             if(dayOfEdition < 0) { onFailure(context); return }
 
