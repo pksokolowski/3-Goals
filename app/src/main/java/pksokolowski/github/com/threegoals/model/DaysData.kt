@@ -4,15 +4,7 @@ import android.content.Context
 import pksokolowski.github.com.threegoals.ScoreCalculator
 import pksokolowski.github.com.threegoals.data.DbHelper
 
-class DaysData(context: Context, val edition: Edition) {
-    private val goals: MutableList<Goal>
-    private val days: Array<Day?>
-
-    init {
-        val db = DbHelper.getInstance(context)
-        goals = db.getGoals(edition)
-        days = db.getDays(edition)
-    }
+class DaysData(val edition: Edition, private val goals: MutableList<Goal>, private val days: Array<Day?>) {
 
     fun isReportPresentForDay(dayNum: Int): Boolean {
         if (dayNum !in days.indices) return false

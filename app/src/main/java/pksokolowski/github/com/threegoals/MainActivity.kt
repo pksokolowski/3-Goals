@@ -1,5 +1,6 @@
 package pksokolowski.github.com.threegoals
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     // todo: remove data from Activity
-    private lateinit var data: DaysData
+
     private lateinit var topBar: TopBarFragment
     private var currentChartSelection = 1
 
@@ -39,48 +40,43 @@ class MainActivity : AppCompatActivity() {
 
         pieChart.noDataMessage = getString(R.string.main_pie_no_data_message)
         pieChart.mainColor = ContextCompat.getColor(this, R.color.pieChartPrimary)
+
+        viewModel.getData().observe(this, Observer {
+            if (it == null) return@Observer
+            setupListeners(it)
+            showData(it)
+        })
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        val edition = topBar.getSelectedEdition()
-        data = DaysData(this, edition)
-
-        showData()
-        setupListeners()
+    private fun showData(data: DaysData) {
+        displayPieChart(data)
+        displayBarChart(data)
     }
 
-    private fun showData() {
-        displayPieChart()
-        displayBarChart()
-    }
-
-    private fun displayPieChart() {
+    private fun displayPieChart(data: DaysData) {
         val pieData = mutableListOf<PieChart.Datum>()
         val daysOfEditionPassed = data.edition.daysOfEditionPassed(TimeHelper.now())
         val tryingHardPerGoal = data.getScoresPerGoal(includePositives = false, dayCap = daysOfEditionPassed)
         val positivesPerGoal = data.getScoresPerGoal(includeTryingHard = false, dayCap = daysOfEditionPassed)
         val sliceColors = ColorHelper.getScoreInColor(positivesPerGoal.values, positivesPerGoal.maxValue)
-        for(i in 0 until data.edition.goalsCount)
-        {
+        for (i in 0 until data.edition.goalsCount) {
             pieData.add(PieChart.Datum(data.getGoalInitialAt(i), tryingHardPerGoal.values[i].toLong(), i.toLong(), sliceColors[i]))
         }
 
         pieChart.data = pieData
     }
 
-    private fun displayBarChart() {
+    private fun displayBarChart(data: DaysData) {
         charts_holder.removeAllViews()
         charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
     }
 
-    private fun setupListeners() {
+    private fun setupListeners(data: DaysData) {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
         selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
         selectionButtons.selectionChangedListener = {
             currentChartSelection = it
-            displayBarChart()
+            displayBarChart(data)
         }
 
         editor_imageview.setOnClickListener {
@@ -92,13 +88,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         pieChart.sliceSelectionChanged = {
-            displayBarChart()
+            displayBarChart(data)
         }
 
         topBar.editionSelected = lambda@{
-            if (data.edition == it) return@lambda
-            data = DaysData(this, it)
-            showData()
+            viewModel.selectEdition(it)
         }
     }
 

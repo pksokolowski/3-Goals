@@ -53,7 +53,6 @@ object NotificationsManager {
 
     public fun cancelNotification(context: Context) {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                ?: return
         manager.cancel(NOTIFICATION_ID_USER_REPORT_REQUEST)
     }
 

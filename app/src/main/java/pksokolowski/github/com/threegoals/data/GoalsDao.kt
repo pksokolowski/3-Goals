@@ -7,7 +7,7 @@ import pksokolowski.github.com.threegoals.model.Goal
 @Dao
 interface GoalsDao {
     @Query("SELECT * FROM goals WHERE edition = :editionId ORDER BY position ASC")
-    fun getGoals(editionId: Long): LiveData<MutableList<Goal>>
+    fun getGoals(editionId: Long): MutableList<Goal>
 
     @Insert
     fun insertGoal(goal: Goal): Long

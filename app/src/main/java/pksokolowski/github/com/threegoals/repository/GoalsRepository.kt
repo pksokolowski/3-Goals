@@ -10,7 +10,7 @@ import javax.inject.Singleton
 @Singleton
 class GoalsRepository @Inject constructor(private val goalsDao: GoalsDao) {
 
-    fun getData(edition: Edition): LiveData<MutableList<Goal>> {
+    fun getData(edition: Edition): MutableList<Goal> {
         return goalsDao.getGoals(edition.id)
     }
 

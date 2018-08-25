@@ -1,6 +1,8 @@
 package pksokolowski.github.com.threegoals.repository
 
+import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MediatorLiveData
+import pksokolowski.github.com.threegoals.data.GoalsDao
 import pksokolowski.github.com.threegoals.data.ReportsDao
 import pksokolowski.github.com.threegoals.model.Day
 import pksokolowski.github.com.threegoals.model.DaysData
@@ -10,15 +12,41 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao) {
+class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, private val goalsDao: GoalsDao, editionsRepository: EditionsRepository) {
 
-//    private val reportsData = reportsDao.getReports()
-//    private val daysData = MediatorLiveData<DaysData>()
-//    init {
-//        daysData.addSource()
-//    }
+//    private var editionSelected = editionsRepository.getLatestEdition()
 
-    fun getReportsForDay(edition: Edition, dayNum: Int) = reportsDao.getReportsForDay(edition.id, dayNum)
+    // do not expose this property to the outside world, the reference will be dropped
+    // observing it makes less than perfect sense even though it might behave
+    // as expected in most situations.
+    private var temporaryReportsSource = reportsDao.getReports(
+            // this can be replaced with code that does not try to guess the edition
+            // to use, and instead relies solely on what is provided when asking for the data.
+            editionsRepository.getLatestEdition().id
+    )
+
+    private val daysData = MediatorLiveData<DaysData>()
+
+    fun getDaysData(edition: Edition): LiveData<DaysData> {
+        val data = daysData.value
+        if (data == null || data.edition.id != edition.id) {
+            fetchData(edition)
+        }
+
+        return daysData
+    }
+
+    private fun fetchData(edition: Edition) {
+        daysData.removeSource(temporaryReportsSource)
+        temporaryReportsSource = reportsDao.getReports(edition.id)
+        daysData.addSource(temporaryReportsSource) {
+            val reports = it ?: mutableListOf()
+            val days = getDays(edition, reports)
+            val goals = goalsDao.getGoals(edition.id)
+
+            daysData.value = DaysData(edition, goals, days)
+        }
+    }
 
     private fun getDays(edition: Edition, reports: MutableList<Report>): Array<Day?> {
         val days = arrayOfNulls<Day>(edition.lengthInDays)

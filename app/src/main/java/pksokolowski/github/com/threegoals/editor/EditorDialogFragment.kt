@@ -46,12 +46,12 @@ class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedLis
     override fun onResume() {
         super.onResume()
         if (::mEdition.isInitialized) {
-            val data = DaysData(requireActivity(), mEdition)
-
-            mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
-            var numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
-            if (numOfDaysToShow == -1) numOfDaysToShow = data.edition.lengthInDays
-            mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this)
+//            val data = DaysData(requireActivity(), mEdition)
+//
+//            mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
+//            var numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
+//            if (numOfDaysToShow == -1) numOfDaysToShow = data.edition.lengthInDays
+//            mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this)
         }
     }
 }

@@ -1,12 +1,14 @@
 package pksokolowski.github.com.threegoals.utils
 
+import pksokolowski.github.com.threegoals.data.GoalsDao
+import pksokolowski.github.com.threegoals.data.ReportsDao
 import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Report
 import pksokolowski.github.com.threegoals.repository.GoalsRepository
 import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
-class ReportsValidator @Inject constructor(private val goalsRepository: GoalsRepository, private val reportsRepository: ReportsRepository) {
+class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, private val reportsDao: ReportsDao) {
     fun isReportsBatchValid(reports: MutableList<Report>, edition: Edition): Boolean {
         return try {
             validateReportsBatch(reports, edition)
@@ -42,14 +44,13 @@ class ReportsValidator @Inject constructor(private val goalsRepository: GoalsRep
         }
 
         // validate that goals of all of the reports exist in the edition
-        val editionsGoals = goalsRepository.getData(edition).value
-                ?: throw RuntimeException("Corrupted Edition: It has no goals.")
+        val editionsGoals = goalsDao.getGoals(edition.id)
         for (i in editionsGoals.indices) {
             if (reports[i].goal != editionsGoals[i].id) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
         }
 
         // validate that the reports are not already present for the day
-        val existingReportsForTheSameDay = reportsRepository.getReportsForDay(edition, expectedDayNum).value
-        if (existingReportsForTheSameDay != null && existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
+        val existingReportsForTheSameDay = reportsDao.getReportsForDay(edition.id, expectedDayNum)
+        if (existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
     }
 }

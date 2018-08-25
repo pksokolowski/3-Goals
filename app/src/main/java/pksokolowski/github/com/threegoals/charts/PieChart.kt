@@ -147,7 +147,7 @@ class PieChart : View {
         val angles = mAngles ?: return
         val colors = mColors ?: return
 
-        val factor = dpToPixels(10)
+        //val factor = dpToPixels(10)
 
         val radius = height / 2f
         var segStartAngle = START_ANGLE
