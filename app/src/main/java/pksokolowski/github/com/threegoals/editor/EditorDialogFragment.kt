@@ -1,5 +1,9 @@
 package pksokolowski.github.com.threegoals.editor
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
@@ -7,13 +11,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.reports_editor_dialog.view.*
+import pksokolowski.github.com.threegoals.MainActivityViewModel
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.help.HelpProvider
-import pksokolowski.github.com.threegoals.model.DaysData
-import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
+import javax.inject.Inject
 
 
 class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedListener {
@@ -24,15 +30,36 @@ class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedLis
     companion object {
         private const val FRAGMENT_TAG_LOGS = "reports editor"
 
-        fun showDialog(activity: AppCompatActivity, edition: Edition) {
+        fun showDialog(activity: AppCompatActivity) {
             val dialog = EditorDialogFragment()
-            dialog.mEdition = edition
             dialog.show(activity.supportFragmentManager, FRAGMENT_TAG_LOGS)
         }
     }
 
-    private lateinit var mEdition: Edition
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: MainActivityViewModel
+
     private lateinit var mView: View
+
+    override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
+        super.onAttach(context)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProviders.of(requireActivity(), viewModelFactory).get(MainActivityViewModel::class.java)
+
+        viewModel.getData().observe(this, Observer {
+            if (it == null) return@Observer
+            mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
+            var numOfDaysToShow = it.edition.dayNumOf(TimeHelper.now())
+            if (numOfDaysToShow == -1) numOfDaysToShow = it.edition.lengthInDays
+            mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), it, numOfDaysToShow, this)
+        })
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -40,18 +67,7 @@ class EditorDialogFragment : DialogFragment(), DaysDataAdapter.OnItemSelectedLis
         mView.help_image.setOnClickListener {
             HelpProvider.requestHelp(requireActivity() as AppCompatActivity, HelpProvider.TOPIC_REPORTS)
         }
-        return mView
-    }
 
-    override fun onResume() {
-        super.onResume()
-        if (::mEdition.isInitialized) {
-//            val data = DaysData(requireActivity(), mEdition)
-//
-//            mView.editor_recycler.layoutManager = LinearLayoutManager(activity)
-//            var numOfDaysToShow = data.edition.dayNumOf(TimeHelper.now())
-//            if (numOfDaysToShow == -1) numOfDaysToShow = data.edition.lengthInDays
-//            mView.editor_recycler.adapter = DaysDataAdapter(requireActivity(), data, numOfDaysToShow, this)
-        }
+        return mView
     }
 }

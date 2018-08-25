@@ -11,8 +11,11 @@ import pksokolowski.github.com.threegoals.data.EditionsDao
 import pksokolowski.github.com.threegoals.data.GoalsDao
 import pksokolowski.github.com.threegoals.utils.DATABASE_NAME
 import javax.inject.Singleton
+import dagger.android.support.AndroidSupportInjectionModule
 
-@Module(includes = [ViewModelModule::class, AndroidInjectionModule::class])
+
+
+@Module(includes = [ViewModelModule::class, AndroidInjectionModule::class, AndroidSupportInjectionModule::class])
 open class AppModule {
 
     @Singleton

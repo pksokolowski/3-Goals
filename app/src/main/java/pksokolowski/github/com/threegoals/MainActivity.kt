@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         editor_imageview.setOnClickListener {
-            EditorDialogFragment.showDialog(this, data.edition)
+            EditorDialogFragment.showDialog(this)
         }
 
         help_imageview.setOnClickListener {
