@@ -37,7 +37,7 @@ class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, 
         return daysData
     }
 
-    fun getReportsForDay(edition: Edition, dayNum: Int): MutableList<Report>{
+    fun getReportsForDay(edition: Edition, dayNum: Int): MutableList<Report> {
         return reportsDao.getReportsForDay(edition.id, dayNum)
     }
 
@@ -76,13 +76,13 @@ class ReportsRepository @Inject constructor(private val reportsDao: ReportsDao, 
         return days
     }
 
-    fun insertReports(reports: List<Report>){
+    fun insertReports(reports: List<Report>) {
         validator.validateReportsBatch(reports)
         reportsDao.insertReports(reports)
     }
 
-    fun updateReports(reports: List<Report>){
-        validator.validateReportsBatch(reports)
+    fun updateReports(reports: List<Report>) {
+        validator.validateReportsBatch(reports, true)
         reportsDao.updateReports(reports)
     }
 }

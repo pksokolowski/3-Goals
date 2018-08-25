@@ -3,13 +3,11 @@ package pksokolowski.github.com.threegoals.utils
 import pksokolowski.github.com.threegoals.data.EditionsDao
 import pksokolowski.github.com.threegoals.data.GoalsDao
 import pksokolowski.github.com.threegoals.data.ReportsDao
-import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Report
-import pksokolowski.github.com.threegoals.repository.GoalsRepository
-import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
 class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, private val reportsDao: ReportsDao, private val editionsDao: EditionsDao) {
+
     fun isReportsBatchValid(reports: List<Report>): Boolean {
         return try {
             validateReportsBatch(reports)
@@ -19,13 +17,13 @@ class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, priva
         }
     }
 
-    fun validateReportsBatch(reports: List<Report>) {
+    fun validateReportsBatch(reports: List<Report>, isEditing: Boolean = false) {
         // reject empty list
-        if(reports.isEmpty()) throw RuntimeException("Attempted to save an empty list of reports")
+        if (reports.isEmpty()) throw RuntimeException("Attempted to save an empty list of reports")
 
         // establish edition based on first report in the batch
-        val goal = goalsDao.getGoalById(reports[0].goal)
-        val edition = editionsDao.getEditionById(goal.edition)
+        val firstReportsGoal = goalsDao.getGoalById(reports[0].goal)
+        val edition = editionsDao.getEditionById(firstReportsGoal.edition)
 
         // validate the number of reports - must match number of reports expected given the edition
         if (reports.size != edition.goalsCount) throw RuntimeException("Attempted to save an incorrect number of reports.")
@@ -57,8 +55,10 @@ class ReportsValidator @Inject constructor(private val goalsDao: GoalsDao, priva
             if (reports[i].goal != editionsGoals[i].id) throw RuntimeException("Attempted to save reports with a mismatch: Goals not matching edition.")
         }
 
-        // validate that the reports are not already present for the day
-        val existingReportsForTheSameDay = reportsDao.getReportsForDay(edition.id, expectedDayNum)
-        if (existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
+        // validate that the reports are not already present for the day (unless it is editing)
+        if (!isEditing) {
+            val existingReportsForTheSameDay = reportsDao.getReportsForDay(edition.id, expectedDayNum)
+            if (existingReportsForTheSameDay.size > 0) throw RuntimeException("Attempted to save duplicate reports for a day, which already had reports saved.")
+        }
     }
 }
