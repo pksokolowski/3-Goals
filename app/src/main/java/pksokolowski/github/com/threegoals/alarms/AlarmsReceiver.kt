@@ -13,13 +13,15 @@ class AlarmsReceiver : BroadcastReceiver() {
     @Inject
     lateinit var editionsRepo: EditionsRepository
 
+    @Inject
+    lateinit var notificationsManager: NotificationsManager
+
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null) return
         AndroidInjection.inject(this, context)
 
-
         // first show notification if needed:
-        NotificationsManager.showNotificationIfNeeded(context, editionsRepo)
+        notificationsManager.showNotificationIfNeeded()
 
         // if edition ended, cancel the alarms
         if (editionsRepo.getCurrentEdition() == null) {

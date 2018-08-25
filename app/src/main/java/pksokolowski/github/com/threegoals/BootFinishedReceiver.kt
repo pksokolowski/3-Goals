@@ -17,6 +17,9 @@ class BootFinishedReceiver : BroadcastReceiver() {
     @Inject
     lateinit var editionsRepo: EditionsRepository
 
+    @Inject
+    lateinit var notificationsManager: NotificationsManager
+
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
         AndroidInjection.inject(this, context)
@@ -30,7 +33,7 @@ class BootFinishedReceiver : BroadcastReceiver() {
                 // to prevent it from running on every system restart
                 setBootFinishedReceiverEnabled(context, false)
             }
-            NotificationsManager.showNotificationIfNeeded(context, editionsRepo)
+            notificationsManager.showNotificationIfNeeded()
         }
     }
 

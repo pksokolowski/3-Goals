@@ -128,7 +128,7 @@ class ReporterActivity : AppCompatActivity() {
         // save reports
         db.pushReports(reports, mEdition)
 
-        NotificationsManager.cancelNotification(this)
+        viewModel.cancelNotification()
 
         Toast.makeText(this,
                 getString(R.string.reporter_activity_message_reports_saved),

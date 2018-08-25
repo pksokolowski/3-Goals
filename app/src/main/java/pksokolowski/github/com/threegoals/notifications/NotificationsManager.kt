@@ -1,9 +1,6 @@
 package pksokolowski.github.com.threegoals.notifications
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -12,14 +9,18 @@ import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.TimeHelper
 import pksokolowski.github.com.threegoals.data.DbHelper
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
+import javax.inject.Inject
+import javax.inject.Singleton
 
-object NotificationsManager {
+@Singleton
+class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository){
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
     val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
-    val ACTION_OPEN_REPORTER = "com.github.pksokolowski.threegoals.action.open_reporter"
+    companion object {
+        const val ACTION_OPEN_REPORTER = "com.github.pksokolowski.threegoals.action.open_reporter"
+    }
 
-    fun showNotification(context: Context) {
-
+    fun showNotification() {
         val B = NotificationCompat.Builder(context, CHANNEL_ID_USER_REPORT_REQUEST)
                 .setContentText(context.getString(R.string.notification_open_reporter_content_text))
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
@@ -34,9 +35,9 @@ object NotificationsManager {
         notificationManager.notify(NOTIFICATION_ID_USER_REPORT_REQUEST, notif)
     }
 
-    fun showNotificationIfNeeded(context: Context, editionsRepository: EditionsRepository) {
+    fun showNotificationIfNeeded() {
         val db = DbHelper.getInstance(context)
-        val edition = editionsRepository.getLatestEdition()
+        val edition = editionsRepo.getLatestEdition()
 
         // check if yesterday is eligible for getting a report within the last edition
         val yesterday0Hour = TimeHelper.yesterday0Hour()
@@ -47,11 +48,11 @@ object NotificationsManager {
         val hasReports = db.isThereReportForDay(yesterdayNum, edition)
         if (hasReports) return
 
-        showNotification(context)
+        showNotification()
     }
 
 
-    fun cancelNotification(context: Context) {
+    fun cancelNotification() {
         val manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         manager.cancel(NOTIFICATION_ID_USER_REPORT_REQUEST)
     }
@@ -60,7 +61,7 @@ object NotificationsManager {
         return PendingIntent.getBroadcast(context, 0, Intent(ACTION_OPEN_REPORTER), PendingIntent.FLAG_CANCEL_CURRENT)
     }
 
-    fun createNotificationChannels(context: Context) {
+    fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_user_report_request_title)
             val description = context.getString(R.string.notification_channel_user_report_request_description)
