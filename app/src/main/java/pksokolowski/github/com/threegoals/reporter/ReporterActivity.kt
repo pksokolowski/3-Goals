@@ -5,17 +5,15 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.View
-import android.view.WindowManager
 import android.widget.Toast
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.reporter_activity.*
 import pksokolowski.github.com.threegoals.R
 import pksokolowski.github.com.threegoals.reporter.ReporterActivityViewModel.Companion.DATA_LOAD_FAILURE
+import pksokolowski.github.com.threegoals.utils.ImmersiveAppCompatActivity
 import javax.inject.Inject
 
-class ReporterActivity : AppCompatActivity() {
+class ReporterActivity : ImmersiveAppCompatActivity() {
     companion object {
         private const val EXTRAS_EDITION_ID = "edition_id"
         private const val EXTRAS_EDITION_DAY_NUMBER = "edition_day_number"
@@ -37,8 +35,6 @@ class ReporterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.reporter_activity)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ReporterActivityViewModel::class.java)
-
-        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         obtainDataFromExtras(intent.extras)
         showData()
@@ -82,7 +78,7 @@ class ReporterActivity : AppCompatActivity() {
         val dayNum = bundle.getInt(EXTRAS_EDITION_DAY_NUMBER, -1)
 
         val result = viewModel.loadData(editionID, dayNum)
-        if(result == DATA_LOAD_FAILURE){
+        if (result == DATA_LOAD_FAILURE) {
             done_button.isEnabled = false
             throw RuntimeException("failed to load data in ReporterActivity")
         }
@@ -100,16 +96,4 @@ class ReporterActivity : AppCompatActivity() {
             goal_2 as ReportFormFragment,
             goal_3 as ReportFormFragment
     )
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-        }
-    }
 }
