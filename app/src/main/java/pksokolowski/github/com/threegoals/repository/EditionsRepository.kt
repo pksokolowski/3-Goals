@@ -1,8 +1,8 @@
 package pksokolowski.github.com.threegoals.repository
 
 import android.app.Application
-import pksokolowski.github.com.threegoals.BootFinishedReceiver
-import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.alarms.BootFinishedReceiver
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.alarms.AlarmsManager
 import pksokolowski.github.com.threegoals.data.EditionsDao
 import pksokolowski.github.com.threegoals.data.GoalsDao

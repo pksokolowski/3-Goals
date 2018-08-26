@@ -1,9 +1,9 @@
-package pksokolowski.github.com.threegoals
+package pksokolowski.github.com.threegoals.charts
 
 import android.content.Context
 import android.view.View
-import pksokolowski.github.com.threegoals.charts.BarChart
 import pksokolowski.github.com.threegoals.model.DaysData
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 
 class ChartProvider {
     companion object {

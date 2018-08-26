@@ -1,6 +1,6 @@
 package pksokolowski.github.com.threegoals.model
 
-import pksokolowski.github.com.threegoals.ScoreCalculator
+import pksokolowski.github.com.threegoals.utils.ScoreCalculator
 
 class DaysData(val edition: Edition, private val goals: MutableList<Goal>, private val days: Array<Day?>) {
 

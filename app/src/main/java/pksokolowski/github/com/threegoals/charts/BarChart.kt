@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.TypedValue
 import android.view.View
-import pksokolowski.github.com.threegoals.ColorHelper
+import pksokolowski.github.com.threegoals.utils.ColorHelper
 
 class BarChart(context: Context, private val data: IntArray, private val maxValue: Int, private val dim2Data: IntArray, private val dim2MaxValue: Int, private val columnTitles: Array<String>? = null) : View(context) {
     private lateinit var framePaint: Paint

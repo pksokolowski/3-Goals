@@ -6,7 +6,7 @@ import android.content.Intent
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import pksokolowski.github.com.threegoals.R
-import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
 import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject

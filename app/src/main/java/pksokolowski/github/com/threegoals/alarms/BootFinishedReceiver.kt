@@ -1,9 +1,8 @@
-package pksokolowski.github.com.threegoals
+package pksokolowski.github.com.threegoals.alarms
 
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
-import pksokolowski.github.com.threegoals.alarms.AlarmsManager
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 import android.content.pm.PackageManager
 import android.content.ComponentName

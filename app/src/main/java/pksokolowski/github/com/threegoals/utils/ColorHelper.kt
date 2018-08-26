@@ -1,4 +1,4 @@
-package pksokolowski.github.com.threegoals
+package pksokolowski.github.com.threegoals.utils
 
 import android.graphics.Color
 

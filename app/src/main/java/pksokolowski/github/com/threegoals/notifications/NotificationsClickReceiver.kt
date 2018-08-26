@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
-import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.notifications.NotificationsManager.Companion.ACTION_OPEN_REPORTER
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 import pksokolowski.github.com.threegoals.repository.EditionsRepository

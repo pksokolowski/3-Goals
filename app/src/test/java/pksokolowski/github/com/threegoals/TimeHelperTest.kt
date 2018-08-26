@@ -2,7 +2,7 @@ package pksokolowski.github.com.threegoals
 
 import org.junit.Test
 import org.junit.Assert.*
-import java.util.*
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 
 class TimeHelperTest {
     @Test

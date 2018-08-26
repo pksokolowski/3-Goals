@@ -1,8 +1,8 @@
-package pksokolowski.github.com.threegoals.data
+package pksokolowski.github.com.threegoals.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import pksokolowski.github.com.threegoals.BootFinishedReceiver
+import pksokolowski.github.com.threegoals.alarms.BootFinishedReceiver
 import pksokolowski.github.com.threegoals.alarms.AlarmsReceiver
 import pksokolowski.github.com.threegoals.notifications.NotificationsClickReceiver
 

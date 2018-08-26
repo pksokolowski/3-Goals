@@ -10,11 +10,13 @@ import android.view.View
 import android.view.WindowManager
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_main.*
+import pksokolowski.github.com.threegoals.charts.ChartProvider
 import pksokolowski.github.com.threegoals.charts.PieChart
 import pksokolowski.github.com.threegoals.editor.EditorDialogFragment
 import pksokolowski.github.com.threegoals.help.HelpProvider
 import pksokolowski.github.com.threegoals.model.DaysData
-import pksokolowski.github.com.threegoals.notifications.NotificationsManager
+import pksokolowski.github.com.threegoals.utils.ColorHelper
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

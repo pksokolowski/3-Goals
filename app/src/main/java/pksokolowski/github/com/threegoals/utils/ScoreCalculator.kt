@@ -1,4 +1,4 @@
-package pksokolowski.github.com.threegoals
+package pksokolowski.github.com.threegoals.utils
 
 import pksokolowski.github.com.threegoals.model.Day
 import pksokolowski.github.com.threegoals.model.Edition

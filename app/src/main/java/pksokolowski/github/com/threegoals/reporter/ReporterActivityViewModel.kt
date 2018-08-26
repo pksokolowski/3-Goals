@@ -4,7 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.widget.Toast
 import pksokolowski.github.com.threegoals.R
-import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Goal
 import pksokolowski.github.com.threegoals.model.Report

@@ -34,7 +34,7 @@
                 <action android:name="com.github.pksokolowski.threegoals.action.request_user_report" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".BootFinishedReceiver"
+        <receiver android:name=".alarms.BootFinishedReceiver"
             android:enabled="false"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>

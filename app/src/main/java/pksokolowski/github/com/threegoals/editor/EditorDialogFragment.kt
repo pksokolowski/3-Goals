@@ -11,12 +11,11 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dagger.android.AndroidInjection
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.reports_editor_dialog.view.*
 import pksokolowski.github.com.threegoals.MainActivityViewModel
 import pksokolowski.github.com.threegoals.R
-import pksokolowski.github.com.threegoals.TimeHelper
+import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.help.HelpProvider
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 import javax.inject.Inject
