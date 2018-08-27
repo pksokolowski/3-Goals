@@ -13,22 +13,27 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository, private val reportsRepo: ReportsRepository){
+class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository, private val reportsRepo: ReportsRepository) {
     val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
     val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
+
+    init {
+        createNotificationChannels()
+    }
+
     companion object {
         const val ACTION_OPEN_REPORTER = "com.github.pksokolowski.threegoals.action.open_reporter"
     }
 
     fun showNotification() {
-        val B = NotificationCompat.Builder(context, CHANNEL_ID_USER_REPORT_REQUEST)
+        val b = NotificationCompat.Builder(context, CHANNEL_ID_USER_REPORT_REQUEST)
                 .setContentText(context.getString(R.string.notification_open_reporter_content_text))
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.ic_timeline_white_24dp)
                 .setOngoing(true)
                 .setContentIntent(getOpenReporterPendingIntent(context))
 
-        val notif = B.build()
+        val notif = b.build()
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // to 0 to id, pozwoli mi potem manipulować tym notification, w szczególności je usunąc lub zastąpić

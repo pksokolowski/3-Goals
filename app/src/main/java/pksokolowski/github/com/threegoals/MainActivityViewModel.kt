@@ -10,14 +10,13 @@ import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(private val reportsRepository: ReportsRepository, private val editionsRepository: EditionsRepository, notificationsManager: NotificationsManager) : ViewModel() {
-    init {
-        notificationsManager.createNotificationChannels()
-    }
 
     private var selectedEdition = editionsRepository.getLatestEdition()
     private val daysData = reportsRepository.getDaysData(selectedEdition)
 
     private val editions = editionsRepository.getAllEditionsAsLiveData()
+
+    var currentChartSelection = 1
 
     fun getData() = daysData
 

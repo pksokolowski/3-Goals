@@ -22,9 +22,6 @@ class MainActivity : ImmersiveAppCompatActivity() {
 
     lateinit var viewModel: MainActivityViewModel
 
-    // todo: consider moving it over to the viewModel, or removing entirely
-    private var currentChartSelection = 1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
@@ -52,14 +49,14 @@ class MainActivity : ImmersiveAppCompatActivity() {
 
     private fun displayBarChart(data: DaysData) {
         charts_holder.removeAllViews()
-        charts_holder.addView(ChartProvider.getChart(this, data, currentChartSelection, pieChart.lastTouchedIndex))
+        charts_holder.addView(ChartProvider.getChart(this, data, viewModel.currentChartSelection, pieChart.lastTouchedIndex))
     }
 
     private fun setupListeners(data: DaysData) {
         val selectionButtons = selection_buttons as SelectorButtonsFragment
-        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), currentChartSelection)
+        selectionButtons.setData(resources.getStringArray(R.array.charts_selection), viewModel.currentChartSelection)
         selectionButtons.selectionChangedListener = {
-            currentChartSelection = it
+            viewModel.currentChartSelection = it
             displayBarChart(data)
         }
 
