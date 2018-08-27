@@ -43,6 +43,13 @@ class TopBarFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(viewModel.getCurrentEdition() == null){
+            makeNewEditionOffer()
+        }
+    }
+
     private lateinit var mView: View
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         mView = inflater.inflate(R.layout.top_bar, container)
