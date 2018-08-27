@@ -1,10 +1,16 @@
 package pksokolowski.github.com.threegoals.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
+import android.arch.persistence.room.ForeignKey.CASCADE
 
-@Entity(tableName = "reports")
+@Entity(tableName = "reports",
+        foreignKeys = [ForeignKey(
+                entity = Goal::class,
+                parentColumns = ["id"],
+                childColumns = ["goal"],
+                onDelete = CASCADE)],
+        indices = [Index("goal")]
+)
 data class Report(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")

@@ -1,10 +1,15 @@
 package pksokolowski.github.com.threegoals.model
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.PrimaryKey
+import android.arch.persistence.room.*
 
-@Entity(tableName = "goals")
+@Entity(tableName = "goals",
+        foreignKeys = [ForeignKey(
+                entity = Edition::class,
+                parentColumns = ["id"],
+                childColumns = ["edition"],
+                onDelete = ForeignKey.CASCADE)],
+        indices = [Index("edition")]
+)
 data class Goal(
         @PrimaryKey(autoGenerate = true)
         @ColumnInfo(name = "id")
@@ -22,8 +27,8 @@ data class Goal(
         @ColumnInfo(name = "edition")
         val edition: Long
 
-){
-        fun changeCustomName(name: String): Goal{
-                return Goal(id, name, initial, position, edition)
-        }
+) {
+    fun changeCustomName(name: String): Goal {
+        return Goal(id, name, initial, position, edition)
+    }
 }
