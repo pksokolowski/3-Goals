@@ -8,16 +8,17 @@ import pksokolowski.github.com.threegoals.utils.TimeHelper
 import pksokolowski.github.com.threegoals.model.Edition
 import pksokolowski.github.com.threegoals.model.Goal
 import pksokolowski.github.com.threegoals.model.Report
-import pksokolowski.github.com.threegoals.notifications.NotificationsManager
+import pksokolowski.github.com.threegoals.notifications.NotificationHelper
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
 import pksokolowski.github.com.threegoals.repository.GoalsRepository
 import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
-class ReporterActivityViewModel @Inject constructor(private val reportsRepository: ReportsRepository, private val goalsRepository: GoalsRepository, private val editionsRepository: EditionsRepository, private val notificationsManager: NotificationsManager, private val context: Application) : ViewModel() {
+class ReporterActivityViewModel @Inject constructor(private val reportsRepository: ReportsRepository, private val goalsRepository: GoalsRepository, private val editionsRepository: EditionsRepository, private val notificationHelper: NotificationHelper, private val context: Application) : ViewModel() {
 
-    fun cancelNotification() {
-        notificationsManager.cancelNotification()
+    companion object {
+        const val DATA_LOAD_SUCCESS = 0
+        const val DATA_LOAD_FAILURE = 1
     }
 
     private var mReportsToBeModified = mutableListOf<Report>()
@@ -80,12 +81,16 @@ class ReporterActivityViewModel @Inject constructor(private val reportsRepositor
                 Toast.LENGTH_LONG).show()
     }
 
-    fun updateCustomGoalName(goal: Goal, f: ReportFormFragment) {
+    private fun updateCustomGoalName(goal: Goal, f: ReportFormFragment) {
         val newName = f.getCustomName()
         if (goal.name != newName) {
             val goalReplacement = goal.changeCustomName(newName)
             goalsRepository.updateGoal(goalReplacement)
         }
+    }
+
+    private fun cancelNotification() {
+        notificationHelper.cancelNotification()
     }
 
     fun fillReportFormsWithData(reportForms: Array<ReportFormFragment>) {
@@ -119,10 +124,5 @@ class ReporterActivityViewModel @Inject constructor(private val reportsRepositor
         mReportsToBeModified = reportsRepository.getReportsForDay(mEdition, mDayNumber)
 
         return DATA_LOAD_SUCCESS
-    }
-
-    companion object {
-        const val DATA_LOAD_SUCCESS = 0
-        const val DATA_LOAD_FAILURE = 1
     }
 }

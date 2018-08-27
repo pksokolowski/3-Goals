@@ -3,7 +3,7 @@ package pksokolowski.github.com.threegoals.alarms
 import android.content.Intent
 import android.content.BroadcastReceiver
 import android.content.Context
-import pksokolowski.github.com.threegoals.notifications.NotificationsManager
+import pksokolowski.github.com.threegoals.notifications.NotificationHelper
 import android.content.pm.PackageManager
 import android.content.ComponentName
 import dagger.android.AndroidInjection
@@ -17,7 +17,7 @@ class BootFinishedReceiver : BroadcastReceiver() {
     lateinit var editionsRepo: EditionsRepository
 
     @Inject
-    lateinit var notificationsManager: NotificationsManager
+    lateinit var notificationHelper: NotificationHelper
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
@@ -32,7 +32,7 @@ class BootFinishedReceiver : BroadcastReceiver() {
                 // to prevent it from running on every system restart
                 setBootFinishedReceiverEnabled(context, false)
             }
-            notificationsManager.showNotificationIfNeeded()
+            notificationHelper.showNotificationIfNeeded()
         }
     }
 

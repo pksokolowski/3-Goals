@@ -28,7 +28,7 @@ class ReporterActivity : ImmersiveAppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    lateinit var viewModel: ReporterActivityViewModel
+    private lateinit var viewModel: ReporterActivityViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)

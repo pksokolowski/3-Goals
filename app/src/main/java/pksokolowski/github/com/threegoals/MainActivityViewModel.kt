@@ -1,15 +1,12 @@
 package pksokolowski.github.com.threegoals
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.ViewModel
-import pksokolowski.github.com.threegoals.model.DaysData
 import pksokolowski.github.com.threegoals.model.Edition
-import pksokolowski.github.com.threegoals.notifications.NotificationsManager
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
 import pksokolowski.github.com.threegoals.repository.ReportsRepository
 import javax.inject.Inject
 
-class MainActivityViewModel @Inject constructor(private val reportsRepository: ReportsRepository, private val editionsRepository: EditionsRepository, notificationsManager: NotificationsManager) : ViewModel() {
+class MainActivityViewModel @Inject constructor(private val reportsRepository: ReportsRepository, private val editionsRepository: EditionsRepository) : ViewModel() {
 
     private var selectedEdition = editionsRepository.getLatestEdition()
     private val daysData = reportsRepository.getDaysData(selectedEdition)
@@ -22,7 +19,7 @@ class MainActivityViewModel @Inject constructor(private val reportsRepository: R
 
     fun getEditions() = editions
 
-    fun getCurrentEdition(): Edition?{
+    fun getCurrentEdition(): Edition? {
         return editionsRepository.getCurrentEdition()
     }
 
@@ -31,7 +28,7 @@ class MainActivityViewModel @Inject constructor(private val reportsRepository: R
         reportsRepository.getDaysData(selectedEdition)
     }
 
-    fun startNewEdition(){
+    fun startNewEdition() {
         val newEdition = editionsRepository.createEdition()
         selectEdition(newEdition)
     }

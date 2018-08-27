@@ -22,10 +22,12 @@ class LikertScale @JvmOverloads constructor(context: Context, attrs: AttributeSe
         }
     }
 
-    private val MAX_VALUE = 4 // and min value is 0
+    companion object {
+        private const val MAX_VALUE = 4 // and min value is 0
+    }
 
     private var mValue = -1
-    var value : Int
+    var value: Int
         get() = mValue
         set(newValue) {
             if (newValue < 0 || newValue > MAX_VALUE) return
@@ -51,15 +53,15 @@ class LikertScale @JvmOverloads constructor(context: Context, attrs: AttributeSe
         // mam już numChosen in range 0-4
         // więc daję text.
         // get the text for options
-        val textual_array = resources.getStringArray(R.array.likert_textual_explanations)
-        val textual_explanation = findViewById<View>(R.id.scale_text_representation_of_current_choice) as TextView
-        textual_explanation.text = textual_array[numChosen]
+        val textualArray = resources.getStringArray(R.array.likert_textual_explanations)
+        val textualExplanation = findViewById<View>(R.id.scale_text_representation_of_current_choice) as TextView
+        textualExplanation.text = textualArray[numChosen]
     }
 
     private fun checkRadioButtonForCurrentValue() {
         if (value < 0 || value > MAX_VALUE) return
-        val R = likert_radio_group.getChildAt(value) as RadioButton
-        R.isChecked = true
+        val r = likert_radio_group.getChildAt(value) as RadioButton
+        r.isChecked = true
     }
 
     public override fun onSaveInstanceState(): Parcelable? {

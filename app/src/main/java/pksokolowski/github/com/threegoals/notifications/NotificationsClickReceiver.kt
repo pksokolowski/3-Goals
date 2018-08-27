@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import dagger.android.AndroidInjection
 import pksokolowski.github.com.threegoals.utils.TimeHelper
-import pksokolowski.github.com.threegoals.notifications.NotificationsManager.Companion.ACTION_OPEN_REPORTER
+import pksokolowski.github.com.threegoals.notifications.NotificationHelper.Companion.ACTION_OPEN_REPORTER
 import pksokolowski.github.com.threegoals.reporter.ReporterActivity
 import pksokolowski.github.com.threegoals.repository.EditionsRepository
 import javax.inject.Inject
@@ -16,7 +16,7 @@ class NotificationsClickReceiver : BroadcastReceiver() {
     lateinit var editionsRepo: EditionsRepository
 
     @Inject
-    lateinit var notificationsManager: NotificationsManager
+    lateinit var notificationHelper: NotificationHelper
 
     override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action ?: return
@@ -32,6 +32,6 @@ class NotificationsClickReceiver : BroadcastReceiver() {
     }
 
     private fun onFailure(){
-        notificationsManager.cancelNotification()
+        notificationHelper.cancelNotification()
     }
 }

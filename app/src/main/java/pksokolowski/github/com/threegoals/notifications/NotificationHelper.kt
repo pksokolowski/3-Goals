@@ -13,9 +13,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NotificationsManager @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository, private val reportsRepo: ReportsRepository) {
-    val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
-    val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
+class NotificationHelper @Inject constructor(private val context: Application, private val editionsRepo: EditionsRepository, private val reportsRepo: ReportsRepository) {
 
     init {
         createNotificationChannels()
@@ -23,9 +21,11 @@ class NotificationsManager @Inject constructor(private val context: Application,
 
     companion object {
         const val ACTION_OPEN_REPORTER = "com.github.pksokolowski.threegoals.action.open_reporter"
+        const val CHANNEL_ID_USER_REPORT_REQUEST = "user_report_request"
+        const val NOTIFICATION_ID_USER_REPORT_REQUEST = 0
     }
 
-    fun showNotification() {
+    private fun showNotification() {
         val b = NotificationCompat.Builder(context, CHANNEL_ID_USER_REPORT_REQUEST)
                 .setContentText(context.getString(R.string.notification_open_reporter_content_text))
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
@@ -66,7 +66,7 @@ class NotificationsManager @Inject constructor(private val context: Application,
         return PendingIntent.getBroadcast(context, 0, Intent(ACTION_OPEN_REPORTER), PendingIntent.FLAG_CANCEL_CURRENT)
     }
 
-    fun createNotificationChannels() {
+    private fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = context.getString(R.string.notification_channel_user_report_request_title)
             val description = context.getString(R.string.notification_channel_user_report_request_description)
